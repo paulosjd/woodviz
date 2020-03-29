@@ -1,0 +1,143 @@
+.login-form {
+    display: inline;
+}
+
+.login-form button input{
+    padding-top: 4px;
+    height: 20px;
+}
+
+.login-form input {
+    width: 7.6rem;
+    border: 1px solid #c5a97c;
+    font-size: small;
+}
+
+.login-form input:focus {
+    background-color: #f8faf3;
+}
+
+.login-form button{
+    background-color: #4c7f49;
+    color: #c5a97c;
+    border-radius: 2px;
+    border: 1px solid #c5a97c;
+}
+
+.login-error {
+    color: orangered;
+    padding-right: 10px;
+    font-size: small;
+}
+
+.reg-label {
+    color: #6e87e0;
+    padding-right: 10px;
+    font-size: small;
+    cursor: pointer;
+}
+
+.center{
+    font-family: 'Raleway', sans-serif;
+    background-color: papayawhip;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.card{
+    background-color: #fff;
+    border-radius: 15px;
+    padding: 0.8rem;
+}
+.card > form{
+    display: flex;
+    flex-direction: column;
+}
+
+.card h5{
+    text-align: center;
+    margin-top: 0;
+    margin-bottom: 18px;
+    /*font-size: 16px;*/
+}
+
+.registration-modal{
+    max-width: 320px !important;
+}
+
+.registration-modal input {
+    margin-left: 10px !important;
+}
+
+.registration-modal label {
+    margin-left: 10px !important;
+}
+
+.registration-modal button {
+    margin-left: 10px !important;
+    margin-right: 18px !important;
+}
+.reg-modal-button{
+    margin-top: 20px;
+    height: 25px;
+    background-color: #7c9dbf
+}
+
+.form-item, .password-invalid-login{
+    font-family: 'Raleway', sans-serif;
+    padding: 5px;
+    margin-bottom: 2rem;
+    height: 30px;
+    width: 16rem;
+    border: 1px solid grey;
+}
+
+.form-item, .new-password{
+    font-family: 'Raleway', sans-serif;
+    padding: 5px;
+    margin-bottom: 1rem !important;
+    height: 30px;
+    width: 16rem;
+    border: 1px solid grey;
+}
+
+.password-invalid-login{
+    margin-bottom: 1rem !important;
+}
+
+.auth-item-error{
+    font-family: 'Raleway', sans-serif;
+    padding: 5px;
+    height: 30px;
+    width: 16rem;
+    border: 1px solid grey;
+}
+
+.form-submit{
+    font-family: 'Raleway', sans-serif;
+    height: 35px;
+    color: #fff;
+    background-color: #657bb2;
+    border: none;
+    letter-spacing: 0.2rem;
+    transition: 0.3s opacity ease;
+    cursor: pointer;
+}
+
+.form-submit:hover{
+    opacity: 0.6;
+}
+
+.auth-errors, .login-error{
+    text-align: right;
+    color: orangered;
+}
+
+.login-error{
+    text-align: left !important;
+    margin-bottom: 1em;
+}
