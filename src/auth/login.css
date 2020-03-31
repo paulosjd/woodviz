@@ -5,6 +5,7 @@
 .login-form button input{
     padding-top: 4px;
     height: 20px;
+    font-size: small;
 }
 
 .login-form input {
@@ -18,10 +19,11 @@
 }
 
 .login-form button{
-    background-color: #4c7f49;
-    color: #c5a97c;
+    background-color: #a9c529;
+    color: #3b249b;
     border-radius: 2px;
-    border: 1px solid #c5a97c;
+    border: 2px solid #a9c529;
+    font-size: small;
 }
 
 .login-error {
@@ -31,7 +33,7 @@
 }
 
 .reg-label {
-    color: #6e87e0;
+    color: #42669c;
     padding-right: 10px;
     font-size: small;
     cursor: pointer;
@@ -92,16 +94,16 @@
     padding: 5px;
     margin-bottom: 2rem;
     height: 30px;
-    width: 16rem;
+    width: 16rem !important;
     border: 1px solid grey;
 }
 
 .form-item, .new-password{
     font-family: 'Raleway', sans-serif;
-    padding: 5px;
+    /*padding: 5px;*/
     margin-bottom: 1rem !important;
     height: 30px;
-    width: 16rem;
+    width: 16rem !important;
     border: 1px solid grey;
 }
 
@@ -113,7 +115,7 @@
     font-family: 'Raleway', sans-serif;
     padding: 5px;
     height: 30px;
-    width: 16rem;
+    width: 16rem !important;
     border: 1px solid grey;
 }
 
@@ -140,4 +142,19 @@
 .login-error{
     text-align: left !important;
     margin-bottom: 1em;
+}
+
+.forgot-field{
+    color: #888f83;
+    margin-left: 14px;
+    margin-right: 14px;
+    cursor: pointer;
+    font-size: small;
+}
+
+.forgot-field-text{
+    margin-top: 8px;
+    margin-left: 18px;
+    margin-bottom: 8px;
+    font-size: small;
 }

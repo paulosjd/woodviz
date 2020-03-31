@@ -17,6 +17,15 @@ class Login extends Component {
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
         this.Auth = new AuthService();
     }
+
+    handleFormSubmit(values){
+        this.setState({loginSubmitting: true});
+        this.Auth.login(values.username, values.password)
+            .then(profile => this.props.loginSuccess(profile))
+            .catch((e) => {console.log('auth reject'); console.log(e)  ;
+                this.setState({loginFail: true, loginSubmitting: false})});
+    }
+
     render() {
         if (this.props.focusUsernameInput) {
             this.usernameInput.current.focus()
@@ -40,52 +49,33 @@ class Login extends Component {
                     return (
                         <div className='login-form' style={{display: 'inline'}}>
                         <form onSubmit={handleSubmit}>
-                        { loginExtras }
-                        <input
-                            type='text'
-                            name='username'
-                            placeholder='Username'
-                            ref={this.usernameInput}
-                            value={values.username}
-                            onBlur={val => {handleBlur(val); this.props.removeUsernameFocus()}}
-                            onChange={val => {handleChange(val);this.setState({loginFail: false});}}
-                            className=''
-                        />
-                        {/*{errors.username && touched.username && (<div className="login-error">{errors.username}</div>)}*/}
-                        <input
-                            type='password'
-                            name='password'
-                            placeholder='Password'
-                            value={values.password}
-                            onBlur={handleBlur}
-                            onChange={val => {handleChange(val); this.setState({loginFail: false})}}
-                            className=''
-                        />
-                        {/*{errors.password && touched.password && (<div className="login-error">{errors.password}</div>)}*/}
-                        {/*{ this.state.loginFail && !errors.username && !errors.password && (*/}
-                            {/*<div className="login-error">Invalid credentials</div> )}*/}
-                            {/*{ (this.props.isSubmitting || this.state.loginSubmitting) && (*/}
-                                    {/*<div className='login-spin'>*/}
-                                        {/*<Spinner color="secondary" />*/}
-                                    {/*</div>*/}
-                            {/*)}*/}
-                        <button
-                            type='submit'
-                            className=''
-                        >Login</button>
+                            { loginExtras }
+                            <input
+                                type='text'
+                                name='username'
+                                placeholder='Username'
+                                ref={this.usernameInput}
+                                value={values.username}
+                                onBlur={val => {handleBlur(val); this.props.removeUsernameFocus()}}
+                                onChange={val => {handleChange(val);this.setState({loginFail: false});}}
+                                className=''
+                            />
+                            <input
+                                type='password'
+                                name='password'
+                                placeholder='Password'
+                                value={values.password}
+                                onBlur={handleBlur}
+                                onChange={val => {handleChange(val); this.setState({loginFail: false})}}
+                                className=''
+                            />
+                            <button type='submit' className=''>Login</button>
                         </form>
                         </div>
                     )
                 }}
             </Formik>
         );
-    }
-    handleFormSubmit(values){
-        this.setState({loginSubmitting: true});
-        this.Auth.login(values.username, values.password)
-            .then(profile => this.props.loginSuccess(profile))
-            .catch((e) => {console.log('auth reject'); console.log(e)  ;
-                                     this.setState({loginFail: true, loginSubmitting: false})});
     }
 }
 
@@ -105,7 +95,6 @@ const mapStateToProps = ({registration, user}) => {
 const mapDispatchToProps = dispatch => {
     return {
         loginSuccess: (user) => dispatch(loginSuccess(user)),
-        // refreshRegistration: () => dispatch(refreshRegistration()),
         // regSubmitBegin: () => dispatch(regSubmitBegin()),
         // registrationSubmit: (val, loginOnReg) => dispatch(registrationSubmit(val, loginOnReg)),
         // demoAccessSubmit: (loginOnReg) => dispatch(demoRegistrationSubmit(loginOnReg)),

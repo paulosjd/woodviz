@@ -10,10 +10,24 @@
 }
 
 .main-home {
-  padding: 10px;
+  padding-left: 0;
+  padding-top: 20px;
+  color: #626b82;
+}
+
+.main-home p{
+  margin-top: 20px;
+}
+
+.h4 {
+  color: #7ea92b;
 }
 
 .link-text {
-  color: #6e87e0;
+  color: #42669c;
   cursor: pointer;
+}
+
+.small-font {
+  font-size: small;
 }

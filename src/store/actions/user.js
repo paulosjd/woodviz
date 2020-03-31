@@ -1,7 +1,7 @@
 import axios from 'axios'
 import AuthService from '../../utils/auth_service';
 import { userConstants as constants } from '../../store/constants/user';
-import { REGISTER_REQUEST, REGISTER_FAILURE, REGISTER_SUCCESS, CLEAR_EXT_FORM_ERRORS, USER_LOGOUT, USER_EMAIL_UPDATE
+import { REGISTER_FAILURE, USER_LOGOUT, USER_EMAIL_UPDATE
 } from "../constants/user";
 
 const baseUrl = 'http://127.0.0.1:8000/api/users';
@@ -20,6 +20,7 @@ export const forgottenLogin = (field, email) => {
     }
 };
 
+// TODO add usage back into component connected dispatch, from samson
 export const requestVerificationEmail = () => {
     const url = `${baseUrl}/new-verification-email`;
     return dispatch => {
@@ -49,16 +50,8 @@ export const confirmAccountDelete = () => {
     }
 };
 
-export const regSubmitBegin = () => {
-    return { type: REGISTER_REQUEST }
-};
-
 export const userLogout = () => {
     return { type: USER_LOGOUT }
-};
-
-export const refreshRegistration = () => {
-    return { type: CLEAR_EXT_FORM_ERRORS }
 };
 
 export const focusUsernameInput = (value) => {
@@ -73,10 +66,7 @@ export const registrationSubmit = (data, loginFunc) => {
     const url = `${baseUrl}/registration`;
     return dispatch => {
         axios.post(url, JSON.stringify(data), {headers: {"Content-Type": "application/json", }})
-            .then(value => {
-                dispatch({ type: REGISTER_SUCCESS, value });
-                loginFunc()
-            })
+            .then(value => loginFunc(value.data.token))
             .catch(errors => {
                 if (errors.response && errors.response.status === 400) {
                     dispatch({ type: REGISTER_FAILURE, errors: errors.response.data.errors });
@@ -84,25 +74,5 @@ export const registrationSubmit = (data, loginFunc) => {
                     dispatch({ type: REGISTER_FAILURE, errors: {miscError: true} })
                 }
             });
-    }
-};
-
-export const demoRegistrationSubmit = (loginFunc) => {
-    const url = `${baseUrl}/demo/registration`;
-    return dispatch => {
-        axios.get(url, {headers: {"Content-Type": "application/json", }})
-            .then(value => {
-                dispatch({ type: REGISTER_SUCCESS, value });
-                loginFunc()
-            })
-    }
-};
-
-export const postNewEmail = (value) => {
-    const url = `${baseUrl}/email/edit`;
-    return dispatch => {
-        axios.post(url,{value},
-            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}} )
-            .then(targetsData => dispatch({ type: USER_EMAIL_UPDATE, payload: {targetsData} }))
     }
 };

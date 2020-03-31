@@ -1,8 +1,6 @@
 import { userConstants } from '../constants/user';
 
 const initialState = {
-    isSubmitting: false,
-    regData: {},
     errors: '',
     passwordResetSent: false,
     usernameReminderSent: false,
@@ -13,12 +11,6 @@ const initialState = {
 
 export default function registration(state = initialState, action) {
     switch (action.type) {
-        case userConstants.REGISTER_REQUEST:
-            return { isSubmitting: true };
-        case userConstants.REGISTER_SUCCESS:
-            return { regData: action.value };
-        case userConstants.CLEAR_EXT_FORM_ERRORS:
-            return { ...state };
         case userConstants.REGISTER_FAILURE:
             return { errors: action.errors };
         case userConstants.PASSWORD_RESET_SUCCESS:

@@ -5,7 +5,7 @@ import body from "./reducers/body"
 import extras from "./reducers/profile_extras"
 import menu from "./reducers/menu"
 import profile from  "./reducers/profile"
-import registration from  "./reducers/registration"
+import registration from "./reducers/reg"
 import { USER_LOGOUT } from "./constants/user"
 
 const appReducer = combineReducers({
