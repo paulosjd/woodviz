@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
-import { Container, Row, Col } from 'reactstrap';
 import {connect} from "react-redux";
+import {Container, Row, Col, ListGroup, ListGroupItem} from 'reactstrap';
 import {setShowRegForm, focusUsernameInput} from "../store/actions/user";
 
 class GuestHome extends Component {
@@ -29,9 +29,16 @@ class GuestHome extends Component {
                             Password reset
                         </span>.
                     </div>
+                    <ListGroup className='menu-items-list'>
+                        <ListGroupItem className='hover-background'>
+                    <svg height="100" width="100">
+                        <circle className='mkrpl'  onClick={()=>console.log('sdfsdf')} cx="50" cy="50" r="40" stroke="black" fill="red" />
+                    </svg>
+                        </ListGroupItem>
+                    </ListGroup>
                 </Col>
                 <Col xs="8">
-                    <img height={300} src='images/board.png' />
+                    <img height={450} src='images/board.png' />
                 </Col>
             </Row>
             </Container>
