@@ -1,18 +1,16 @@
 import { applyMiddleware, combineReducers, createStore } from "redux";
 import thunk from "redux-thunk";
+import activity from "./reducers/activity"
 import auth from "./reducers/auth"
-import body from "./reducers/body"
-import extras from "./reducers/profile_extras"
-import menu from "./reducers/menu"
+import board from "./reducers/board"
 import profile from  "./reducers/profile"
 import registration from "./reducers/reg"
 import { USER_LOGOUT } from "./constants/user"
 
 const appReducer = combineReducers({
+    activity,
     auth,
-    body,
-    extras,
-    menu,
+    board,
     profile,
     registration
 });

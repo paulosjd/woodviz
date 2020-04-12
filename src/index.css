@@ -3,6 +3,18 @@
   padding: .2rem 0.5rem  !important;
 }
 
+.col-3 {
+  padding-left: 0 !important;
+}
+
+.board {
+  margin-left: 28px;
+}
+
+.active-item {
+  background-color: #f8f9fa !important;
+}
+
 .modal-title {
   font-size: 1.1rem;
   line-height: 1;

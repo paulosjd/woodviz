@@ -1,0 +1,2 @@
+export const RESET_ACTIVITY_STATE = 'RESET_ACTIVITY_STATE';
+export const SET_CURRENT = 'SET_CURRENT';

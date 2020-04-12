@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import AuthService from './utils/auth_service';
-import TopNav from './home/top_nav';
-import GuestHome from './home/guest';
-import UserHome from './home/user';
+import TopNav from './main/top_nav';
+import GuestHome from './main/guest';
+import UserHome from './main/user';
 import Forgotten from './auth/forgotten';
 import Register from './auth/register';
 import {loginSuccess, setShowRegForm} from "./store/actions/user";

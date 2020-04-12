@@ -1,0 +1,2 @@
+export const RESET_BOARD_STATE = 'RESET_BOARD_STATE';
+export const SET_BOARD_POINTS = 'SET_BOARD_POINTS';
