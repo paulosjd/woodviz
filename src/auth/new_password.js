@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {connect} from "react-redux";
 import { Formik } from 'formik';
 import { Modal, ModalHeader } from "reactstrap";
-import { passwordResetConfirm } from "../store/actions/user";
+import { passwordResetConfirm } from "../store/actions/auth";
 import { ResetConfirmSchema } from '../schemas/auth'
 import './login.css';
 

@@ -30,22 +30,48 @@ import {
     SHOW_REPORT_DOWNLOAD_MENU,
     SET_HAS_REPORT_FILE
 } from '../constants/profile'
+import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS} from '../constants/board'
+import AuthService from "../../utils/auth_service";
 
 const baseUrl = 'http://127.0.0.1:8000/api';
 
-// export const fetchProfileSummary = () => {
-//     let url = `${baseUrl}/profile/summary`;
-//     return dispatch => {
-//         axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then(profileData => {
-//                 dispatch({ type: FETCH_SUMMARY_DATA_SUCCESS, payload: {profileData} });
-//                 dispatch({ type: SUMMARY_DATA_PROFILE_EXTRAS, payload: {profileData} });
-//             })
-//             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
-//     }
-// };
+const Auth = new AuthService();
+
+export const fetchProfileData = () => {
+    let url = `${baseUrl}/profile/data`;
+    return dispatch => {
+        axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(profileData => { console.log(profileData)
+                // dispatch({ type: FETCH_SUMMARY_DATA_SUCCESS, payload: {profileData} });
+                dispatch({
+                    type: SET_BOARD_POINTS,
+                    value: {xCoords: profileData.data.data.x_coords, yCoords: profileData.data.data.y_coords} });
+            })
+            .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
+    }
+};
+
+export const updateBoardPoints = (value, isAuth) => {
+    if (isAuth) {
+        const url = `${baseUrl}/profile/board-setup`;
+        return dispatch => {
+            console.log(value)
+            axios.post(url,
+                {board_height: value.yNum, board_width: value.xNum},
+                {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+                .then(resp => dispatch({
+                        type: SET_BOARD_POINTS,
+                        value: {xCoords: resp.data.x_coords, yCoords: resp.data.y_coords}
+                    })
+                )
+        }
+    } else {
+        return { type: SET_BOARD_POINTS_FROM_NUMS, value }
+    }
+};
+
 //
-// export const fetchProfileSummaryBegin = () => ({
+// export const fetchProfileDataBegin = () => ({
 //     type: FETCH_SUMMARY_DATA_BEGIN
 // });
 //
@@ -97,7 +123,7 @@ const baseUrl = 'http://127.0.0.1:8000/api';
 //             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
 //             .then(() => dispatch({ type: PROFILE_MENU_EDIT_SUCCESS, payload: {value} }))
 //             .then(() => setTimeout(() => dispatch({ type: CLEAR_PROFILE_UPDATE_STATUS }),2500))
-//             .then(() => {return dispatch(fetchProfileSummary())})
+//             .then(() => {return dispatch(fetchProfileData())})
 //             .catch(() => dispatch({ type: PROFILE_MENU_EDIT_FAILURE }) )
 //     }
 // };
@@ -130,7 +156,7 @@ const baseUrl = 'http://127.0.0.1:8000/api';
 // };
 //
 // export const postMenuItemAdd = (value) => {
-//     const url = `${baseUrl}/profile/menu-item-add`;
+//     const url = `${baseUrl}/profile/panel_items-item-add`;
 //     return dispatch => {
 //         axios.post(url, {data: { param_choice: value.param_choice, unit_choice: value.unit_choice }},
 //             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})

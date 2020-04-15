@@ -2,11 +2,11 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import AuthService from './utils/auth_service';
 import TopNav from './main/top_nav';
-import GuestHome from './main/guest';
-import UserHome from './main/user';
+import MainContainer from './main/main';
 import Forgotten from './auth/forgotten';
 import Register from './auth/register';
-import {loginSuccess, setShowRegForm} from "./store/actions/user";
+import {loginSuccess, setShowRegForm} from "./store/actions/auth";
+import {fetchProfileData} from "./store/actions/profile";
 import './auth/login.css';
 
 const Auth = new AuthService();
@@ -23,6 +23,8 @@ class App extends Component {
             try {
                 const profile = Auth.getProfile();
                 this.props.loginSuccess(profile);
+                console.log('Fetching profile summary from App component');
+                this.props.fetchProfileData()
             } catch (err) {
                 Auth.logout();
             }
@@ -53,17 +55,12 @@ class App extends Component {
                 />)
         }
 
-        let main = (<GuestHome helpClickHandler={this.toggleHelp.bind(this)}/>);
-        if (this.props.isAuth) {
-            main = (<UserHome />);
-        }
-
         return (
           <div className="App">
               <TopNav
                   handleLogout={() => Auth.logout()}
               />
-              { main }
+              <MainContainer helpClickHandler={this.toggleHelp.bind(this)}/>
           </div>
         );
     }
@@ -71,7 +68,6 @@ class App extends Component {
 
 const mapStateToProps = ({auth, registration}) => {
     return {
-        isAuth: !!auth.user_id,
         showRegForm: registration.showRegForm,
     };
 };
@@ -80,6 +76,7 @@ const mapDispatchToProps = dispatch => {
     return {
         loginSuccess: (user) => dispatch(loginSuccess(user)),
         setShowReg: (val) => dispatch(setShowRegForm(val)),
+        fetchProfileData: () => dispatch(fetchProfileData())
     };
 };
 

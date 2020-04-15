@@ -1,8 +1,8 @@
 import axios from 'axios'
 import AuthService from '../../utils/auth_service';
-import { userConstants as constants } from '../../store/constants/user';
-import { REGISTER_FAILURE, USER_LOGOUT, USER_EMAIL_UPDATE
-} from "../constants/user";
+import { authConstants as constants } from '../constants/auth';
+import { REGISTER_FAILURE, USER_LOGOUT, USER_EMAIL_UPDATE, SET_AWAITING_AUTH
+} from "../constants/auth";
 
 const baseUrl = 'http://127.0.0.1:8000/api/users';
 
@@ -52,6 +52,10 @@ export const confirmAccountDelete = () => {
 
 export const userLogout = () => {
     return { type: USER_LOGOUT }
+};
+
+export const setAwaitingAuth = (value) => {
+    return { type: SET_AWAITING_AUTH, value }
 };
 
 export const focusUsernameInput = (value) => {

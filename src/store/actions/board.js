@@ -1,6 +1,6 @@
 import axios from 'axios'
 import AuthService from '../../utils/auth_service';
-import {USER_LOGOUT, userConstants as constants} from '../../store/constants/user';
+import {USER_LOGOUT, authConstants as constants} from '../constants/auth';
 import { RESET_BOARD_STATE, SET_BOARD_POINTS
 } from "../constants/board";
 

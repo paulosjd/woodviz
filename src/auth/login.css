@@ -24,6 +24,12 @@
     border-radius: 2px;
     border: 2px solid #a9c529;
     font-size: small;
+    outline: none !important
+}
+
+.disabled-btn {
+    background-color: #d5e6cb !important;
+    border-color: #d5e6cb !important;
 }
 
 .login-error {

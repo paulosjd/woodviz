@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {Modal, ModalHeader, ModalBody} from 'reactstrap';
 import {Formik} from 'formik';
 import {ForgotFieldSchema} from '../schemas/auth'
-import {forgottenLogin} from "../store/actions/user";
+import {forgottenLogin} from "../store/actions/auth";
 import {connect} from "react-redux";
 
 class Forgotten extends Component {

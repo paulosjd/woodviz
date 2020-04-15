@@ -3,17 +3,20 @@ import { Navbar, UncontrolledTooltip, Alert } from 'reactstrap';
 import {connect } from "react-redux";
 import Login from '../auth/login'
 import { } from '../store/actions/profile'
-import { userLogout } from '../store/actions/user'
+import { userLogout } from '../store/actions/auth'
 
 class TopNav extends Component {
 
     render() {
 
+        // TODO section of e.g. buttons to with users recent ticks (, problems working on list etc.
+        // -- benchmarks  (record this alongside problem on rhs)
+
         let topRight;
         if (this.props.user_id) {
             topRight = (
                 <button
-                    type="button" className="form-submit"
+                    type="button"
                     onClick={(e) => {
                         this.props.handleLogout(e);
                         this.props.userLogout()

@@ -1,6 +1,7 @@
-import { userConstants } from '../constants/user';
+import { LOGIN_SUCCESS, SET_AWAITING_AUTH } from '../constants/auth';
 
 const initalState = {
+    awaitingAuth: false,
     username: '',
     user_id: '',
     email: '',
@@ -8,8 +9,10 @@ const initalState = {
 
 export default function authentication(state = initalState, action) {
     switch (action.type) {
-        case userConstants.LOGIN_SUCCESS:
-            return {...action.user};
+        case LOGIN_SUCCESS:
+            return { ...action.user };
+        case SET_AWAITING_AUTH:
+            return { ...state, awaitingAuth: action.value };
         default:
             return state
     }

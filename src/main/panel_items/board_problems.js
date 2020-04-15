@@ -1,30 +1,30 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {} from "../store/actions/user";
 
-class UserHome extends Component {
+class BoardProblems extends Component {
+
+    // Show board holds num e.g. 8 X 10   select (with number of problems for each) ?? so if change grid know where have gone
 
     render() {
         return (
-            <div className='main-home'>
-            </div>
-        );
+            <h4>Foo</h4>
+        )
     }
-
 }
 
-const mapStateToProps = ({auth, registration}) => {
+const mapStateToProps = state => {
     return {
-        username: auth.username,
+
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+
     };
 };
 
 export default connect(
     mapStateToProps,
     mapDispatchToProps
-)(UserHome);
+)(BoardProblems);

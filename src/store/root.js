@@ -5,7 +5,7 @@ import auth from "./reducers/auth"
 import board from "./reducers/board"
 import profile from  "./reducers/profile"
 import registration from "./reducers/reg"
-import { USER_LOGOUT } from "./constants/user"
+import { USER_LOGOUT } from "./constants/auth"
 
 const appReducer = combineReducers({
     activity,

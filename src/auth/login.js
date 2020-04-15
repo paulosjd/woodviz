@@ -2,16 +2,16 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Formik} from 'formik';
 import AuthService from '../utils/auth_service';
-import {setShowRegForm, loginSuccess, focusUsernameInput} from "../store/actions/user";
+import {setShowRegForm, loginSuccess, focusUsernameInput, setAwaitingAuth} from "../store/actions/auth";
 import {LoginSchema} from '../schemas/auth'
 import './login.css';
+import {fetchProfileData} from "../store/actions/profile";
 
 class Login extends Component {
     constructor(props){
         super(props);
         this.state = {
             loginFail: false,
-            loginSubmitting: false
         };
         this.usernameInput = React.createRef();
         this.handleFormSubmit = this.handleFormSubmit.bind(this);
@@ -19,11 +19,14 @@ class Login extends Component {
     }
 
     handleFormSubmit(values){
-        this.setState({loginSubmitting: true});
+        this.props.setAwaitingAuth(true);
         this.Auth.login(values.username, values.password)
             .then(profile => this.props.loginSuccess(profile))
+            .then(() => this.props.fetchProfileData())
             .catch((e) => {console.log('auth reject'); console.log(e)  ;
-                this.setState({loginFail: true, loginSubmitting: false})});
+                this.setState({loginFail: true});
+                this.props.setAwaitingAuth(false)
+            });
     }
 
     render() {
@@ -38,11 +41,7 @@ class Login extends Component {
             <Formik
                 initialValues={{ username: '', password: ''}}
                 validationSchema={LoginSchema}
-                onSubmit={(values) => {
-                    if (!this.props.isSubmitting && !this.state.loginSubmitting) {
-                        this.handleFormSubmit(values)
-                    }
-                }}
+                onSubmit={this.handleFormSubmit}
             >
                 {props => {
                     const {values, handleChange, handleBlur, handleSubmit} = props;
@@ -56,6 +55,7 @@ class Login extends Component {
                                 placeholder='Username'
                                 ref={this.usernameInput}
                                 value={values.username}
+                                disabled={this.props.awaitingAuth}
                                 onBlur={val => {handleBlur(val); this.props.removeUsernameFocus()}}
                                 onChange={val => {handleChange(val);this.setState({loginFail: false});}}
                                 className=''
@@ -66,10 +66,16 @@ class Login extends Component {
                                 placeholder='Password'
                                 value={values.password}
                                 onBlur={handleBlur}
+                                disabled={this.props.awaitingAuth}
                                 onChange={val => {handleChange(val); this.setState({loginFail: false})}}
                                 className=''
                             />
-                            <button type='submit' className=''>Login</button>
+                            <button
+                                type='submit'
+                                className={this.props.awaitingAuth ? 'disabled-btn' : ''}
+                                disabled={this.props.awaitingAuth}
+                            >Login
+                            </button>
                         </form>
                         </div>
                     )
@@ -79,7 +85,7 @@ class Login extends Component {
     }
 }
 
-const mapStateToProps = ({registration, user}) => {
+const mapStateToProps = ({registration, auth}) => {
     return {
         registrationData: registration.regData,
         isSubmitting: registration.isSubmitting,
@@ -89,6 +95,7 @@ const mapStateToProps = ({registration, user}) => {
         usernameReminderSent: registration.usernameReminderSent,
         showRegForm: registration.showRegForm,
         focusUsernameInput: registration.focusUsernameInput,
+        awaitingAuth: auth.awaitingAuth,
     };
 };
 
@@ -98,9 +105,10 @@ const mapDispatchToProps = dispatch => {
         // regSubmitBegin: () => dispatch(regSubmitBegin()),
         // registrationSubmit: (val, loginOnReg) => dispatch(registrationSubmit(val, loginOnReg)),
         // demoAccessSubmit: (loginOnReg) => dispatch(demoRegistrationSubmit(loginOnReg)),
-        // forgottenLogin: (fType, val) => dispatch(forgottenLogin(fType, val)),
-        setShowReg: (val) => dispatch(setShowRegForm(val)),
+        setAwaitingAuth: val => dispatch(setAwaitingAuth(val)),
+        setShowReg: val => dispatch(setShowRegForm(val)),
         removeUsernameFocus: () => dispatch(focusUsernameInput(false)),
+        fetchProfileData: () => dispatch(fetchProfileData())
     };
 };
 

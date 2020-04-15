@@ -1,4 +1,4 @@
-import { userConstants } from '../constants/user';
+import { authConstants } from '../constants/auth';
 
 const initialState = {
     errors: '',
@@ -11,17 +11,17 @@ const initialState = {
 
 export default function registration(state = initialState, action) {
     switch (action.type) {
-        case userConstants.REGISTER_FAILURE:
+        case authConstants.REGISTER_FAILURE:
             return { errors: action.errors };
-        case userConstants.PASSWORD_RESET_SUCCESS:
+        case authConstants.PASSWORD_RESET_SUCCESS:
             return { passwordResetSent: true };
-        case userConstants.USERNAME_REMINDER_SUCCESS:
+        case authConstants.USERNAME_REMINDER_SUCCESS:
             return { usernameReminderSent: true };
-        case userConstants.NEW_PASSWORD_CONFIRMED:
+        case authConstants.NEW_PASSWORD_CONFIRMED:
             return { passwordReset: action.value };
-        case userConstants.FOCUS_USERNAME_INPUT:
+        case authConstants.FOCUS_USERNAME_INPUT:
             return { focusUsernameInput: action.value };
-        case userConstants.SET_SHOW_REG_FORM:
+        case authConstants.SET_SHOW_REG_FORM:
             return { showRegForm: action.value };
         default:
             return state

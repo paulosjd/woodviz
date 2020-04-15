@@ -4,7 +4,7 @@ import {connect} from "react-redux";
 import {Modal, ModalHeader} from 'reactstrap';
 import {Formik} from 'formik';
 import {RegisterSchema} from '../schemas/auth'
-import {forgottenLogin, loginSuccess, registrationSubmit, setShowRegForm} from "../store/actions/user";
+import {forgottenLogin, loginSuccess, registrationSubmit, setShowRegForm} from "../store/actions/auth";
 import AuthService from "../utils/auth_service";
 
 class Register extends Component {

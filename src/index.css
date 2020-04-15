@@ -7,6 +7,10 @@
   padding-left: 0 !important;
 }
 
+.inline {
+  display: inline;
+}
+
 .board {
   margin-left: 28px;
 }
@@ -33,6 +37,10 @@
 
 .h4 {
   color: #7ea92b;
+}
+
+.pad-left-0 {
+  padding-left: 0 !important;
 }
 
 .bottom20 {
@@ -63,8 +71,27 @@
   font-size: small;
 }
 
-#sdf {
-  display: none;
+.hold-nums select{
+  display: inline-block;
+  margin-top: 6px;
+  margin-left: 14px;
+  width: 52px;
+  height: 35px;
+  text-align: center;
+}
+
+.board-setup-btn {
+  margin-top: 26px;
+  border: solid 2px #8a8a8a;
+  background-color: #374773;
+  color: white;
+  border-radius: 2px;
+  padding: 4px 8px 4px 8px;
+}
+
+.revert-symbol {
+  padding-left: 10px;
+  font-size: small;
 }
 
 .mkrpl {
