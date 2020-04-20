@@ -1,6 +1,6 @@
 import React, {useState} from 'react';
 import {Row, Col} from 'reactstrap';
-import {xCoordsMap, yCoordsMap} from "../store/constants/board";
+import {xCoordsMap, yCoordsMap} from "../../store/constants/board";
 
 const BoardPointsForm = ({xPtNum, yPtNum, updateBoardPoints}) => {
 
@@ -20,7 +20,8 @@ const BoardPointsForm = ({xPtNum, yPtNum, updateBoardPoints}) => {
                             return <option key={x} value={x}>{x}</option>;
                         })}
                     </select>
-                    <label className='revert-symbol' onClick={() => setXNum(xPtNum)}>{'\ud83d\udd04'}</label>
+                    { xNum !== xPtNum && (
+                        <label className='revert-symbol' onClick={() => setXNum(xPtNum)}>{'\ud83d\udd04'}</label>) }
                 </div>
                 <div className='hold-nums'>
                     <label>Holds high: </label>
@@ -33,15 +34,18 @@ const BoardPointsForm = ({xPtNum, yPtNum, updateBoardPoints}) => {
                             return <option key={x} value={x}>{x}</option>;
                         })}
                     </select>
-                    <label className='revert-symbol' onClick={() => setYNum(yPtNum)}>{'\ud83d\udd04'}</label>
+                    { yNum !== yPtNum && (
+                        <label className='revert-symbol' onClick={() => setYNum(yPtNum)}>{'\ud83d\udd04'}</label>) }
                 </div>
             </Col>
             <Col xs={4} className='pad-left-0'>
-                <button
-                    onClick={() => updateBoardPoints({xNum, yNum})}
-                    className='board-setup-btn'
-                >Save
-                </button>
+                { (yNum !== yPtNum || xNum !== xPtNum) && (
+                    <button
+                        onClick={() => updateBoardPoints({xNum, yNum})}
+                        className='board-setup-btn'
+                    >Save
+                    </button>
+                )}
             </Col>
         </Row>
     )

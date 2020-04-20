@@ -1,6 +1,8 @@
 export const RESET_BOARD_STATE = 'RESET_BOARD_STATE';
 export const SET_BOARD_POINTS = 'SET_BOARD_POINTS';
 export const SET_BOARD_POINTS_FROM_NUMS = 'SET_BOARD_POINTS_FROM_NUMS';
+export const SET_HOVER_HOLD = 'SET_HOVER_HOLD';
+export const SET_SELECTED_HOLD = 'SET_SELECTED_HOLD';
 
 export const xCoordsMap = {
     '6': [38, 102, 167, 232, 297, 362],

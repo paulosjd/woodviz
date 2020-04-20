@@ -5,9 +5,12 @@ import TopNav from './main/top_nav';
 import MainContainer from './main/main';
 import Forgotten from './auth/forgotten';
 import Register from './auth/register';
+import {setSelectedPanelHold} from './store/actions/activity'
 import {loginSuccess, setShowRegForm} from "./store/actions/auth";
+import {setSelectedHold} from './store/actions/board'
 import {fetchProfileData} from "./store/actions/profile";
 import './auth/login.css';
+import EscapeKeyAction from "./utils/esc_key_action";
 
 const Auth = new AuthService();
 
@@ -56,13 +59,17 @@ class App extends Component {
         }
 
         return (
-          <div className="App">
-              <TopNav
-                  handleLogout={() => Auth.logout()}
-              />
-              <MainContainer helpClickHandler={this.toggleHelp.bind(this)}/>
-          </div>
-        );
+            <EscapeKeyAction
+                actions={[this.props.resetSelectedHold, this.props.resetSelectedPanelHold]}
+            >
+                <div className="App">
+                  <TopNav
+                      handleLogout={() => Auth.logout()}
+                  />
+                  <MainContainer helpClickHandler={this.toggleHelp.bind(this)}/>
+                </div>
+            </EscapeKeyAction>
+        )
     }
 }
 
@@ -76,7 +83,11 @@ const mapDispatchToProps = dispatch => {
     return {
         loginSuccess: (user) => dispatch(loginSuccess(user)),
         setShowReg: (val) => dispatch(setShowRegForm(val)),
-        fetchProfileData: () => dispatch(fetchProfileData())
+        fetchProfileData: () => dispatch(fetchProfileData()),
+        resetSelectedHold: () => dispatch(setSelectedHold({
+            selectedHoldX: null, selectedHoldY: null })),
+        resetSelectedPanelHold:  () => dispatch(setSelectedPanelHold(
+            {selectedPanelHoldX: null, selectedPanelHoldY: null}))
     };
 };
 

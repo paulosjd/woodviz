@@ -23,6 +23,7 @@ class MainContainer extends Component {
                 <Col xs='5'>
                     {/*<img height={450} src='images/demo_board.svg' />*/}
                     { board }
+
                     {/*<svg>*/}
                         {/*<circle cx="40" cy="40" r="24" fill='#00cc00' stroke=":#006600" onClick={()=>console.log('clicd')} onMouseOver={()=>console.log('mouseover ev')}/>*/}
                     {/*</svg>*/}

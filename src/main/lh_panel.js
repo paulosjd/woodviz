@@ -1,9 +1,8 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {Container, Row, Col} from 'reactstrap';
+import {Col} from 'reactstrap';
 import {setShowRegForm, focusUsernameInput} from "../store/actions/auth";
 import {setAction} from "../store/actions/activity";
-import DemoBoard from '../board/board';
 import ActionItems from './panel_items/action_items'
 
 class LeftHandPanel extends Component {
@@ -11,8 +10,8 @@ class LeftHandPanel extends Component {
     render() {
         const intro = (
             <React.Fragment>
-                <h3>Welcome to the Den</h3>
-                <p><span className='link-text' onClick={() => this.props.setShowReg(true)}>Register</span> {'or '}
+                <p style={{fontSize: 'small'}}>
+                    <span className='link-text' onClick={() => this.props.setShowReg(true)}>Register</span> {'or '}
                     <span className='link-text' onClick={this.props.usernameFocus}> login</span>
                 </p>
                 <div className='bottom20'>
