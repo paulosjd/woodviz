@@ -30,7 +30,6 @@ const HoldSetupForm = ({selectedPanelHoldX, selectedPanelHoldY, setSelectedPanel
             return
         }
         if (!boardHoldIsSelected) {
-            console.log('!boardHoldIsSelected condition')
             return
         }
         let ctm = event.target.getScreenCTM();
