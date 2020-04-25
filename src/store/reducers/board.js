@@ -1,7 +1,7 @@
 import { RESET_BOARD_STATE, SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HOLD, SET_HOVER_HOLD, SET_SELECTED_HOLD,
     xCoordsMap, yCoordsMap
 } from '../constants/board'
-import { SET_CURRENT } from '../constants/activity'
+import {SET_CURRENT} from '../constants/activity'
 
 const initialState = {
     xCoords: xCoordsMap['8'],
@@ -10,7 +10,7 @@ const initialState = {
     hoverHoldY: null,
     selectedHoldY: null,
     selectedHoldX: null,
-    setHolds: {},
+    holdSet: {},
     hideNonSet: false
 };
 
@@ -21,19 +21,24 @@ export default function board(state = initialState, action) {
         case SET_BOARD_POINTS_FROM_NUMS:
             return {
                 ...state,
-                setHolds: {},
+                holdSet: {},
                 xCoords: xCoordsMap[action.value.xNum],
                 yCoords: yCoordsMap[action.value.yNum]
             };
         case SET_BOARD_POINTS:
-            return { ...state, setHolds: {}, xCoords: action.value.xCoords, yCoords: action.value.yCoords };
+            return {
+                ...state,
+                holdSet: action.value.holdSet,
+                xCoords: action.value.xCoords,
+                yCoords: action.value.yCoords
+            };
         case SET_HOLD:
             return {
                 ...state,
                 selectedHoldX: null,
                 selectedHoldY: null,
-                setHolds: {
-                    ...state.setHolds,
+                holdSet: {
+                    ...state.holdSet,
                     [''.concat(state.selectedHoldX, state.selectedHoldY)]: action.value.svgDataInd
                 }
             };

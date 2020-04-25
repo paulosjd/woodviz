@@ -45,7 +45,12 @@ export const fetchProfileData = () => {
                 // dispatch({ type: FETCH_SUMMARY_DATA_SUCCESS, payload: {profileData} });
                 dispatch({
                     type: SET_BOARD_POINTS,
-                    value: {xCoords: profileData.data.data.x_coords, yCoords: profileData.data.data.y_coords} });
+                    value: {
+                        xCoords: profileData.data.data.x_coords,
+                        yCoords: profileData.data.data.y_coords,
+                        holdSet: profileData.data.data.hold_set,
+                    }
+                });
             })
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
     }
@@ -55,9 +60,7 @@ export const updateBoardPoints = (value, isAuth) => {
     if (isAuth) {
         const url = `${baseUrl}/profile/board-setup`;
         return dispatch => {
-            console.log(value)
-            axios.post(url,
-                {board_height: value.yNum, board_width: value.xNum},
+            axios.post(url, {board_height: value.yNum, board_width: value.xNum},
                 {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
                 .then(resp => dispatch({
                         type: SET_BOARD_POINTS,
@@ -67,6 +70,20 @@ export const updateBoardPoints = (value, isAuth) => {
         }
     } else {
         return { type: SET_BOARD_POINTS_FROM_NUMS, value }
+    }
+};
+
+export const saveHoldSet = (value) => {
+    const url = `${baseUrl}/profile/board-setup`;
+    return dispatch => {
+        axios.post(url,
+            {hold_set: value.holdSet, board_width: value.boardWidth, board_height: value.boardHeight},
+            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(resp => dispatch({
+                    type: 'hj',
+                    value: {}
+                })
+            )
     }
 };
 

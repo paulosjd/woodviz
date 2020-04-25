@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {setSelectedPanelHold} from "../../store/actions/activity";
 import {setHandHold} from "../../store/actions/board";
-import {updateBoardPoints} from "../../store/actions/profile";
+import {updateBoardPoints, saveHoldSet} from "../../store/actions/profile";
 import BoardPointsForm from '../../form/panel_items/board_points'
 import HoldSetupForm from '../../form/panel_items/hold_setup'
 
@@ -31,9 +31,13 @@ class BoardSetup extends Component {
                 </button>
                 { this.props.isAuth && (
                     <button
-                        onClick={() => console.log('dispatch action sends board.setHolds object to server')}
+                        onClick={() => this.props.saveHoldSet({
+                            holdSet: this.props.holdSet,
+                            boardWidth: xPtNum,
+                            boardHeight: yPtNum
+                        })}
                         className='save-board-btn'
-                        disabled={!this.props.selectedHold || !this.props.selectedPanelHold || 3 == 3}
+                        // disabled={!this.props.selectedHold || !this.props.selectedPanelHold || 3 == 3}
                     >Save board
                     </button>
                 )}
@@ -63,9 +67,10 @@ const mapStateToProps = ({activity, auth, board}) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateBoardPoints: (val, isAuth) => dispatch(updateBoardPoints(val, isAuth)),
+        updateBoardPoints: (val) => dispatch(updateBoardPoints(val)),
         setSelectedPanelHold: (val) => dispatch(setSelectedPanelHold(val)),
         setHandHold: (val) => dispatch(setHandHold(val)),
+        saveHoldSet: (val) => dispatch(saveHoldSet(val)),
     };
 };
 

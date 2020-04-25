@@ -3,6 +3,8 @@ import {connect} from "react-redux";
 import {Col} from 'reactstrap';
 import BoardSetup from './panel_items/board_setup'
 
+// TODO consider making functional, and just use useDispatch to get currentAction
+
 class RightHandPanel extends Component {
 
     render() {

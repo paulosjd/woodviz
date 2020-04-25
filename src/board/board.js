@@ -39,8 +39,8 @@ class Board extends Component {
         // TODO  -  next priority is hook up logged in user Save Board btn to dispatch API post, load set holds data on login
         // clear holds button (bottom left ?), alongside hide unset holds button
 
-        const setHoldsBool = Object.keys(this.props.setHolds).length > 0;
-        const boardFillColor = setHoldsBool ? '#B8B8B8' : 'grey';
+        const holdSetBool = Object.keys(this.props.holdSet).length > 0;
+        const boardFillColor = holdSetBool ? '#B8B8B8' : 'grey';
         return (
             <svg width={boardWidth} height={boardHeight} className='board'>
                 <rect
@@ -50,7 +50,7 @@ class Board extends Component {
                 { grid.map((obj, ind) => {
                     const {x, y, holdKeyX, holdKeyY} = obj;
                     let holdMarker;
-                    const svgDataInd = this.props.setHolds[''.concat(holdKeyX, holdKeyY)];
+                    const svgDataInd = this.props.holdSet[''.concat(holdKeyX, holdKeyY)];
                     if (svgDataInd) {
                         const svgt = `${x + svgHoldPaths[svgDataInd].xOffset},${y + svgHoldPaths[svgDataInd].yOffset}`;
                         holdMarker = (
@@ -117,7 +117,7 @@ const mapStateToProps = ({activity, auth, board}) => {
         hoverHoldY: board.hoverHoldY,
         selectedHoldX: board.selectedHoldX,
         selectedHoldY: board.selectedHoldY,
-        setHolds: board.setHolds,
+        holdSet: board.holdSet,
         hideNonSet: board.hideNonSet,
     };
 };
