@@ -41,8 +41,9 @@ export const fetchProfileData = () => {
     let url = `${baseUrl}/profile/data`;
     return dispatch => {
         axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-            .then(profileData => { console.log(profileData)
-                // dispatch({ type: FETCH_SUMMARY_DATA_SUCCESS, payload: {profileData} });
+            .then(profileData => {
+                console.log('fetchProfileData profileData.data.data')
+                console.log(profileData.data)
                 dispatch({
                     type: SET_BOARD_POINTS,
                     value: {
@@ -57,16 +58,27 @@ export const fetchProfileData = () => {
 };
 
 export const updateBoardPoints = (value, isAuth) => {
+    console.log(value)
+    console.log(isAuth)
     if (isAuth) {
         const url = `${baseUrl}/profile/board-setup`;
         return dispatch => {
             axios.post(url, {board_height: value.yNum, board_width: value.xNum},
                 {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-                .then(resp => dispatch({
-                        type: SET_BOARD_POINTS,
-                        value: {xCoords: resp.data.x_coords, yCoords: resp.data.y_coords}
-                    })
+                .then(profileData => {
+                    console.log('updateBoardPoints profileData.data.data')
+                    console.log(profileData.data)
+                        dispatch({
+                            type: SET_BOARD_POINTS,
+                            value: {
+                                xCoords: profileData.data.x_coords,
+                                yCoords: profileData.data.y_coords,
+                                holdSet: profileData.data.hold_set,
+                            }
+                        })
+                    }
                 )
+                .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
         }
     } else {
         return { type: SET_BOARD_POINTS_FROM_NUMS, value }
@@ -79,157 +91,24 @@ export const saveHoldSet = (value) => {
         axios.post(url,
             {hold_set: value.holdSet, board_width: value.boardWidth, board_height: value.boardHeight},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-            .then(resp => dispatch({
-                    type: 'hj',
-                    value: {}
-                })
-            )
+            .then(profileData => {
+                console.log('fetchProfileData profileData.data.data')
+                console.log(profileData.data)
+                dispatch({
+                    type: SET_BOARD_POINTS,
+                    value: {
+                        xCoords: profileData.data.data.x_coords,
+                        yCoords: profileData.data.data.y_coords,
+                        holdSet: profileData.data.data.hold_set,
+                    }
+                });
+            })
+            // .then(() => setTimeout(() => dispatch({ type: CLEAR_PROFILE_UPDATE_STATUS }),2500))
+            .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
     }
 };
 
-//
-// export const fetchProfileDataBegin = () => ({
-//     type: FETCH_SUMMARY_DATA_BEGIN
-// });
-//
-// export const resetSelectedItemIndex = () => ({
-//     type: RESET_SELECTED_ITEM_INDEX
-// });
-//
-// export const showNavItem = (item, value) => {
-//     switch (item) {
-//         case 'report_download':
-//             return ({ type: SHOW_REPORT_DOWNLOAD_MENU, value });
-//         case 'interventions':
-//             return ({ type: SHOW_INTERVENTIONS_MENU, value });
-//         case 'csv_download':
-//             return ({ type: SHOW_CSV_DOWNLOAD_MENU, value });
-//         case 'csv_upload':
-//             return ({ type: SHOW_CSV_UPLOAD_MENU, value });
-//         case 'linked_params':
-//             return ({ type: SHOW_LINKED_PARAMS_MENU, value });
-//         case 'profile_shares':
-//             return ({ type: SHOW_PROFILE_SHARES_MENU, value });
-//         default:
-//             return ({ type: SHOW_PROFILE_MENU, value })
-//     }
-// };
-//
-// export const fetchProfileInfo = () => {
-//     const url = `${baseUrl}/profile/info-update`;
-//     return dispatch => {
-//         axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then((profileInfo) => dispatch({ type: PROFILE_MENU_FETCH_SUCCESS, payload: {profileInfo} }))
-//             .catch(() => dispatch({ type: PROFILE_MENU_FETCH_FAILURE }))
-//     }
-// };
-//
-// export const fetchProfileShareInfo = () => {
-//     const url = `${baseUrl}/profile/profile-share`;
-//     return dispatch => {
-//         axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then((shareInfo) => dispatch({ type: PROFILE_SHARE_FETCH_SUCCESS, payload: {shareInfo} }))
-//     }
-// };
-//
-// export const updateProfileInfo = (value) => {
-//     const url = `${baseUrl}/profile/info-update`;
-//     return dispatch => {
-//         axios.post(url,
-//             {birth_year: value.birthYear, gender: value.gender, height: value.height },
-//             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then(() => dispatch({ type: PROFILE_MENU_EDIT_SUCCESS, payload: {value} }))
-//             .then(() => setTimeout(() => dispatch({ type: CLEAR_PROFILE_UPDATE_STATUS }),2500))
-//             .then(() => {return dispatch(fetchProfileData())})
-//             .catch(() => dispatch({ type: PROFILE_MENU_EDIT_FAILURE }) )
-//     }
-// };
-//
-// export const postCsvUpload = (value) => {
-//     const formData = new FormData();
-//     formData.set('file',value.file);
-//     formData.set('date_format',value.date_fmt);
-//     formData.set('param_choice',value.param_choice);
-//     formData.set('unit_choice',value.unit_choice);
-//     const url = `${baseUrl}/datapoints/upload`;
-//     return dispatch => {
-//         axios.post(url, formData,
-//             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token'),
-//                     'Content-Type': 'multipart/form-data'}} )
-//             .then(val => dispatch({ type: SUBMIT_CSV_LOAD_SUCCESS, value: val }) )
-//             .catch(error => dispatch({ type: SUBMIT_CSV_LOAD_FAILURE, payload: error }) )
-//     }
-// };
-//
-// export const confirmCsvUpload = (data, meta) => {
-//     const url = `${baseUrl}/datapoints/upload`;
-//     return dispatch => {
-//         axios.post(url, {data: {...data, confirm: true}, meta: meta },
-//             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then(() => dispatch({ type: CSV_LOAD_CONFIRM }) )
-//             .then(() => setTimeout(() => dispatch({ type: CLEAR_CSV_LOAD_CONFIRM }), 2500))
-//             .catch((error) => dispatch({ type: SUBMIT_CSV_LOAD_FAILURE, payload: error }) )
-//     }
-// };
-//
-// export const postMenuItemAdd = (value) => {
-//     const url = `${baseUrl}/profile/panel_items-item-add`;
-//     return dispatch => {
-//         axios.post(url, {data: { param_choice: value.param_choice, unit_choice: value.unit_choice }},
-//             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then(profileData => dispatch({ type: FETCH_SUMMARY_DATA_SUCCESS, payload: {profileData} }) )
-//             .then(() => dispatch({ type: SET_SHOW_ADD_METRIC, value: false }) )
-//     }
-// };
-//
-// export const postCustomMenuItemAdd = (value) => {
-//     const url = `${baseUrl}/profile/custom-metric-add`;
-//     return dispatch => {
-//         axios.post(url, {data: { param_name: value.param_name, unit_symbol: value.unit_symbol }},
-//             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then(profileData => dispatch({ type: FETCH_SUMMARY_DATA_SUCCESS, payload: {profileData} }) )
-//             .then(() => dispatch({ type: SET_SHOW_ADD_CUSTOM_METRIC, value: false }) )
-//             .catch((error) => dispatch({ type: POST_CUSTOM_PARAM_FAILURE, payload: error }) )
-//     }
-// };
-//
-// export const clearLoadError = () => ({
-//     type: CSV_LOAD_CLEAR
-// });
-//
-// export const getCsvDownload = (value) => {
-//     const url = `${baseUrl}/datapoints/download`;
-//     const fileName = value.fields.join('_').replace(/ /g, '_').toLowerCase().concat(
-//         new Date().toISOString().slice(0,7).replace('-', ''), '.csv');
-//     return dispatch => {
-//         axios.post(url, value,
-//             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token') }})
-//             .then(response => {
-//                 download(response.data, fileName, 'text/csv'); dispatch({ type: CSV_LOAD_CONFIRM })} )
-//             .then(() => setTimeout(() => dispatch({ type: CLEAR_CSV_LOAD_CONFIRM }), 2500))
-//             .catch((error) => dispatch({ type: SUBMIT_CSV_LOAD_FAILURE, payload: error }))
-//     }
-// };
-//
-// export const fetchReportCall = (task_id) => {
-//     return dispatch => {
-//         const fileName = 'health_metrics_report_'.concat(
-//             new Date().toISOString().slice(0,7).replace('-', ''), '.pdf');
-//         dispatch({ type: SET_HAS_REPORT_FILE, value: false });
-//         return axios.get(`${baseUrl}/profile/generate-report/${task_id}`,
-//             { headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then(result => {
-//                 if (result.headers['content-type'] === 'application/pdf') {
-//                     dispatch({ type: SET_HAS_REPORT_FILE, value: true })
-//                     download(result.data, fileName, 'application/pdf');
-//                 }
-//             })
-//             .then(() => setTimeout(() =>
-//                 dispatch({ type: SET_HAS_REPORT_FILE, value: false }), 3600)
-//             )
-//     }
-// };
-//
+
 // export const postColorSchema = (value) => {
 //     return dispatch => {
 //         axios.post(`${baseUrl}/profile/param-colors`, value,
@@ -249,14 +128,5 @@ export const saveHoldSet = (value) => {
 //             .then(() => dispatch({ type: SHOW_MENU_EDIT_SUCCESS }))
 //             .then(() => setTimeout(() => dispatch({ type: CLEAR_PROFILE_UPDATE_STATUS }),2500))
 //             .catch(() => dispatch({ type: PROFILE_MENU_EDIT_FAILURE }) )
-//     }
-// };
-//
-// export const postEditedBookmarks = (value, action='edit') => {
-//     return dispatch => {
-//         axios.post(`${baseUrl}/profile/bookmarks-${action}`, {value},
-//             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-//             .then(bookmarksData => dispatch({ type: UPDATE_BOOKMARKS, payload: {bookmarksData} }))
-//             .catch((error) => dispatch({ type: EDIT_DATA_FAILURE, payload: error }) )
 //     }
 // };

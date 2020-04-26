@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {Row, Col} from 'reactstrap';
 import {xCoordsMap, yCoordsMap} from "../../store/constants/board";
 
-const BoardPointsForm = ({xPtNum, yPtNum, updateBoardPoints}) => {
+const BoardPointsForm = ({xPtNum, yPtNum, updateBoardPoints, isAuth}) => {
 
     const [xNum, setXNum] = useState(xPtNum);
     const [yNum, setYNum] = useState(yPtNum);
@@ -41,7 +41,7 @@ const BoardPointsForm = ({xPtNum, yPtNum, updateBoardPoints}) => {
             <Col xs={4} className='pad-left-0'>
                 { (yNum !== yPtNum || xNum !== xPtNum) && (
                     <button
-                        onClick={() => updateBoardPoints({xNum, yNum})}
+                        onClick={() => updateBoardPoints({xNum, yNum}, isAuth)}
                         className='board-setup-btn'
                     >Save
                     </button>

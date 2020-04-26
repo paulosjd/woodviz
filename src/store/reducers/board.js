@@ -15,10 +15,13 @@ const initialState = {
 };
 
 export default function board(state = initialState, action) {
+    console.log(action.type)
+    console.log(action.payload)
     switch(action.type) {
         case RESET_BOARD_STATE:
             return { ...initialState };
         case SET_BOARD_POINTS_FROM_NUMS:
+            console.log(SET_BOARD_POINTS_FROM_NUMS)
             return {
                 ...state,
                 holdSet: {},
@@ -26,6 +29,7 @@ export default function board(state = initialState, action) {
                 yCoords: yCoordsMap[action.value.yNum]
             };
         case SET_BOARD_POINTS:
+            console.log(SET_BOARD_POINTS)
             return {
                 ...state,
                 holdSet: action.value.holdSet,

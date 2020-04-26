@@ -116,6 +116,12 @@
   background-color: #a9bdd6;
 }
 
+.hold_set_saved {
+  margin-left: 30px;
+  color: #5168a9;
+  display: inline;
+}
+
 .all-holds {
   margin-top: 20px;
 }

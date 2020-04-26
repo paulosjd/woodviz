@@ -27,6 +27,7 @@ class Board extends Component {
     }
 
     render() {
+        console.log(this.props.holdSet)
         const [xCoords, yCoords] = [this.props.xCoords, this.props.yCoords];
         const [boardWidth, boardHeight] = [400, 500];
         const grid = [];

@@ -21,7 +21,8 @@ class BoardSetup extends Component {
                 <BoardPointsForm
                     xPtNum={xPtNum}
                     yPtNum={yPtNum}
-                    updateBoardPoints={val => this.props.updateBoardPoints(val, this.props.isAuth)}
+                    updateBoardPoints={this.props.updateBoardPoints}
+                    isAuth={this.props.isAuth}
                 />
                 <button
                     onClick={() => this.props.setHandHold({svgDataInd: selPanelHoldInd})}
@@ -29,7 +30,9 @@ class BoardSetup extends Component {
                     disabled={!this.props.selectedHold || !this.props.selectedPanelHold}
                 >Set hold
                 </button>
+                {true && <span className='hold_set_saved'>Saved!</span>}
                 { this.props.isAuth && (
+
                     <button
                         onClick={() => this.props.saveHoldSet({
                             holdSet: this.props.holdSet,
@@ -67,7 +70,7 @@ const mapStateToProps = ({activity, auth, board}) => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        updateBoardPoints: (val) => dispatch(updateBoardPoints(val)),
+        updateBoardPoints: (val, isAuth) => dispatch(updateBoardPoints(val, isAuth)),
         setSelectedPanelHold: (val) => dispatch(setSelectedPanelHold(val)),
         setHandHold: (val) => dispatch(setHandHold(val)),
         saveHoldSet: (val) => dispatch(saveHoldSet(val)),
