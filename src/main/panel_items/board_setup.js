@@ -7,6 +7,7 @@ import BoardPointsForm from '../../form/panel_items/board_points'
 import HoldSetupForm from '../../form/panel_items/hold_setup'
 
 class BoardSetup extends Component {
+    state = {showSaveBtn: false};
 
     render() {
         const [xPtNum, yPtNum] = [this.props.xCoords.length, this.props.yCoords.length];
@@ -25,20 +26,25 @@ class BoardSetup extends Component {
                     isAuth={this.props.isAuth}
                 />
                 <button
-                    onClick={() => this.props.setHandHold({svgDataInd: selPanelHoldInd})}
+                    onClick={() => {
+                        this.props.setHandHold({svgDataInd: selPanelHoldInd});
+                        this.setState({ ...this.state, showSaveBtn: true })
+                    }}
                     className='set-hold-btn'
                     disabled={!this.props.selectedHold || !this.props.selectedPanelHold}
                 >Set hold
                 </button>
-                {true && <span className='hold_set_saved'>Saved!</span>}
-                { this.props.isAuth && (
-
+                { this.props.showHoldsSavedNote && <span className='hold_set_saved'>Saved!</span> }
+                { this.props.isAuth && this.state.showSaveBtn && (
                     <button
-                        onClick={() => this.props.saveHoldSet({
-                            holdSet: this.props.holdSet,
-                            boardWidth: xPtNum,
-                            boardHeight: yPtNum
-                        })}
+                        onClick={() => {
+                            this.setState({ ...this.state, showSaveBtn: false });
+                            this.props.saveHoldSet({
+                                holdSet: this.props.holdSet,
+                                boardWidth: xPtNum,
+                                boardHeight: yPtNum
+                            });
+                        }}
                         className='save-board-btn'
                         // disabled={!this.props.selectedHold || !this.props.selectedPanelHold || 3 == 3}
                     >Save board
@@ -65,6 +71,7 @@ const mapStateToProps = ({activity, auth, board}) => {
         selectedPanelHoldX: activity.selectedPanelHoldX,
         selectedPanelHoldY: activity.selectedPanelHoldY,
         holdSet: board.holdSet,
+        showHoldsSavedNote: activity.showHoldsSavedNote
     };
 };
 

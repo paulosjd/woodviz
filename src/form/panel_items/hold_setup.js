@@ -67,7 +67,7 @@ const HoldSetupForm = ({selectedPanelHoldX, selectedPanelHoldY, setSelectedPanel
                                fill={boardHoldIsSelected ? "#000000" : 'grey'} stroke="none"
                             >
                                 {svgHoldPaths[ind].pathDs.map((d, i) => (
-                                    <path key={i} onMouseOver={() => console.log('mouseover1')} d={d} />)
+                                    <path key={i} d={d} />)
                                 )}
                             </g>
                             { holdIsSelected(holdKeyX, holdKeyY) && boardHoldIsSelected ? (

@@ -20,7 +20,7 @@ export default function activity(state = initialState, action) {
         case SET_SELECTED_PANEL_HOLD:
             return { ...state, ...action.value };
         case SHOW_HOLDS_SAVED_NOTE:
-            return { ...state, ...action.value };
+            return { ...state, showHoldsSavedNote: action.value };
         default:
             return state
     }

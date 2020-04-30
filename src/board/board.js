@@ -27,7 +27,6 @@ class Board extends Component {
     }
 
     render() {
-        console.log(this.props.holdSet)
         const [xCoords, yCoords] = [this.props.xCoords, this.props.yCoords];
         const [boardWidth, boardHeight] = [400, 500];
         const grid = [];
@@ -37,11 +36,11 @@ class Board extends Component {
             });
         });
 
-        // TODO  -  next priority is hook up logged in user Save Board btn to dispatch API post, load set holds data on login
-        // clear holds button (bottom left ?), alongside hide unset holds button
+        // TODO  clear holds button (bottom left ?), alongside hide unset holds button
 
         const holdSetBool = Object.keys(this.props.holdSet).length > 0;
         const boardFillColor = holdSetBool ? '#B8B8B8' : 'grey';
+
         return (
             <svg width={boardWidth} height={boardHeight} className='board'>
                 <rect
@@ -55,18 +54,33 @@ class Board extends Component {
                     if (svgDataInd) {
                         const svgt = `${x + svgHoldPaths[svgDataInd].xOffset},${y + svgHoldPaths[svgDataInd].yOffset}`;
                         holdMarker = (
-                            <g transform={`translate(${svgt}) scale(0.100000,-0.100000)`}
-                               fill="#000000" stroke="none">
-                                {svgHoldPaths[svgDataInd].pathDs.map((d, i) => (<path key={i} d={d} />))}
+                            <React.Fragment>
+                                <g
+                                    transform={`translate(${svgt})scale(0.100000,-0.100000)`}
+                                    fill="#353434" stroke="none"
+                                >
+                                {svgHoldPaths[svgDataInd].pathDs.map((d, i) => (
+                                    <path
+                                        key={i} d={d}
+                                        onClick={() => this.handleHoldClick(ind)}
+                                        onMouseOver={() => this.handleHoldHover(ind)}
+                                        onMouseLeave={() => this.props.setHoverHold(
+                                            {hoverHoldX: null, hoverHoldY: null}
+                                        )}
+                                    />
+
+                                ))}
                             </g>
+                        //    #470487 purple
+                            </React.Fragment>
                         )
                     } else {
                         holdMarker = (
                             <React.Fragment>
                                 <circle
-                                    cx={x} cy={y} key={ind + 'a'} r="5"
-                                    fill={!this.props.hideNonSet ? '#00cc00' : boardFillColor}
-                                    stroke={!this.props.hideNonSet ? '#006600' : boardFillColor}
+                                    cx={x} cy={y} key={ind + 'a'} stroke='#006600'
+                                    r={this.props.currentAction === 'setup' ? "5" : "3"}
+                                    fill={this.props.currentAction === 'problems' ? '#f6ffdf' : '#dcffbc'}
                                     onClick={() => this.handleHoldClick(ind)}
                                     onMouseOver={() => this.handleHoldHover(ind)}
                                     onMouseLeave={() => this.props.setHoverHold(
@@ -74,7 +88,7 @@ class Board extends Component {
                                     )}
                                 />
                                 <circle
-                                    cx={x} cy={y}  key={ind + 'b'} r="6"
+                                    cx={x} cy={y}  key={ind + 'b'} r="5"
                                     stroke={boardFillColor} fill='none' strokeWidth='2'
                                     onClick={() => this.handleHoldClick(ind)}
                                     onMouseOver={() => this.handleHoldHover(ind)}
@@ -85,18 +99,41 @@ class Board extends Component {
                             </React.Fragment>
                         )
                     }
+                    let selectdMark;
+                    const holdIsSelected = this.holdIsSelected(holdKeyX, holdKeyY);
+                    if (holdIsSelected) {
+                        selectdMark = (
+                            <circle
+                                cx={x} cy={y} key={'outline' + ind}
+                                r="12" stroke='black' strokeWidth='2' fill='none'
+                            />
+                        );
+                        if (svgDataInd) {
+                            selectdMark = (
+                                <rect width={26} height={26} x={x - 13} y={y - 13} stroke='green' fill='none'/>
+                            )
+                        }
+                    }
+                    let hoveredMark;
+                    if (this.holdIsHovered(holdKeyX, holdKeyY)) {
+                        if (!holdIsSelected) {
+                            hoveredMark = (
+                                <circle cx={x} cy={y} key={'hover' + ind}
+                                        r="8" stroke='goldenrod' fill='none' strokeWidth='2' />
+                            );
+                        }
+                        if (svgDataInd) {
+                            hoveredMark = (
+                                <rect width={26} height={26} x={x - 13} y={y - 13}
+                                      stroke={!holdIsSelected ? '#626b82' : 'green'} fill='none' />
+                            )
+                        }
+                    }
+
                     return (
                         <React.Fragment key={'frag' + ind}>
-                            { this.holdIsSelected(holdKeyX, holdKeyY) && (
-                                <circle
-                                    cx={x} cy={y} key={'outline' + ind}
-                                    r="12" stroke='black' strokeWidth='2' fill='none'
-                                />) }
-                            { this.holdIsHovered(holdKeyX, holdKeyY) && !this.holdIsSelected(holdKeyX, holdKeyY) && (
-                                <circle
-                                    cx={x} cy={y} key={'hover' + ind}
-                                    r="8" stroke='goldenrod' fill='none' strokeWidth='2'
-                                />) }
+                            { selectdMark }
+                            { hoveredMark }
                             { holdMarker }
                         </React.Fragment>
                     )})
@@ -119,7 +156,6 @@ const mapStateToProps = ({activity, auth, board}) => {
         selectedHoldX: board.selectedHoldX,
         selectedHoldY: board.selectedHoldY,
         holdSet: board.holdSet,
-        hideNonSet: board.hideNonSet,
     };
 };
 

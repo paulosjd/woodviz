@@ -122,6 +122,10 @@
   display: inline;
 }
 
+.saveddf {
+  color: #470487;
+}
+
 .all-holds {
   margin-top: 20px;
 }
