@@ -1,43 +1,32 @@
 import React, {Component} from 'react';
-import {connect} from "react-redux";
+import {useSelector} from "react-redux";
 import {Col} from 'reactstrap';
+import BoardProblems from './panel_items/board_problems'
 import BoardSetup from './panel_items/board_setup'
 
-// TODO consider making functional, and just use useDispatch to get currentAction
+const RightHandPanel = (props) => {
 
-class RightHandPanel extends Component {
+    const content = useSelector(state => state);
+    const currentAction = content.activity.current;
 
-    render() {
-
-        let colBody;
-        switch (this.props.currentAction) {
-            case 'setup':
-                colBody = (
-                    <BoardSetup />
-                )
-        }
-
-        return (
-            <Col xs={this.props.xs}>
-                {colBody}
-            </Col>
-        );
+    let colBody;
+    switch (currentAction) {
+        case 'problems':
+            colBody = (
+                <BoardProblems />
+            );
+            break;
+        case 'setup':
+            colBody = (
+                <BoardSetup />
+            )
     }
-}
 
-const mapStateToProps = ({activity}) => {
-    return {
-        currentAction: activity.current,
-    };
+    return (
+        <Col xs={props.xs}>
+            {colBody}
+        </Col>
+    );
 };
 
-const mapDispatchToProps = dispatch => {
-    return {
-
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(RightHandPanel);
+export default RightHandPanel

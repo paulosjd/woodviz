@@ -2,8 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Col} from 'reactstrap';
 import {setShowRegForm, focusUsernameInput} from "../store/actions/auth";
-import {setAction} from "../store/actions/activity";
+import {setAction, setBoardListIndex} from "../store/actions/activity";
 import ActionItems from './panel_items/action_items'
+import BoardList from './panel_items/board_list'
 
 class LeftHandPanel extends Component {
 
@@ -28,11 +29,14 @@ class LeftHandPanel extends Component {
         return (
             <Col xs={this.props.xs}>
                 { intro }
-                {/*{ this.state.selectedItem && (*/}
-                {/*<button className='lg-back-btn' onClick={() => this.setSelectedItem('')} >Back</button>) }*/}
                 <ActionItems
                     currentAction={this.props.currentAction}
                     setAction={this.props.setAction}
+                />
+                <BoardList
+                    currentAction={this.props.currentAction}
+                    boardListIndex={this.props.boardListIndex}
+                    setBoardListIndex={this.props.setBoardListIndex}
                 />
             </Col>
         );
@@ -42,6 +46,7 @@ class LeftHandPanel extends Component {
 const mapStateToProps = ({activity}) => {
     return {
         currentAction: activity.current,
+        boardListIndex: activity.boardListIndex,
     };
 };
 
@@ -50,6 +55,7 @@ const mapDispatchToProps = dispatch => {
         usernameFocus: () => dispatch(focusUsernameInput(true)),
         setShowReg: val => dispatch(setShowRegForm(val)),
         setAction: val => dispatch(setAction(val)),
+        setBoardListIndex: val => dispatch(setBoardListIndex(val)),
     };
 };
 

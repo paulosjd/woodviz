@@ -12,9 +12,9 @@ class BoardProblems extends Component {
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({activity, auth, board}) => {
     return {
-
+        problems: board.problems,
     };
 };
 

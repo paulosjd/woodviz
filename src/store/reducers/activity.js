@@ -1,4 +1,4 @@
-import {RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE
+import {RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE, SET_BOARD_LIST_INDEX,
 } from '../constants/activity'
 import {SET_SELECTED_HOLD} from "../constants/board";
 
@@ -7,6 +7,7 @@ const initialState = {
     selectedPanelHoldX: null,
     selectedPanelHoldY: null,
     showHoldsSavedNote: false,
+    boardListIndex: 0
 };
 
 export default function activity(state = initialState, action) {
@@ -21,6 +22,8 @@ export default function activity(state = initialState, action) {
             return { ...state, ...action.value };
         case SHOW_HOLDS_SAVED_NOTE:
             return { ...state, showHoldsSavedNote: action.value };
+        case SET_BOARD_LIST_INDEX:
+            return { ...state, boardListIndex: action.value };
         default:
             return state
     }

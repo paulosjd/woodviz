@@ -36,8 +36,6 @@ class Board extends Component {
             });
         });
 
-        // TODO  clear holds button (bottom left ?), alongside hide unset holds button
-
         const holdSetBool = Object.keys(this.props.holdSet).length > 0;
         const boardFillColor = holdSetBool ? '#B8B8B8' : 'grey';
 
@@ -51,7 +49,7 @@ class Board extends Component {
                     const {x, y, holdKeyX, holdKeyY} = obj;
                     let holdMarker;
                     const svgDataInd = this.props.holdSet[''.concat(holdKeyX, holdKeyY)];
-                    if (svgDataInd) {
+                    if (svgDataInd || svgDataInd === 0) {
                         const svgt = `${x + svgHoldPaths[svgDataInd].xOffset},${y + svgHoldPaths[svgDataInd].yOffset}`;
                         holdMarker = (
                             <React.Fragment>

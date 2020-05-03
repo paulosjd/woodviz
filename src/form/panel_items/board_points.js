@@ -8,7 +8,7 @@ const BoardPointsForm = ({xPtNum, yPtNum, updateBoardPoints, isAuth}) => {
     const [yNum, setYNum] = useState(yPtNum);
 
     return (
-        <Row>
+        <Row className='top20'>
             <Col xs={8}>
                 <div className='hold-nums'>
                     <label>Holds wide: </label>

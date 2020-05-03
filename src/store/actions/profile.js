@@ -2,22 +2,26 @@ import axios from "axios";
 import {
     FETCH_SUMMARY_DATA_FAILURE,
 } from '../constants/profile'
-import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS} from '../constants/board'
+import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HOLD} from '../constants/board'
 import {SHOW_HOLDS_SAVED_NOTE} from "../constants/activity";
 
 const baseUrl = 'http://127.0.0.1:8000/api';
 
 export const fetchProfileData = () => {
     let url = `${baseUrl}/profile/data`;
-    return dispatch => {
+    return (dispatch, getState) => {
+        const state = getState();
+        const boardInd = state.activity.boardListIndex;
         axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => {
+                const boards = profileData.data.data.boards;
                 dispatch({
                     type: SET_BOARD_POINTS,
                     value: {
-                        xCoords: profileData.data.data.x_coords,
-                        yCoords: profileData.data.data.y_coords,
-                        holdSet: profileData.data.data.hold_set,
+                        xCoords: boards[boardInd].x_coords,
+                        yCoords: boards[boardInd].y_coords,
+                        holdSet: boards[boardInd].hold_set,
+                        boardName: boards[boardInd].board_name,
                     }
                 });
             })
@@ -49,6 +53,10 @@ export const updateBoardPoints = (value, isAuth) => {
     }
 };
 
+// The above - only called from e.g. board_setup (not app didMount hook etc)
+// - Should change this (and fetchProfileData) so that updates profile.boards  -  the current selected obj within array - []
+// - then everywhere that
+
 export const saveHoldSet = (value) => {
     const url = `${baseUrl}/profile/board-setup`;
     return dispatch => {
@@ -61,3 +69,4 @@ export const saveHoldSet = (value) => {
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
     }
 };
+

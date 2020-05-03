@@ -18,7 +18,7 @@ const ActionItems = ({currentAction, setAction}) => {
                         onClick={() => setAction(item.key)}
                         className={currentAction === item.key ? 'board-item active-item' : 'board-item'}
                     >
-                        <h4>{item.label}</h4>
+                        <h5>{item.label}</h5>
                     </ListGroupItem>
                 )})
             }
