@@ -9,6 +9,7 @@ import BoardList from './panel_items/board_list'
 class LeftHandPanel extends Component {
 
     render() {
+        console.log(this.props.boards)
         const intro = (
             <React.Fragment>
                 <p style={{fontSize: 'small'}}>
@@ -34,7 +35,7 @@ class LeftHandPanel extends Component {
                     setAction={this.props.setAction}
                 />
                 <BoardList
-                    currentAction={this.props.currentAction}
+                    boardNames={this.props.boards.map(obj => obj.boardName)}
                     boardListIndex={this.props.boardListIndex}
                     setBoardListIndex={this.props.setBoardListIndex}
                 />
@@ -43,10 +44,11 @@ class LeftHandPanel extends Component {
     }
 }
 
-const mapStateToProps = ({activity}) => {
+const mapStateToProps = ({activity, profile}) => {
     return {
         currentAction: activity.current,
         boardListIndex: activity.boardListIndex,
+        boards: profile.boards,
     };
 };
 

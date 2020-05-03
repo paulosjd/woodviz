@@ -1,10 +1,11 @@
 import React, {useEffect} from "react";
 import PropTypes from "prop-types";
 
-const useEscapeKeyAction = (actions) => {
+const useEscapeKeyAction = (actions, key) => {
 
     const handleKeyPress = (event) => {
-        if (event.key === 'Escape'){
+        console.log(event.key)
+        if (event.key === key){
             for (let action of actions) {
                 action()
             }
@@ -21,7 +22,7 @@ const useEscapeKeyAction = (actions) => {
 
 function EscapeKeyAction(props) {
     /** Component that runs the action prop (a callback function) if you click outside of it (and its children) */
-    useEscapeKeyAction(props.actions);
+    useEscapeKeyAction(props.actions, 'Escape');
     return <div>{props.children}</div>;
 }
 

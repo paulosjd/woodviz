@@ -12,6 +12,7 @@ const initialState = {
     selectedHoldX: null,
     holdSet: {},
     boardName: '',
+    boardId: '',
 };
 
 export default function board(state = initialState, action) {
@@ -24,7 +25,8 @@ export default function board(state = initialState, action) {
                 holdSet: {},
                 xCoords: xCoordsMap[action.value.xNum],
                 yCoords: yCoordsMap[action.value.yNum],
-                boardName: ''
+                boardName: '',
+                boardId: '', // TODO
             };
         case SET_BOARD_POINTS:
             return {
@@ -33,6 +35,7 @@ export default function board(state = initialState, action) {
                 xCoords: action.value.xCoords,
                 yCoords: action.value.yCoords,
                 boardName: action.value.boardName,
+                boardId: action.value.boardId
             };
         case SET_HOLD:
             return {

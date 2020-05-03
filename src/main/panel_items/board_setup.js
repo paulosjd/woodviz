@@ -65,6 +65,7 @@ class BoardSetup extends Component {
                     yPtNum={yPtNum}
                     updateBoardPoints={this.props.updateBoardPoints}
                     isAuth={this.props.isAuth}
+                    boardName={this.props.boardName}
                 />
             </React.Fragment>
         )

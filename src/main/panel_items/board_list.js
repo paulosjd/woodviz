@@ -1,49 +1,74 @@
-import React from "react";
+import React, {useState} from "react";
+import { useDispatch, useSelector } from "react-redux";
 import {ListGroup, ListGroupItem} from "reactstrap";
+import {setShowBoardAdd} from "../../store/actions/activity";
+import EscapeKeyAction from "../../utils/esc_key_action";
 
-const BoardList = ({boardNameList, currentAction, boardListIndex, setBoardListIndex}) => {
+const BoardList = ({boardNames, boardListIndex, setBoardListIndex}) => {
 
-    const testBoards = [
-        {holdSet: {}, xCoords: [], yCoords: [], boardName: 'Set A'},
-    ];
-    console.log(boardListIndex)
+    const [newNameVal, setNewNameVal] = useState('');
+    const dispatch = useDispatch();
+    const content = useSelector(state => state);
+    const currentAction = content.activity.current;
+    const showBoardAdd = content.activity.showBoardAdd;
+    // console.log(showBoardAdd)
+
+    let setupAction;
+    if (currentAction === 'setup') {
+        if (!showBoardAdd) {
+            setupAction = (
+                <ListGroupItem
+                    className='add_board_btn'
+                    onClick={() => dispatch(setShowBoardAdd(true))}
+                >
+                <span id='add_board_label' role="img" aria-label="plus" className='add_board_icon'>
+                    &#x2795;
+                </span>
+                    <span>Add new board</span>
+                </ListGroupItem>
+            )
+        } else {
+            setupAction = (
+                <EscapeKeyAction actions={[() => dispatch(setShowBoardAdd(false))]}>
+                    <ListGroupItem
+                        className='add_board_form'
+                    >
+                        <input
+                            type="text"
+                            value={newNameVal}
+                            placeholder='Name'
+                            onChange={(e) => setNewNameVal(e.target.value)}
+                            className='add_board_input'
+                        />
+                        <span id='add_board_label' role="img" aria-label="plus" className='save_board_icon'>
+                            &#x2714;
+                        </span>
+                    </ListGroupItem>
+                </EscapeKeyAction>
+            )
+        }
+
+    }
+
     return (
         <ListGroup className='top30'>
-            {testBoards.map((item, ind) => {
-                // let editIcon;
-                // if (currentAction === 'setup') {
-                //     editIcon = (
-                //         <span onClick={() => console.log(true)} role="img" aria-label="info" id="target-edit-icon">
-                //             &#x270F;
-                //         </span>
-                //     )
-                // }
+            {boardNames.map((name, ind) => {
                 return (
                     <ListGroupItem
                         key={ind}
                         onClick={() => setBoardListIndex(ind)}
                         className={boardListIndex === ind ? 'board-lg-item active-item' : 'board-lg-item'}
                     >
-                        <span>{item.boardName}</span>
-                        {currentAction === 'setup' && (
-                            <span onClick={() => console.log(true)} role="img" aria-label="info" id="target-edit-icon" className='edit-icon'>
+                        <span style={{fontSize: '1.0rem'}}>{name}</span>
+                        {currentAction === 'setup' && boardListIndex === ind && (
+                            <span onClick={() => console.log(true)} role="img" aria-label="info"
+                                  id="target-edit-icon" className='edit-icon'>
                             &#x270F;
                         </span>
                         )}
                     </ListGroupItem>
-                )})
-            }
-            {currentAction === 'setup' && (
-                <ListGroupItem
-                    className='add_board_btn'
-                    onClick={() => console.log(3)}
-                >
-                    <span id='add_board_label' role="img" aria-label="plus" className='add_board_icon'>
-                        &#x2795;
-                    </span>
-                    <span>Add new board</span>
-                </ListGroupItem>
-            )}
+                )})}
+            {setupAction}
         </ListGroup>
     )
 };

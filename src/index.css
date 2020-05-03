@@ -29,7 +29,7 @@
 }
 
 .list-group h5 {
-  font-size: 1.1rem;
+  font-size: 1.0rem;
 }
 
 .active-item {
@@ -195,4 +195,18 @@
   font-size: 0.6rem !important;
   padding-bottom: 18px !important;
   padding-right: 8px !important;
+}
+
+.save_board_icon {
+  /*font-size: 0.8rem !important;*/
+  /*padding-bottom: 18px !important;*/
+  padding-left: 8px !important;
+}
+
+.add_board_form {
+  font-size: 0.8rem;
+}
+
+.add_board_input {
+  width: 150px;
 }
