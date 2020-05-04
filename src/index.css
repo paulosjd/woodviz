@@ -198,13 +198,18 @@
 }
 
 .save_board_icon {
-  /*font-size: 0.8rem !important;*/
-  /*padding-bottom: 18px !important;*/
-  padding-left: 8px !important;
+  margin-left: 12px !important;
+}
+
+.save_board_icon:hover {
+  background-color: #f5f5f5;
+  border-radius: 3px;
+  cursor: pointer;
 }
 
 .add_board_form {
   font-size: 0.8rem;
+  padding-right: 0 !important
 }
 
 .add_board_input {

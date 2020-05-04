@@ -10,7 +10,7 @@ import {loginSuccess, setShowRegForm} from "./store/actions/auth";
 import {setSelectedHold} from './store/actions/board'
 import {fetchProfileData} from "./store/actions/profile";
 import './auth/login.css';
-import EscapeKeyAction from "./utils/esc_key_action";
+import {EscapeKeyAction} from "./utils/use_key_actions";
 
 const Auth = new AuthService();
 

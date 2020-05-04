@@ -27,6 +27,7 @@ class BoardSetup extends Component {
                             boardWidth: xPtNum,
                             boardHeight: yPtNum,
                             boardName: this.props.boardName,
+                            boardId: this.props.boardId,
                         });
                     }}
                     className='save-board-btn'
@@ -66,6 +67,7 @@ class BoardSetup extends Component {
                     updateBoardPoints={this.props.updateBoardPoints}
                     isAuth={this.props.isAuth}
                     boardName={this.props.boardName}
+                    boardId={this.props.boardId}
                 />
             </React.Fragment>
         )
@@ -85,6 +87,7 @@ const mapStateToProps = ({activity, auth, board}) => {
         selectedPanelHoldY: activity.selectedPanelHoldY,
         holdSet: board.holdSet,
         boardName: board.boardName,
+        boardId: board.boardId,
         showHoldsSavedNote: activity.showHoldsSavedNote
     };
 };

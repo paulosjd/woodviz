@@ -4,7 +4,6 @@ import PropTypes from "prop-types";
 const useEscapeKeyAction = (actions, key) => {
 
     const handleKeyPress = (event) => {
-        console.log(event.key)
         if (event.key === key){
             for (let action of actions) {
                 action()
@@ -20,14 +19,14 @@ const useEscapeKeyAction = (actions, key) => {
     })
 };
 
-function EscapeKeyAction(props) {
+export function EnterKeyAction(props) {
+    /** Component that runs the action prop (a callback function) if you click outside of it (and its children) */
+    useEscapeKeyAction(props.actions, 'Enter');
+    return <div>{props.children}</div>;
+}
+
+export function EscapeKeyAction(props) {
     /** Component that runs the action prop (a callback function) if you click outside of it (and its children) */
     useEscapeKeyAction(props.actions, 'Escape');
     return <div>{props.children}</div>;
 }
-
-EscapeKeyAction.propTypes = {
-    children: PropTypes.element.isRequired
-};
-
-export default EscapeKeyAction

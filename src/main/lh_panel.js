@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Col} from 'reactstrap';
 import {setShowRegForm, focusUsernameInput} from "../store/actions/auth";
 import {setAction, setBoardListIndex} from "../store/actions/activity";
+import {createNewBoard} from "../store/actions/profile";
 import ActionItems from './panel_items/action_items'
 import BoardList from './panel_items/board_list'
 
@@ -38,17 +39,19 @@ class LeftHandPanel extends Component {
                     boardNames={this.props.boards.map(obj => obj.boardName)}
                     boardListIndex={this.props.boardListIndex}
                     setBoardListIndex={this.props.setBoardListIndex}
+                    createNewBoard={this.props.createNewBoard}
                 />
             </Col>
         );
     }
 }
 
-const mapStateToProps = ({activity, profile}) => {
+const mapStateToProps = ({auth, activity, profile}) => {
     return {
         currentAction: activity.current,
         boardListIndex: activity.boardListIndex,
         boards: profile.boards,
+        isAuth: !!auth.user_id,
     };
 };
 
@@ -58,6 +61,7 @@ const mapDispatchToProps = dispatch => {
         setShowReg: val => dispatch(setShowRegForm(val)),
         setAction: val => dispatch(setAction(val)),
         setBoardListIndex: val => dispatch(setBoardListIndex(val)),
+        createNewBoard: (val, isAuth) => dispatch(createNewBoard(val, isAuth))
     };
 };
 

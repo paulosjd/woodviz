@@ -2,15 +2,17 @@ import React, {useState} from "react";
 import { useDispatch, useSelector } from "react-redux";
 import {ListGroup, ListGroupItem} from "reactstrap";
 import {setShowBoardAdd} from "../../store/actions/activity";
-import EscapeKeyAction from "../../utils/esc_key_action";
+import {syncBoardWithInd} from "../../store/actions/profile";
+import {EscapeKeyAction} from "../../utils/use_key_actions";
 
-const BoardList = ({boardNames, boardListIndex, setBoardListIndex}) => {
+const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoard}) => {
 
     const [newNameVal, setNewNameVal] = useState('');
     const dispatch = useDispatch();
     const content = useSelector(state => state);
     const currentAction = content.activity.current;
     const showBoardAdd = content.activity.showBoardAdd;
+    const isAuth = !!content.auth.user_id;
     // console.log(showBoardAdd)
 
     let setupAction;
@@ -37,12 +39,17 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex}) => {
                             type="text"
                             value={newNameVal}
                             placeholder='Name'
+                            maxLength={10}
+                            onKeyDown={e => {if (e.key === 'Enter' && newNameVal) {
+                                createNewBoard(newNameVal, isAuth)
+                            }}}
                             onChange={(e) => setNewNameVal(e.target.value)}
                             className='add_board_input'
                         />
-                        <span id='add_board_label' role="img" aria-label="plus" className='save_board_icon'>
-                            &#x2714;
-                        </span>
+                        { newNameVal && (
+                            <span id='add_board_label' role="img" aria-label="plus" className='save_board_icon'
+                                  onClick={() => createNewBoard(newNameVal, isAuth)}
+                            >&#x2714;</span> )}
                     </ListGroupItem>
                 </EscapeKeyAction>
             )
@@ -56,7 +63,7 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex}) => {
                 return (
                     <ListGroupItem
                         key={ind}
-                        onClick={() => setBoardListIndex(ind)}
+                        onClick={() => {setBoardListIndex(ind); dispatch(syncBoardWithInd())}}
                         className={boardListIndex === ind ? 'board-lg-item active-item' : 'board-lg-item'}
                     >
                         <span style={{fontSize: '1.0rem'}}>{name}</span>
@@ -68,7 +75,7 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex}) => {
                         )}
                     </ListGroupItem>
                 )})}
-            {setupAction}
+            { boardNames.length < 5 && setupAction }
         </ListGroup>
     )
 };
