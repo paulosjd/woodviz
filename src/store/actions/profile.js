@@ -75,27 +75,23 @@ export const updateBoardPoints = (value, isAuth) => {
     }
 };
 
-export const createNewBoard = (value, isAuth) => {
-    if (isAuth) {
-        const url = `${baseUrl}/profile/board-setup`;
-        return (dispatch, getState) => {
-            const state = getState();
-            axios.post(url, {board_height: state.board.yCoords.length, board_width: state.board.xCoords.length,
-                    board_name: value},
-                {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-                .then(profileData => dispatch({
-                    type: SET_PROFILE_BOARDS,
-                    value: profileData.data.boards.map(obj => {
-                        return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
-                            boardName: obj.board_name, boardId: obj.board_id }
-                    })
-                }))
-                .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
-                .then(() => dispatch(syncBoardWithInd()))
-                .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
-        }
-    } else {
-        return { type: SET_BOARD_POINTS_FROM_NUMS, value }
+export const createNewBoard = (value) => {
+    const url = `${baseUrl}/profile/board-setup`;
+    return (dispatch, getState) => {
+        const state = getState();
+        axios.post(url, {board_height: state.board.yCoords.length, board_width: state.board.xCoords.length,
+                board_name: value},
+            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(profileData => dispatch({
+                type: SET_PROFILE_BOARDS,
+                value: profileData.data.boards.map(obj => {
+                    return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
+                        boardName: obj.board_name, boardId: obj.board_id }
+                })
+            }))
+            .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
+            .then(() => dispatch(syncBoardWithInd()))
+            .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
     }
 };
 
@@ -106,6 +102,13 @@ export const saveHoldSet = (value) => {
             {hold_set: value.holdSet, board_width: value.boardWidth, board_height: value.boardHeight,
                 board_name: value.boardName, board_id: value.boardId},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(profileData => dispatch({
+                type: SET_PROFILE_BOARDS,
+                value: profileData.data.boards.map(obj => {
+                    return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
+                        boardName: obj.board_name, boardId: obj.board_id }
+                })
+            }))
             .then(() => dispatch({ type: SHOW_HOLDS_SAVED_NOTE, value: true }))
             .then(() => setTimeout(() => dispatch(
                 { type: SHOW_HOLDS_SAVED_NOTE, value: false }),4000))

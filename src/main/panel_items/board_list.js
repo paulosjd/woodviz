@@ -13,15 +13,18 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
     const currentAction = content.activity.current;
     const showBoardAdd = content.activity.showBoardAdd;
     const isAuth = !!content.auth.user_id;
-    // console.log(showBoardAdd)
 
     let setupAction;
     if (currentAction === 'setup') {
         if (!showBoardAdd) {
             setupAction = (
                 <ListGroupItem
-                    className='add_board_btn'
-                    onClick={() => dispatch(setShowBoardAdd(true))}
+                    className={isAuth ? 'add_board_btn' : 'add_board_btn faded'}
+                    onClick={() => {
+                        if (isAuth) {
+                            dispatch(setShowBoardAdd(true))
+                        }
+                    }}
                 >
                 <span id='add_board_label' role="img" aria-label="plus" className='add_board_icon'>
                     &#x2795;
@@ -63,7 +66,12 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
                 return (
                     <ListGroupItem
                         key={ind}
-                        onClick={() => {setBoardListIndex(ind); dispatch(syncBoardWithInd())}}
+                        onClick={() => {
+                            if (boardNames.length > 1) {
+                                setBoardListIndex(ind);
+                                dispatch(syncBoardWithInd())
+                            }
+                        }}
                         className={boardListIndex === ind ? 'board-lg-item active-item' : 'board-lg-item'}
                     >
                         <span style={{fontSize: '1.0rem'}}>{name}</span>
@@ -71,8 +79,7 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
                             <span onClick={() => console.log(true)} role="img" aria-label="info"
                                   id="target-edit-icon" className='edit-icon'>
                             &#x270F;
-                        </span>
-                        )}
+                        </span>)}
                     </ListGroupItem>
                 )})}
             { boardNames.length < 5 && setupAction }

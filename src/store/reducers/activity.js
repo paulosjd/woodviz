@@ -14,6 +14,7 @@ const initialState = {
 
 export default function activity(state = initialState, action) {
     const partInitState = { ...state, showBoardAdd: false };
+    console.log(action.type)
     switch(action.type) {
         case RESET_ACTIVITY_STATE:
             return { ...initialState };

@@ -37,16 +37,27 @@ class BoardSetup extends Component {
         }
         let rmHoldBtn;
         if (hsholdIsSelected) {
-            rmHoldBtn = (<button onClick={this.props.delHandHold} className='rm-hold-btn'>x</button>)
+            rmHoldBtn = (
+                <button
+                    onClick={(val) => {
+                        this.props.delHandHold(val);
+                        if (this.props.isAuth) {
+                            this.setState({ ...this.state, showSaveBtn: true })
+                        }
+                    }}
+                    className='rm-hold-btn'
+                >x</button>
+            )
         }
 
         return (
             <React.Fragment>
-
                 <button
                     onClick={() => {
                         this.props.setHandHold({svgDataInd: selPanelHoldInd});
-                        this.setState({ ...this.state, showSaveBtn: true })
+                        if (this.props.isAuth) {
+                            this.setState({ ...this.state, showSaveBtn: true })
+                        }
                     }}
                     className='set-hold-btn'
                     disabled={!this.props.selectedHold || !this.props.selectedPanelHold}

@@ -61,7 +61,11 @@ const mapDispatchToProps = dispatch => {
         setShowReg: val => dispatch(setShowRegForm(val)),
         setAction: val => dispatch(setAction(val)),
         setBoardListIndex: val => dispatch(setBoardListIndex(val)),
-        createNewBoard: (val, isAuth) => dispatch(createNewBoard(val, isAuth))
+        createNewBoard: (val, isAuth) => {
+            if (isAuth) {
+                dispatch(createNewBoard(val))
+            }
+        }
     };
 };
 
