@@ -1,13 +1,13 @@
 import axios from "axios";
 import {
-    FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS
+    FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE
 } from '../constants/profile'
 import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HOLD} from '../constants/board'
 import {SET_BOARD_LIST_INDEX, SHOW_HOLDS_SAVED_NOTE} from "../constants/activity";
 
 const baseUrl = 'http://127.0.0.1:8000/api';
 
-const pdcb = (profileData, dispatch, boardInd) => {
+const pdcb = (profileData, dispatch, boardInd, ) => {
     const boards = profileData.data.boards;
     dispatch({
         type: SET_BOARD_POINTS,
@@ -46,7 +46,6 @@ export const syncBoardWithInd = () => {
     }
 };
 
-
 export const fetchProfileData = () => {
     let url = `${baseUrl}/profile/data`;
     return (dispatch, getState) => {
@@ -54,6 +53,7 @@ export const fetchProfileData = () => {
         const boardInd = state.activity.boardListIndex;
         axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => pdcb(profileData, dispatch, boardInd))
+            .then(() => dispatch({ type: INITIAL_LOAD_DONE }))
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
     }
 };
@@ -81,6 +81,27 @@ export const createNewBoard = (value) => {
         const state = getState();
         axios.post(url, {board_height: state.board.yCoords.length, board_width: state.board.xCoords.length,
                 board_name: value},
+            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(profileData => dispatch({
+                type: SET_PROFILE_BOARDS,
+                value: profileData.data.boards.map(obj => {
+                    return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
+                        boardName: obj.board_name, boardId: obj.board_id }
+                })
+            }))
+            .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
+            .then(() => dispatch(syncBoardWithInd()))
+            .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
+    }
+};
+
+
+
+
+export const editBoardName = (value) => {
+    const url = `${baseUrl}/profile/board-setup`;
+    return (dispatch, getState) => {
+        axios.post(url, {edit_name: true, board_name: value},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => dispatch({
                 type: SET_PROFILE_BOARDS,

@@ -1,9 +1,10 @@
 import React, {useState} from "react";
-import { useDispatch, useSelector } from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {ListGroup, ListGroupItem} from "reactstrap";
-import {setShowBoardAdd} from "../../store/actions/activity";
+import {setShowBoardAdd, setShowBoardNameEdit} from "../../store/actions/activity";
 import {syncBoardWithInd} from "../../store/actions/profile";
 import {EscapeKeyAction} from "../../utils/use_key_actions";
+import BoardNameEdit from "../../form/panel_items/board_name_edit";
 
 const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoard}) => {
 
@@ -12,6 +13,7 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
     const content = useSelector(state => state);
     const currentAction = content.activity.current;
     const showBoardAdd = content.activity.showBoardAdd;
+    const showBoardNameEdit = content.activity.showBoardNameEdit;
     const isAuth = !!content.auth.user_id;
 
     let setupAction;
@@ -57,12 +59,32 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
                 </EscapeKeyAction>
             )
         }
-
     }
 
     return (
         <ListGroup className='top30'>
             {boardNames.map((name, ind) => {
+                let item;
+                let editBtn;
+                if (currentAction === 'setup' && !showBoardNameEdit && boardListIndex === ind) {
+                    editBtn = (
+                        <span onClick={() => dispatch(setShowBoardNameEdit(true))}
+                              role="img" aria-label="info" id="target-edit-icon" className='edit-icon'
+                        >&#x270F;</span>
+                    )
+                }
+                if (boardListIndex === ind && showBoardNameEdit) {
+                    item = (
+                        <BoardNameEdit
+                            name={name}
+
+                        />
+                    )
+                } else {
+                    item = (
+                        <span style={{fontSize: '1.0rem'}}>{name}</span>
+                    )
+                }
                 return (
                     <ListGroupItem
                         key={ind}
@@ -74,14 +96,11 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
                         }}
                         className={boardListIndex === ind ? 'board-lg-item active-item' : 'board-lg-item'}
                     >
-                        <span style={{fontSize: '1.0rem'}}>{name}</span>
-                        {currentAction === 'setup' && boardListIndex === ind && (
-                            <span onClick={() => console.log(true)} role="img" aria-label="info"
-                                  id="target-edit-icon" className='edit-icon'>
-                            &#x270F;
-                        </span>)}
+                        {item}
+                        {editBtn}
                     </ListGroupItem>
-                )})}
+                )}
+            )}
             { boardNames.length < 5 && setupAction }
         </ListGroup>
     )

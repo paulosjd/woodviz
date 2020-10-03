@@ -22,6 +22,7 @@ class App extends Component {
     };
 
     componentDidMount() {
+
         if (Auth.loggedIn()) {
             try {
                 const profile = Auth.getProfile();

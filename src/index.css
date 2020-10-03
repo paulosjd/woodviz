@@ -211,6 +211,10 @@
   cursor: pointer;
 }
 
+#edit_board_label {
+  font-size: 11px;
+}
+
 .add_board_form {
   font-size: 0.8rem;
   padding-right: 0 !important

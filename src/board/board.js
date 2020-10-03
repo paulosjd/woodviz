@@ -103,7 +103,7 @@ class Board extends Component {
                         selectdMark = (
                             <circle
                                 cx={x} cy={y} key={'outline' + ind}
-                                r="12" stroke='black' strokeWidth='2' fill='none'
+                                r="12" stroke='#ffda2f' strokeWidth='2' fill='none'
                             />
                         );
                         if (svgDataInd) {

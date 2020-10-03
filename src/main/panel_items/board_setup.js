@@ -49,6 +49,19 @@ class BoardSetup extends Component {
                 >x</button>
             )
         }
+        let boardDimsForm;
+        if (Object.keys(this.props.holdSet).length === 0){
+            boardDimsForm = (
+                <BoardPointsForm
+                    xPtNum={xPtNum}
+                    yPtNum={yPtNum}
+                    updateBoardPoints={this.props.updateBoardPoints}
+                    isAuth={this.props.isAuth}
+                    boardName={this.props.boardName}
+                    boardId={this.props.boardId}
+                />
+            )
+        }
 
         return (
             <React.Fragment>
@@ -72,14 +85,7 @@ class BoardSetup extends Component {
                     setSelectedPanelHold={this.props.setSelectedPanelHold}
                     boardHoldIsSelected={this.props.selectedHold}
                 />
-                <BoardPointsForm
-                    xPtNum={xPtNum}
-                    yPtNum={yPtNum}
-                    updateBoardPoints={this.props.updateBoardPoints}
-                    isAuth={this.props.isAuth}
-                    boardName={this.props.boardName}
-                    boardId={this.props.boardId}
-                />
+                { boardDimsForm }
             </React.Fragment>
         )
     }
