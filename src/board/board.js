@@ -17,12 +17,12 @@ class Board extends Component {
     }
 
     holdIsHovered(xKey, yKey) {
-        return this.props.currentAction === 'setup' && this.props.hoverHoldX === xKey &&
+        return ['setup', 'add'].includes(this.props.currentAction) && this.props.hoverHoldX === xKey &&
             this.props.hoverHoldY === yKey
     }
 
     holdIsSelected(xKey, yKey) {
-        return this.props.currentAction === 'setup' && this.props.selectedHoldX === xKey &&
+        return ['setup', 'add'].includes(this.props.currentAction) && this.props.selectedHoldX === xKey &&
             this.props.selectedHoldY === yKey
     }
 
@@ -69,7 +69,6 @@ class Board extends Component {
 
                                 ))}
                             </g>
-                        //    #470487 purple
                             </React.Fragment>
                         )
                     } else {
@@ -103,10 +102,10 @@ class Board extends Component {
                         selectdMark = (
                             <circle
                                 cx={x} cy={y} key={'outline' + ind}
-                                r="12" stroke='#ffda2f' strokeWidth='2' fill='none'
+                                r="12" stroke='black' strokeWidth='2' fill='none'
                             />
                         );
-                        if (svgDataInd) {
+                        if (svgDataInd || svgDataInd === 0) {
                             selectdMark = (
                                 <rect width={26} height={26} x={x - 13} y={y - 13} stroke='green' fill='none'/>
                             )
@@ -120,7 +119,7 @@ class Board extends Component {
                                         r="8" stroke='goldenrod' fill='none' strokeWidth='2' />
                             );
                         }
-                        if (svgDataInd) {
+                        if (svgDataInd || svgDataInd === 0) {
                             hoveredMark = (
                                 <rect width={26} height={26} x={x - 13} y={y - 13}
                                       stroke={!holdIsSelected ? '#626b82' : 'green'} fill='none' />
