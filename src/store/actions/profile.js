@@ -3,7 +3,12 @@ import {
     FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE
 } from '../constants/profile'
 import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HOLD} from '../constants/board'
-import {SET_BOARD_LIST_INDEX, SHOW_HOLDS_SAVED_NOTE} from "../constants/activity";
+import {
+    SET_BOARD_LIST_INDEX,
+    SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_DELETE_CONFIRM,
+    SET_SHOW_BOARD_NAME_EDIT,
+    SHOW_HOLDS_SAVED_NOTE
+} from "../constants/activity";
 
 const baseUrl = 'http://127.0.0.1:8000/api';
 
@@ -89,19 +94,17 @@ export const createNewBoard = (value) => {
                         boardName: obj.board_name, boardId: obj.board_id }
                 })
             }))
+            .then(() => dispatch({ type: SET_SHOW_BOARD_ADD,  value: false }))
             .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
             .then(() => dispatch(syncBoardWithInd()))
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
     }
 };
 
-
-
-
-export const editBoardName = (value) => {
+export const editBoardName = (value, boardId) => {
     const url = `${baseUrl}/profile/board-setup`;
-    return (dispatch, getState) => {
-        axios.post(url, {edit_name: true, board_name: value},
+    return (dispatch) => {
+        axios.post(url, {edit_name: true, board_name: value, board_id: boardId},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => dispatch({
                 type: SET_PROFILE_BOARDS,
@@ -110,6 +113,24 @@ export const editBoardName = (value) => {
                         boardName: obj.board_name, boardId: obj.board_id }
                 })
             }))
+            .then(() => dispatch({ type: SET_SHOW_BOARD_NAME_EDIT, value: false }))
+            .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
+    }
+};
+
+export const deleteBoard = (boardId) => {
+    const url = `${baseUrl}/profile/board-setup`;
+    return (dispatch) => {
+        axios.post(url, {delete_board: true, board_id: boardId},
+            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(profileData => dispatch({
+                type: SET_PROFILE_BOARDS,
+                value: profileData.data.boards.map(obj => {
+                    return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
+                        boardName: obj.board_name, boardId: obj.board_id }
+                })
+            }))
+            .then(() => dispatch({ type: SET_SHOW_BOARD_DELETE_CONFIRM, value: false }))
             .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
             .then(() => dispatch(syncBoardWithInd()))
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))

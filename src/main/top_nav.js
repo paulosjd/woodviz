@@ -4,6 +4,9 @@ import {connect } from "react-redux";
 import Login from '../auth/login'
 import { } from '../store/actions/profile'
 import { userLogout } from '../store/actions/auth'
+import ConfirmBoardDelete from '../form/modals/confirm_board_delete'
+import {setShowBoardDeleteConfirm} from "../store/actions/activity";
+import {deleteBoard} from "../store/actions/profile";
 
 class TopNav extends Component {
 
@@ -16,7 +19,8 @@ class TopNav extends Component {
         if (this.props.user_id) {
             topRight = (
                 <button
-                    type="button"
+                    type='button'
+                    className='gen-btn nav-btn'
                     onClick={(e) => {
                         this.props.handleLogout(e);
                         this.props.userLogout()
@@ -26,27 +30,52 @@ class TopNav extends Component {
         } else {
             topRight = <Login/>
         }
-        return (
+
+        const navbar = (
             <Navbar>
                 <span role="img" aria-label="Mushroom" className='nav-item' id="profile">&#x1F344;</span>
                 <span className="mr-auto"
                 >{ this.props.username }</span>
                 { topRight }
             </Navbar>
-        )
+        );
+
+        if (this.props.showBoardDeleteConfirm) {
+            return (
+                <React.Fragment>
+                    {navbar}
+                    <ConfirmBoardDelete
+                        toggle={() => this.props.setShowBoardDeleteConfirm(!this.props.showBoardDeleteConfirm)}
+                        isOpen={this.props.showBoardDeleteConfirm}
+                        boardName={this.props.boardName}
+                        boardId={this.props.boardId}
+                        setShowBoardDeleteConfirm={this.props.setShowBoardDeleteConfirm}
+                        deleteBoard={this.props.deleteBoard}
+                    />
+                </React.Fragment>
+            )
+        }
+
+        return navbar
     }
 }
 
-const mapStateToProps = state => {
+const mapStateToProps = ({auth, activity, profile}) => {
+    const boardInd = activity.boardListIndex;
     return {
-        user_id: state.auth.user_id,
-        username: state.auth.username,
+        user_id: auth.user_id,
+        username: auth.username,
+        showBoardDeleteConfirm: activity.showBoardDeleteConfirm,
+        boardName: profile.boards[boardInd].boardName,
+        boardId: profile.boards[boardInd].boardId,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        userLogout: () => dispatch(userLogout())
+        userLogout: () => dispatch(userLogout()),
+        setShowBoardDeleteConfirm: (val) =>  dispatch(setShowBoardDeleteConfirm(val)),
+        deleteBoard: (val) => dispatch(deleteBoard(val)),
     };
 };
 

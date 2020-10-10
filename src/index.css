@@ -3,6 +3,10 @@
   padding: .2rem 0.5rem  !important;
 }
 
+.App {
+  background-color: #fcfcfc;;
+}
+
 .container {
   padding-left: 0 !important;
 }
@@ -99,6 +103,54 @@
   color: #42669c;
   cursor: pointer;
   font-size: small;
+}
+
+.del-board-text {
+  color: #f6a92c;
+  cursor: pointer;
+  font-size: small;
+  margin-top: 18px !important;
+}
+
+.del-board-btn {
+  margin: 12px 0 22px 22px;
+}
+
+.nav-btn {
+  padding: 2px 6px !important;
+  font-size: small !important;
+}
+
+.gen-btn {
+  display: inline-block;
+  padding: 2px 10px;
+  border-radius: 3px;
+  background-color: #e5ebe9;
+}
+
+.gen-btn:hover {
+  background-color: #cfdbd1;
+}
+
+.pa-form select  {
+  width: 64px;
+}
+
+.pa-form label  {
+  margin-right: 16px;
+}
+
+.pa-form div  {
+  margin-top: 12px;
+}
+
+.form-error-msg  {
+  text-align: left;
+  font-size: small;
+  color: #c63c09;
+  margin-bottom: 12px;
+  margin-top: 0 !important
+
 }
 
 .hold-nums select{

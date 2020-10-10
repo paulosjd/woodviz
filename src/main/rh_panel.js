@@ -1,8 +1,9 @@
-import React, {Component} from 'react';
+import React from 'react';
 import {useSelector} from "react-redux";
 import {Col} from 'reactstrap';
 import BoardProblems from './panel_items/board_problems'
 import BoardSetup from './panel_items/board_setup'
+import ProblemAdd from '../form/panel_items/problem_add'
 
 const RightHandPanel = (props) => {
 
@@ -14,6 +15,11 @@ const RightHandPanel = (props) => {
         case 'problems':
             colBody = (
                 <BoardProblems />
+            );
+            break;
+        case 'add':
+            colBody = (
+                <ProblemAdd />
             );
             break;
         case 'setup':

@@ -6,7 +6,7 @@ import {syncBoardWithInd} from "../../store/actions/profile";
 import {EscapeKeyAction} from "../../utils/use_key_actions";
 import BoardNameEdit from "../../form/panel_items/board_name_edit";
 
-const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoard}) => {
+const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
 
     const [newNameVal, setNewNameVal] = useState('');
     const dispatch = useDispatch();
@@ -15,6 +15,11 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
     const showBoardAdd = content.activity.showBoardAdd;
     const showBoardNameEdit = content.activity.showBoardNameEdit;
     const isAuth = !!content.auth.user_id;
+    let boardNames = content.profile.boards.map(obj => obj.boardName);
+    if (isAuth && !content.profile.boardsLoaded) {
+        // Temp fix non-auth default board data display while load; this.props.boards.length expected to be 1
+        boardNames = ['']
+    }
 
     let setupAction;
     if (currentAction === 'setup') {
@@ -44,16 +49,22 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
                             type="text"
                             value={newNameVal}
                             placeholder='Name'
-                            maxLength={10}
-                            onKeyDown={e => {if (e.key === 'Enter' && newNameVal) {
-                                createNewBoard(newNameVal, isAuth)
-                            }}}
+                            maxLength={18}
+                            onKeyDown={e => {
+                                if (e.key === 'Enter' && newNameVal) {
+                                    createNewBoard(newNameVal, isAuth)
+                                }
+                            }}
                             onChange={(e) => setNewNameVal(e.target.value)}
                             className='add_board_input'
                         />
                         { newNameVal && (
-                            <span id='add_board_label' role="img" aria-label="plus" className='save_board_icon'
-                                  onClick={() => createNewBoard(newNameVal, isAuth)}
+                            <span
+                                id='add_board_label' role="img" aria-label="plus" className='save_board_icon'
+                                onClick={() => {
+                                    createNewBoard(newNameVal, isAuth);
+                                    setNewNameVal('')}
+                                }
                             >&#x2714;</span> )}
                     </ListGroupItem>
                 </EscapeKeyAction>
@@ -74,16 +85,9 @@ const BoardList = ({boardNames, boardListIndex, setBoardListIndex, createNewBoar
                     )
                 }
                 if (boardListIndex === ind && showBoardNameEdit) {
-                    item = (
-                        <BoardNameEdit
-                            name={name}
-
-                        />
-                    )
+                    item = <BoardNameEdit name={name} />
                 } else {
-                    item = (
-                        <span style={{fontSize: '1.0rem'}}>{name}</span>
-                    )
+                    item = <span style={{fontSize: '1.0rem'}}>{name}</span>
                 }
                 return (
                     <ListGroupItem
