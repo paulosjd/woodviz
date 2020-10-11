@@ -15,6 +15,7 @@ class BoardSetup extends Component {
         if (this.props.selectedPanelHold) {
             selPanelHoldInd = this.props.selectedPanelHoldY * 14 + this.props.selectedPanelHoldX
         }
+
         const hsholdIsSelected  = !!this.props.holdSet[''.concat(this.props.selectedHoldX, this.props.selectedHoldY)];
         let saveBtn;
         if (this.state.showSaveBtn) {
@@ -40,6 +41,8 @@ class BoardSetup extends Component {
             rmHoldBtn = (
                 <button
                     onClick={(val) => {
+                        console.log('delHold val passed to delHandHold')
+                        console.log(val)
                         this.props.delHandHold(val);
                         if (this.props.isAuth) {
                             this.setState({ ...this.state, showSaveBtn: true })

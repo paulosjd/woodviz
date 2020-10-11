@@ -29,6 +29,6 @@ export const setSelectedHoldList = (value) => {
     return { type: SET_SELECTED_HOLD_LIST,  value }
 };
 
-export const resetSelectedHoldList = (value) => {
+export const resetSelectedHoldList = () => {
     return { type: RESET_SELECTED_HOLD_LIST }
 };

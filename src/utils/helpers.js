@@ -1,9 +1,14 @@
 
 export const holdAsStr = (x, y) => {
-    x = x.length === 1 ? '0' + x : x.toString();
-    y = y.length === 1 ? '0' + y : y.toString();
+    x = x.toString().length === 1 ? '0' + x : x.toString();
+    y = y.toString().length === 1 ? '0' + y : y.toString();
     return x.concat(y)
-}
+};
+
+export const dimHoldAsStr = (n) => {
+    n = n.toString().length === 1 ? '0' + n : n.toString();
+    return n
+};
 
 export const average = (array) => array.reduce((a, b) => a + b) / array.length;
 

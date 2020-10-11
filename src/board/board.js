@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {setHoverHold, setSelectedHold, setSelectedHoldList} from '../store/actions/board'
-import {holdAsStr} from '../utils/helpers'
+import {holdAsStr, dimHoldAsStr} from '../utils/helpers'
 import svgHoldPaths from './svg_hold_paths'
 
 class Board extends Component {
@@ -14,19 +14,15 @@ class Board extends Component {
     handleHoldClick(holdInd) {
         const [xKey, yKey] = [holdInd % this.props.xCoords.length, parseInt(holdInd / this.props.xCoords.length)];
         const isSel = this.holdIsSelected(xKey, yKey);
-
-        // buggy - needs leading 0
-        // const inHoldSet = Object.keys(this.props.holdSet).includes(holdAsStr(xKey + '' + yKey));
-
         const inHoldSet = Object.keys(this.props.holdSet).includes(holdAsStr(xKey, yKey));
         if (this.props.currentAction === 'add' && inHoldSet) {
             const selHolds = this.props.selectedHoldXList.map(
-                (v, i) => ''.concat(v, this.props.selectedHoldYList[i])
+                (v, i) => holdAsStr(v, this.props.selectedHoldYList[i])
             );
-            if (!selHolds.includes(xKey.toString() + yKey.toString())) {
+            if (!selHolds.includes(holdAsStr(xKey, yKey))) {
                 this.props.setSelectedHoldList({
-                    selectedHoldXList: [...this.props.selectedHoldXList, xKey],
-                    selectedHoldYList: [...this.props.selectedHoldYList, yKey]
+                    selectedHoldXList: [...this.props.selectedHoldXList, dimHoldAsStr(xKey)],
+                    selectedHoldYList: [...this.props.selectedHoldYList, dimHoldAsStr(yKey)]
                 })
             }
         }
@@ -39,22 +35,22 @@ class Board extends Component {
     }
 
     holdIsSelected(xKey, yKey) {
-        console.log(xKey + '' + yKey)
         if (this.props.currentAction === 'add') {
-            const ind = this.props.selectedHoldXList.indexOf(xKey)
-            if (ind > -1){
-                console.log('here')
-                console.log(this.props.selectedHoldXList)
-                console.log(this.props.selectedHoldYList)
-                return this.props.selectedHoldYList[ind] === yKey;
+            let ind = 0;
+            for (let val of this.props.selectedHoldXList) {
+                if (val === dimHoldAsStr(xKey) && this.props.selectedHoldYList[ind] === dimHoldAsStr(yKey)) {
+                    return true
+                }
+                ind++;
             }
         }
-        return this.props.currentAction === 'setup' && this.props.selectedHoldX === xKey &&
-            this.props.selectedHoldY === yKey
+        return this.props.currentAction === 'setup' && parseInt(this.props.selectedHoldX) === xKey &&
+            parseInt(this.props.selectedHoldY) === yKey
     }
 
     render() {
-        console.log(this.props.holdSet)
+        console.log(this.props.selectedHoldXList)
+        console.log(this.props.selectedHoldYList)
         const [xCoords, yCoords] = [this.props.xCoords, this.props.yCoords];
         const [boardWidth, boardHeight] = [400, 500];
         const grid = [];
@@ -76,7 +72,7 @@ class Board extends Component {
                 { grid.map((obj, ind) => {
                     const {x, y, holdKeyX, holdKeyY} = obj;
                     let holdMarker;
-                    const svgDataInd = this.props.holdSet[''.concat(holdKeyX, holdKeyY)];
+                    const svgDataInd = this.props.holdSet[holdAsStr(holdKeyX, holdKeyY)];
                     if (svgDataInd || svgDataInd === 0) {
                         const svgt = `${x + svgHoldPaths[svgDataInd].xOffset},${y + svgHoldPaths[svgDataInd].yOffset}`;
                         holdMarker = (
@@ -141,7 +137,7 @@ class Board extends Component {
                     }
                     let hoveredMark;
                     if (this.holdIsHovered(holdKeyX, holdKeyY)) {
-                        if (!holdIsSelected) {
+                        if (!holdIsSelected && this.props.currentAction === 'setup') {
                             hoveredMark = (
                                 <circle cx={x} cy={y} key={'hover' + ind}
                                         r="8" stroke='goldenrod' fill='none' strokeWidth='2' />

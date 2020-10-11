@@ -2,6 +2,7 @@ import { RESET_BOARD_STATE, SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HO
     SET_SELECTED_HOLD_LIST, RESET_SELECTED_HOLD_LIST, DEL_HOLD, xCoordsMap, yCoordsMap
 } from '../constants/board'
 import {SET_CURRENT, SET_BOARD_LIST_INDEX} from '../constants/activity'
+import {holdAsStr, dimHoldAsStr} from '../../utils/helpers'
 
 const initialState = {
     xCoords: xCoordsMap['8'],
@@ -46,12 +47,12 @@ export default function board(state = initialState, action) {
                 selectedHoldY: null,
                 holdSet: {
                     ...state.holdSet,
-                    [''.concat(state.selectedHoldX, state.selectedHoldY)]: action.value.svgDataInd
+                    [holdAsStr(state.selectedHoldX, state.selectedHoldY)]: action.value.svgDataInd
                 }
             };
         case DEL_HOLD:
             let holdSet = {...state.holdSet};
-            delete holdSet[''.concat(state.selectedHoldX, state.selectedHoldY)];
+            delete holdSet[holdAsStr(state.selectedHoldX, state.selectedHoldY)];
             return {
                 ...state,
                 selectedHoldX: null,
@@ -63,7 +64,14 @@ export default function board(state = initialState, action) {
         case SET_CURRENT:
             return { ...state, selectedHoldX: null, selectedHoldY: null };
         case SET_SELECTED_HOLD:
-            return { ...state, ...action.value };
+            let value = action.value;
+            console.log(value)
+            if (value.selectedHoldX && value.selectedHoldX) {
+                value.selectedHoldX = dimHoldAsStr(value.selectedHoldX)
+                value.selectedHoldY = dimHoldAsStr(value.selectedHoldY)
+            }
+            console.log(value)
+            return { ...state, ...value };
         case SET_SELECTED_HOLD_LIST:
             return { ...state, ...action.value };
         case SET_HOVER_HOLD:
