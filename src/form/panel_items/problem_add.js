@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Formik} from 'formik';
 import {BoardProblemSchema} from '../../schemas/board_problem'
 import {resetSelectedHoldList} from "../../store/actions/board";
+import {saveProblemHolds} from "../../store/actions/profile";
 
 class ProblemAdd extends Component {
 
@@ -22,12 +23,13 @@ class ProblemAdd extends Component {
                 validationSchema={BoardProblemSchema}
                 onSubmit={val => {
                     // console.log(val)
+                    this.props.saveProblemHolds(val)
                 }}
             >
                 {props => {
                     const {values, touched, errors, handleChange, handleBlur, handleSubmit} = props;
-                    // console.log(errors)
-                    // console.log(values)
+                    console.log(errors)
+                    console.log(values)
 
                     // TODO will need something like the onchcange setFieldValue for setting multiple/array selected
 
@@ -102,6 +104,7 @@ const mapStateToProps = ({auth, board}) => {
 const mapDispatchToProps = dispatch => {
     return {
         resetSelectedHoldList: () => dispatch(resetSelectedHoldList()),
+        saveProblemHolds: () => dispatch(saveProblemHolds())
     };
 };
 

@@ -1,6 +1,6 @@
 import axios from "axios";
 import {
-    FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE
+    FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE, SET_PROFILE_BOARD_PROBLEMS
 } from '../constants/profile'
 import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HOLD} from '../constants/board'
 import {
@@ -158,3 +158,27 @@ export const saveHoldSet = (value) => {
     }
 };
 
+export const saveProblemHolds = (value) => {
+    console.log(value)
+    const url = `${baseUrl}/profile/problems`;
+    return dispatch => {
+        axios.post(url,
+            {p_name: value.name, grade: value.grade},
+            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(profileData => console.log(profileData))
+                // dispatch({
+
+                // type: 'fdgffg',
+                // value: profileData.data.boards.map(obj => {
+                //     return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
+                //         boardName: obj.board_name, boardId: obj.board_id }
+                // })
+            // }))
+            // .then(() => dispatch({ type: SHOW_HOLDS_SAVED_NOTE, value: true }))
+            // .then(() => setTimeout(() => dispatch(
+            //     { type: SHOW_HOLDS_SAVED_NOTE, value: false }),4000))
+            .catch((error) => console.log(error))
+            //     dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
+
+    }
+};
