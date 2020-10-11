@@ -1,7 +1,8 @@
 import axios from 'axios'
 import AuthService from '../../utils/auth_service';
 import {USER_LOGOUT, authConstants as constants} from '../constants/auth';
-import { RESET_BOARD_STATE, SET_HOLD, SET_HOVER_HOLD, SET_SELECTED_HOLD, DEL_HOLD
+import { RESET_BOARD_STATE, SET_HOLD, SET_HOVER_HOLD, SET_SELECTED_HOLD, SET_SELECTED_HOLD_LIST,
+    RESET_SELECTED_HOLD_LIST, DEL_HOLD
 } from "../constants/board";
 
 export const resetBoardState = () => {
@@ -22,4 +23,12 @@ export const setHoverHold = (value) => {
 
 export const setSelectedHold = (value) => {
     return { type: SET_SELECTED_HOLD,  value }
+};
+
+export const setSelectedHoldList = (value) => {
+    return { type: SET_SELECTED_HOLD_LIST,  value }
+};
+
+export const resetSelectedHoldList = (value) => {
+    return { type: RESET_SELECTED_HOLD_LIST }
 };

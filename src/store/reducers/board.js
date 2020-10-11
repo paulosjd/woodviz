@@ -1,5 +1,5 @@
 import { RESET_BOARD_STATE, SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HOLD, SET_HOVER_HOLD, SET_SELECTED_HOLD,
-    DEL_HOLD, xCoordsMap, yCoordsMap
+    SET_SELECTED_HOLD_LIST, RESET_SELECTED_HOLD_LIST, DEL_HOLD, xCoordsMap, yCoordsMap
 } from '../constants/board'
 import {SET_CURRENT, SET_BOARD_LIST_INDEX} from '../constants/activity'
 
@@ -10,6 +10,8 @@ const initialState = {
     hoverHoldY: null,
     selectedHoldY: null,
     selectedHoldX: null,
+    selectedHoldYList: [],
+    selectedHoldXList: [],
     holdSet: {},
     boardName: '',
     boardId: '',
@@ -62,8 +64,12 @@ export default function board(state = initialState, action) {
             return { ...state, selectedHoldX: null, selectedHoldY: null };
         case SET_SELECTED_HOLD:
             return { ...state, ...action.value };
+        case SET_SELECTED_HOLD_LIST:
+            return { ...state, ...action.value };
         case SET_HOVER_HOLD:
             return { ...state, ...action.value };
+        case RESET_SELECTED_HOLD_LIST:
+            return { ...state, selectedHoldYList: [], selectedHoldXList: []};
         default:
             return state
     }

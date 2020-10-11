@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
-import {setHoverHold, setSelectedHold} from '../store/actions/board'
+import {setHoverHold, setSelectedHold, setSelectedHoldList} from '../store/actions/board'
+import {holdAsStr} from '../utils/helpers'
 import svgHoldPaths from './svg_hold_paths'
 
 class Board extends Component {
@@ -13,6 +14,22 @@ class Board extends Component {
     handleHoldClick(holdInd) {
         const [xKey, yKey] = [holdInd % this.props.xCoords.length, parseInt(holdInd / this.props.xCoords.length)];
         const isSel = this.holdIsSelected(xKey, yKey);
+
+        // buggy - needs leading 0
+        // const inHoldSet = Object.keys(this.props.holdSet).includes(holdAsStr(xKey + '' + yKey));
+
+        const inHoldSet = Object.keys(this.props.holdSet).includes(holdAsStr(xKey, yKey));
+        if (this.props.currentAction === 'add' && inHoldSet) {
+            const selHolds = this.props.selectedHoldXList.map(
+                (v, i) => ''.concat(v, this.props.selectedHoldYList[i])
+            );
+            if (!selHolds.includes(xKey.toString() + yKey.toString())) {
+                this.props.setSelectedHoldList({
+                    selectedHoldXList: [...this.props.selectedHoldXList, xKey],
+                    selectedHoldYList: [...this.props.selectedHoldYList, yKey]
+                })
+            }
+        }
         this.props.setSelectedHold({selectedHoldX: isSel ? null : xKey, selectedHoldY: isSel ? null : yKey})
     }
 
@@ -22,11 +39,22 @@ class Board extends Component {
     }
 
     holdIsSelected(xKey, yKey) {
-        return ['setup', 'add'].includes(this.props.currentAction) && this.props.selectedHoldX === xKey &&
+        console.log(xKey + '' + yKey)
+        if (this.props.currentAction === 'add') {
+            const ind = this.props.selectedHoldXList.indexOf(xKey)
+            if (ind > -1){
+                console.log('here')
+                console.log(this.props.selectedHoldXList)
+                console.log(this.props.selectedHoldYList)
+                return this.props.selectedHoldYList[ind] === yKey;
+            }
+        }
+        return this.props.currentAction === 'setup' && this.props.selectedHoldX === xKey &&
             this.props.selectedHoldY === yKey
     }
 
     render() {
+        console.log(this.props.holdSet)
         const [xCoords, yCoords] = [this.props.xCoords, this.props.yCoords];
         const [boardWidth, boardHeight] = [400, 500];
         const grid = [];
@@ -152,6 +180,8 @@ const mapStateToProps = ({activity, auth, board}) => {
         hoverHoldY: board.hoverHoldY,
         selectedHoldX: board.selectedHoldX,
         selectedHoldY: board.selectedHoldY,
+        selectedHoldXList: board.selectedHoldXList,
+        selectedHoldYList: board.selectedHoldYList,
         holdSet: board.holdSet,
     };
 };
@@ -160,6 +190,7 @@ const mapDispatchToProps = dispatch => {
     return {
         setHoverHold: (val) => dispatch(setHoverHold(val)),
         setSelectedHold: (val) => dispatch(setSelectedHold(val)),
+        setSelectedHoldList: (val) => dispatch(setSelectedHoldList(val)),
     };
 };
 

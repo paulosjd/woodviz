@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Formik} from 'formik';
 import {BoardProblemSchema} from '../../schemas/board_problem'
+import {resetSelectedHoldList} from "../../store/actions/board";
 
 class ProblemAdd extends Component {
 
@@ -15,31 +16,23 @@ class ProblemAdd extends Component {
                 initialValues={{
                     name: '',
                     grade: '6a',
-                    selectedHoldXList: [this.props.selectedHoldX],
-                    selectedHoldYList: [this.props.selectedHoldY]
+                    selectedHoldXList: this.props.selectedHoldXList,
+                    selectedHoldYList: this.props.selectedHoldYList
                 }}
                 validationSchema={BoardProblemSchema}
                 onSubmit={val => {
-                    console.log(val)
+                    // console.log(val)
                 }}
             >
                 {props => {
-                    const {values, touched, errors, handleChange, handleBlur, handleSubmit, setFieldValue} = props;
-                    console.log(errors)
-                    console.log(typeof this.props.selectedHoldY)
-                    console.log(values)
+                    const {values, touched, errors, handleChange, handleBlur, handleSubmit} = props;
+                    // console.log(errors)
+                    // console.log(values)
 
                     // TODO will need something like the onchcange setFieldValue for setting multiple/array selected
 
-                    // <input
-                    // className='email-input'
-                    // type='text' name='target_value'
-                    // value={values.email}
-                    // maxLength="50"
-                    // onBlur={handleBlur}
-                    // onChange={ e => { setFieldValue('email', e.target.value) }}
-                    // />
-                    setFieldValue
+                    // TODO - clear selected holds button - which calls resetSelectedHoldList
+
                     return (
                         <form onSubmit={handleSubmit} className='pa-form'>
                             <div className='pa-form-name'>
@@ -71,9 +64,17 @@ class ProblemAdd extends Component {
                                     })}
                                 </select>
                             </div>
-                            <button type="submit" className="form-submit top-10 bottom-14">
+                            <button type="submit" className="form-submit top-10 bottom-14 block">
                                 Save
                             </button>
+                            {this.props.selectedHoldXList.length > 0 && (
+                                <button
+                                    onClick={this.props.resetSelectedHoldList}
+                                    className='clear-holds-btn'
+                                >
+                                    Clear holds
+                                </button>
+                            )}
                         </form>
                     );
                 }}
@@ -92,13 +93,15 @@ const mapStateToProps = ({auth, board}) => {
         hoverHoldY: board.hoverHoldY,
         selectedHoldX: board.selectedHoldX,
         selectedHoldY: board.selectedHoldY,
+        selectedHoldXList: board.selectedHoldXList,
+        selectedHoldYList: board.selectedHoldYList,
         holdSet: board.holdSet,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        // forgottenLogin: (fType, val) => dispatch(forgottenLogin(fType, val)),
+        resetSelectedHoldList: () => dispatch(resetSelectedHoldList()),
     };
 };
 

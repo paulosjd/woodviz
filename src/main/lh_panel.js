@@ -3,6 +3,7 @@ import {connect} from "react-redux";
 import {Col} from "reactstrap";
 import {setShowRegForm, focusUsernameInput} from "../store/actions/auth";
 import {setAction, setBoardListIndex, setShowBoardDeleteConfirm} from "../store/actions/activity";
+import {resetSelectedHoldList} from "../store/actions/board";
 import {createNewBoard} from "../store/actions/profile";
 import ActionItems from './panel_items/action_items'
 import BoardList from './panel_items/board_list'
@@ -21,7 +22,7 @@ class LeftHandPanel extends Component {
                     <div className='bottom20'>
                     <span className='link-text' data-field='username' onClick={this.props.helpClick}>
                         Username reminder</span>{'. '}
-                        <span className='link-text' data-field='password'onClick={this.props.helpClick}>
+                        <span className='link-text' data-field='password' onClick={this.props.helpClick}>
                         Password reset</span>.
                     </div>
                 </React.Fragment>
@@ -70,8 +71,14 @@ const mapDispatchToProps = dispatch => {
     return {
         usernameFocus: () => dispatch(focusUsernameInput(true)),
         setShowReg: val => dispatch(setShowRegForm(val)),
-        setAction: val => dispatch(setAction(val)),
-        setBoardListIndex: val => dispatch(setBoardListIndex(val)),
+        setAction: val => {
+            dispatch(setAction(val));
+            dispatch(resetSelectedHoldList())
+        },
+        setBoardListIndex: val => {
+            dispatch(setBoardListIndex(val));
+            dispatch(resetSelectedHoldList())
+        },
         showDeleteBoard: () =>  dispatch(setShowBoardDeleteConfirm(true)),
         createNewBoard: (val, isAuth) => {
             if (isAuth) {

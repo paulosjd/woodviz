@@ -23,6 +23,10 @@
   display: inline;
 }
 
+.block {
+  display: block;
+}
+
 .board {
   margin-left: 28px;
 }
@@ -91,6 +95,15 @@
 
 .board-item:hover {
   background-color: #f8f9fa !important;
+}
+
+.clear-holds-btn {
+  font-size: small;
+  color: #403e4b;
+  margin-top: 8px;
+  border-radius: 2px;
+  border-color: white;
+  background-color: whitesmoke;
 }
 
 .lg-back-btn {

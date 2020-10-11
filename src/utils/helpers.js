@@ -1,3 +1,10 @@
+
+export const holdAsStr = (x, y) => {
+    x = x.length === 1 ? '0' + x : x.toString();
+    y = y.length === 1 ? '0' + y : y.toString();
+    return x.concat(y)
+}
+
 export const average = (array) => array.reduce((a, b) => a + b) / array.length;
 
 export const toTitleCase = (phrase) => {
