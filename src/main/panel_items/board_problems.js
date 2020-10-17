@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {ListGroup, ListGroupItem} from "reactstrap";
-import {setProblemListIndex, setProblemListGrade} from "../../store/actions/activity";
+import {setProblemListIndex} from "../../store/actions/activity";
 import BoardNameEdit from "./board_list";
 import {syncBoardWithInd} from "../../store/actions/profile";
 import {setSelectedHoldList} from "../../store/actions/board";
@@ -14,15 +14,11 @@ class BoardProblems extends Component {
     render() {
         console.log(this.props.problems)
         console.log(this.props.grades)
-        console.log(this.props.problemListGrade)
         let problems = [];
 
         return (
             <div>
                 <ProblemsForm
-                    // handleCsvDownloadSubmit={getCsvDownload}
-                    // setParamChoiceError={setParamChoiceError}
-                    setParamChoiceError={() => {}}
                     gradeOptions={this.props.grades.map(val => {return {label: val, id: val}})}
                 />
             </div>
@@ -84,7 +80,6 @@ class BoardProblems extends Component {
 const mapStateToProps = ({activity, auth, board}) => {
     return {
         problemListIndex: activity.problemListIndex,
-        problemListGrade: activity.problemListGrade,
         problems: board.problems,
         grades: board.grades,
     };
@@ -93,8 +88,6 @@ const mapStateToProps = ({activity, auth, board}) => {
 const mapDispatchToProps = dispatch => {
     return {
         setProblemListIndex: (val) => dispatch(setProblemListIndex(val)),
-        setProblemListGrade: (val) => dispatch(setProblemListGrade(val)),
-
     };
 };
 

@@ -1,6 +1,6 @@
 import {RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE, SET_BOARD_LIST_INDEX,
     SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, SET_PROBLEM_LIST_INDEX,
-    SET_PROBLEM_LIST_GRADE
+    ADD_SELECTED_GRADE, REMOVE_SELECTED_GRADE
 } from '../constants/activity'
 import {SET_SELECTED_HOLD} from "../constants/board";
 
@@ -14,12 +14,12 @@ const initialState = {
     showBoardNameEdit: false,
     showBoardDeleteConfirm: false,
     showBoardAdd: false,
-    problemListGrade: '',
     selectedGrades: [],
 };
 
 export default function activity(state = initialState, action) {
-    const partInitState = { ...state, showBoardAdd: false };
+    const grades = state.selectedGrades;
+    const partInitState = { ...state, showBoardAdd: false, selectedGrades: [] };
     switch(action.type) {
         case RESET_ACTIVITY_STATE:
             return { ...initialState };
@@ -56,7 +56,6 @@ export default function activity(state = initialState, action) {
                 showBoardNameEdit: false,
                 boardListIndex: action.value
             };
-
         case SET_SHOW_BOARD_ADD:
             return {
                 ...state,
@@ -67,11 +66,6 @@ export default function activity(state = initialState, action) {
             return {
                 ...state,
                 problemListIndex: action.value
-            };
-        case SET_PROBLEM_LIST_GRADE:
-            return {
-                ...state,
-                problemListGrade: action.value
             };
         case SET_SHOW_BOARD_NAME_EDIT:
             return {
@@ -84,6 +78,21 @@ export default function activity(state = initialState, action) {
                 ...partInitState,
                 showBoardNameEdit: false,
                 showBoardDeleteConfirm: action.value
+            };
+        case ADD_SELECTED_GRADE:
+            grades.push(action.value);
+            return {
+                ...state,
+                selectedGrades: grades,
+            };
+        case REMOVE_SELECTED_GRADE:
+            const gradeInd = grades.indexOf(action.value);
+            if (gradeInd > -1) {
+                grades.splice(gradeInd, 1)
+            }
+            return {
+                ...state,
+                selectedGrades: grades,
             };
         default:
             return state

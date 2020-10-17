@@ -1,17 +1,30 @@
 import React, {useState, useEffect} from "react";
-import {Formik} from "formik";
 import MultiSelect from "../multi_select"
+import {useDispatch, useSelector} from "react-redux";
+import {addSelectedGrade, removeSelectedGrade} from "../../store/actions/activity";
 
-const ProblemsForm = ({gradeOptions, setParamChoiceError}) => {
+const ProblemsForm = ({gradeOptions}) => {
 
-    console.log(gradeOptions)
     const [dropDownClicked, setDropDownClicked] = useState(false);
     const [multiSelect, setMultiSelect] = useState(gradeOptions);  // contains the selected objects
-    // const selectedParams = multiSelect.filter(obj => obj.value).map(obj => obj.name);
-    console.log(multiSelect)
+    const dispatch = useDispatch();
+    const content = useSelector(state => state);
+    const selectedGrades = content.activity.selectedGrades;
+    console.log(selectedGrades)
+    const addGrade = val => dispatch(addSelectedGrade(val));
+    const removeGrade = val => dispatch(removeSelectedGrade(val));
+
     useEffect(() => {
         setMultiSelect(gradeOptions)
     }, [gradeOptions])
+
+    const handleOptionClick = val => {
+        if (!selectedGrades.includes(val)) {
+            addGrade(val)
+        } else {
+            removeGrade(val)
+        }
+    };
 
     return (
         <React.Fragment>
@@ -20,9 +33,10 @@ const ProblemsForm = ({gradeOptions, setParamChoiceError}) => {
                 <MultiSelect
                     dropDownClicked={dropDownClicked}
                     setDropDownClicked={setDropDownClicked}
-                    gradeOptions={multiSelect}
+                    optionsList={multiSelect}
+                    selectedOptions={selectedGrades}
                     optionClicked={setMultiSelect}
-                    selectedBadgeClicked={(val) => {setMultiSelect(val); setParamChoiceError(false)} }
+                    handleOptionClick={handleOptionClick}
                     selectedOptStyles={selectedOptionsStyles}
                     optListStyles={optionsListStyles}
                     optionsHeight={32 * gradeOptions.length}

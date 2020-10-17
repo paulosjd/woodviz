@@ -1,55 +1,43 @@
 import React from "react";
 import "./styles/multi_select.css"
-import {useSelector} from "react-redux";
 
 const MultiSelect = ({
-    gradeOptions, selectedOptStyles, selectedBadgeClicked, dropDownClicked, setDropDownClicked, optionsHeight,
-    optListStyles
+    optionsList, selectedOptStyles, handleOptionClick, dropDownClicked, setDropDownClicked, optionsHeight,
+    optListStyles, selectedOptions
 }) => {
 
-    const content = useSelector(state => state);
-    const selectedGrades = content.activity.boardListIndex;
-    let selected = [];
-    gradeOptions.forEach(obj => {
-        if (obj.value) {
-            selected.push({ label: obj.label, id: obj.id });
-        }
-    });
+    console.log(selectedOptions)
 
     let selectedList = (
         <label className="selected-options-badges-list"
                onClick={(e) => {
                    if (e.target.className === 'selected-badge-cross') {
                        // Remove item from selected when cross is clicked
-                       optionsOnchange(e.target.parentElement.dataset.id, false)
+                       handleOptionClick(e.target.parentElement.dataset.id)
                    }
         }}>
-            {selected.map((obj) => {
+            {selectedOptions.map((obj) => {
+                console.log(obj)
                 return (
                     <span style={selectedOptionsStyles || selectedOptionsStyles}
-                          key={obj.id} data-id={obj.id}
-                          className="selected-options-badges" >{obj.label}
+                          key={obj} data-id={obj}
+                          className="selected-options-badges" >{obj}
                           <span className='selected-badge-cross'>×</span>
                     </span>
                 );
             })}
         </label>);
 
-    const optionsOnchange = (index, value) => {
-        /** Call the parents useState setter function with the updated selected options array.
-         * This causes the component the be re-rendered with this updated array, whose objects are included
-         * in the selected options array if they have a 'value' key which is truthy */
-        let dd = gradeOptions.slice();
-        dd[index].value = value;
-        selectedBadgeClicked(dd);
+    const optionsOnchange = value => {
+        handleOptionClick(value);
     };
 
-    const options = gradeOptions.map((el, i) => {
+    const options = optionsList.map(el => {
         return (
             <li key={el.id} value={el.value} className="multi-select-item">
                 <div className="option-list"
-                     style={el.value ? (optListStyles || optionsListStyles) : {}}
-                     onClick={() => optionsOnchange(i, !el.value)}>{el.label}
+                     style={selectedOptions.includes(el.label) ? (optListStyles || optionsListStyles) : {}}
+                     onClick={() => handleOptionClick(el.label)}>{el.label}
                 </div>
             </li>
         );
@@ -57,7 +45,7 @@ const MultiSelect = ({
 
     return (
         <div className="multi-select" tabIndex="0"
-             onBlur={ () => setDropDownClicked(false) }>
+             onBlur={() => setDropDownClicked(false)}>
             <div className="selected-options"
                  onClick={(e) => {
                      if ('selected-options-badges-list' !== e.target.className || !dropDownClicked){
