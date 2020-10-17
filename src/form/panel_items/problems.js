@@ -10,13 +10,12 @@ const ProblemsForm = ({gradeOptions}) => {
     const dispatch = useDispatch();
     const content = useSelector(state => state);
     const selectedGrades = content.activity.selectedGrades;
-    console.log(selectedGrades)
     const addGrade = val => dispatch(addSelectedGrade(val));
     const removeGrade = val => dispatch(removeSelectedGrade(val));
-
+    console.log(selectedGrades)
     useEffect(() => {
         setMultiSelect(gradeOptions)
-    }, [gradeOptions])
+    }, [gradeOptions]);
 
     const handleOptionClick = val => {
         if (!selectedGrades.includes(val)) {
@@ -28,7 +27,7 @@ const ProblemsForm = ({gradeOptions}) => {
 
     return (
         <React.Fragment>
-            <div className='inline'>
+            <div className='inline problems-form'>
                 <label style={{marginTop: 12, fontSize: 'small'}}>Grades</label>
                 <MultiSelect
                     dropDownClicked={dropDownClicked}

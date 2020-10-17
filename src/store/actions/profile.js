@@ -156,7 +156,6 @@ export const saveHoldSet = (value) => {
 };
 
 export const saveProblemHolds = (value) => {
-    console.log(value)
     const url = `${baseUrl}/profile/problems`;
     return dispatch => {
         axios.post(url,
@@ -177,6 +176,7 @@ export const saveProblemHolds = (value) => {
             // .then(() => dispatch({ type: SHOW_HOLDS_SAVED_NOTE, value: true }))
             // .then(() => setTimeout(() => dispatch(
             //     { type: SHOW_HOLDS_SAVED_NOTE, value: false }),4000))
+            .then(() => dispatch(syncBoardWithInd()))
             .catch((error) => console.log(error))
             //     dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
 

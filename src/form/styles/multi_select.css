@@ -8,7 +8,7 @@
 
 .multi-select .options.show {
     display: block;
-    width: 80%
+    width: 100%;
 }
 
 .multi-select-item:hover{
@@ -26,7 +26,7 @@
     border: 1px solid #ccc;
     border-top-width: 0;
     border-radius: 0 0 4px 4px;
-    width: 80%;
+    width: 100%;
     /* width: inherit; */
     padding: 0;
     display: none;
@@ -58,7 +58,7 @@
     border-radius: 4px;
     display: inline-block;
     padding: 5px 0px 5px 10px;
-    width: inherit;
+    width: 100%;
 }
 
 .multi-select .selected-options .selected-options-badges-list {
@@ -85,7 +85,7 @@
     position: relative;
     background-color: #fff;
     border-radius: 4px;
-    width: 80%;
+    width: 72%;
     outline: none;
     display: inline-block;
     -webkit-user-select: none;

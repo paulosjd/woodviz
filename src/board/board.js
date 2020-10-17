@@ -49,9 +49,12 @@ class Board extends Component {
     }
 
     render() {
-        console.log(this.props.selectedHoldXList)
-        console.log(this.props.selectedHoldYList)
-        console.log(this.props.problems)
+
+        // console.log(this.props.selectedHoldXList)
+        // console.log(this.props.selectedHoldYList)
+        // console.log(this.props.problems)
+
+
         const [xCoords, yCoords] = [this.props.xCoords, this.props.yCoords];
         const [boardWidth, boardHeight] = [400, 500];
         const grid = [];

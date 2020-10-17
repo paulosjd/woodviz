@@ -1,6 +1,6 @@
 import {
     SET_BOARD_LIST_INDEX, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SET_SHOW_BOARD_ADD,
-    SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, SET_PROBLEM_LIST_INDEX, SET_PROBLEM_LIST_GRADE,
+    SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, SET_PROBLEM_LIST_INDEX,
     ADD_SELECTED_GRADE, REMOVE_SELECTED_GRADE
 } from "../constants/activity";
 
@@ -39,3 +39,4 @@ export const addSelectedGrade = (value) => {
 export const removeSelectedGrade = (value) => {
     return { type: REMOVE_SELECTED_GRADE,  value }
 };
+

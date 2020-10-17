@@ -19,6 +19,10 @@
   padding-left: 0 !important;
 }
 
+.col-4 {
+  padding-left: 20px !important;
+}
+
 .inline {
   display: inline;
 }
@@ -77,6 +81,10 @@
   margin-bottom: 20px;
 }
 
+.top8 {
+  margin-top: 8px;
+}
+
 .top20 {
   margin-top: 20px;
 }
@@ -97,6 +105,18 @@
   background-color: #cecfd6 !important;
 }
 
+.problem-item {
+  padding-top: 0 !important;
+  padding-bottom: 2px !important;
+  background-color: rgba(252, 231, 233, 0.07) !important
+}
+.problem-item span{
+  font-size: small;
+}
+.problem-item:hover {
+  background-color: #f4f3fc !important;
+}
+
 .clear-holds-btn {
   font-size: small;
   color: #403e4b;
@@ -114,6 +134,23 @@
   font-size: small;
   color: #f6a626;
   margin-left: 32px;
+}
+
+.problems-form label {
+  font-size: small;
+}
+
+.grade-label {
+  font-size: small;
+  margin-left: 2px;
+}
+
+.problems-form input {
+  font-size: small;
+  margin-top: 12px;
+  margin-bottom: 12px;
+  margin-left: 17px;
+  border-radius: 2px;
 }
 
 .lg-back-btn {
@@ -266,6 +303,7 @@
   padding-bottom: 2px !important;
   background-color: rgba(252, 231, 233, 0.07) !important
 }
+
 .add_board_btn span {
   font-size: small;
 }
@@ -274,6 +312,12 @@
   font-size: 0.6rem !important;
   padding-bottom: 18px !important;
   padding-right: 8px !important;
+}
+
+.problem_rate_icon {
+  font-size: 0.4rem !important;
+  float: right;
+  padding-top: 10px !important;
 }
 
 .save_board_icon {

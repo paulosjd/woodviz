@@ -5,19 +5,15 @@ const MultiSelect = ({
     optionsList, selectedOptStyles, handleOptionClick, dropDownClicked, setDropDownClicked, optionsHeight,
     optListStyles, selectedOptions
 }) => {
-
-    console.log(selectedOptions)
-
     let selectedList = (
         <label className="selected-options-badges-list"
-               onClick={(e) => {
-                   if (e.target.className === 'selected-badge-cross') {
-                       // Remove item from selected when cross is clicked
-                       handleOptionClick(e.target.parentElement.dataset.id)
-                   }
+            onClick={(e) => {
+                if (e.target.className === 'selected-badge-cross') {
+                    // Remove item from selected when cross is clicked
+                    handleOptionClick(e.target.parentElement.dataset.id)
+                }
         }}>
             {selectedOptions.map((obj) => {
-                console.log(obj)
                 return (
                     <span style={selectedOptionsStyles || selectedOptionsStyles}
                           key={obj} data-id={obj}
@@ -27,10 +23,6 @@ const MultiSelect = ({
                 );
             })}
         </label>);
-
-    const optionsOnchange = value => {
-        handleOptionClick(value);
-    };
 
     const options = optionsList.map(el => {
         return (
@@ -48,7 +40,7 @@ const MultiSelect = ({
              onBlur={() => setDropDownClicked(false)}>
             <div className="selected-options"
                  onClick={(e) => {
-                     if ('selected-options-badges-list' !== e.target.className || !dropDownClicked){
+                     if ('selected-options-badges-list' !== e.target.className || !dropDownClicked) {
                          setDropDownClicked(true)
                      } else setDropDownClicked(false)
                  }}
@@ -61,7 +53,7 @@ const MultiSelect = ({
             <ul style={dropDownClicked ? {height: optionsHeight} : {}}
                 className={"options " + (dropDownClicked ? "show" : "")}
             >
-                { dropDownClicked ? options : null }
+                {dropDownClicked ? options : null}
             </ul>
         </div>
     )

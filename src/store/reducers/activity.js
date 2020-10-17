@@ -1,6 +1,6 @@
 import {RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE, SET_BOARD_LIST_INDEX,
     SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, SET_PROBLEM_LIST_INDEX,
-    ADD_SELECTED_GRADE, REMOVE_SELECTED_GRADE
+    ADD_SELECTED_GRADE, REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID
 } from '../constants/activity'
 import {SET_SELECTED_HOLD} from "../constants/board";
 
@@ -15,11 +15,18 @@ const initialState = {
     showBoardDeleteConfirm: false,
     showBoardAdd: false,
     selectedGrades: [],
+    selectedProblemId: null
 };
 
 export default function activity(state = initialState, action) {
     const grades = state.selectedGrades;
-    const partInitState = { ...state, showBoardAdd: false, selectedGrades: [] };
+    const partInitState = {
+        ...state,
+        showBoardAdd: false,
+        selectedGrades: [],
+        problemName: '',
+        selectedProblemId: null
+    };
     switch(action.type) {
         case RESET_ACTIVITY_STATE:
             return { ...initialState };
@@ -66,6 +73,11 @@ export default function activity(state = initialState, action) {
             return {
                 ...state,
                 problemListIndex: action.value
+            };
+        case SET_SELECTED_PROBLEM_ID:
+            return {
+                ...state,
+                selectedProblemId: action.value
             };
         case SET_SHOW_BOARD_NAME_EDIT:
             return {

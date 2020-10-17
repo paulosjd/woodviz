@@ -1,27 +1,63 @@
 import React, {Component} from 'react';
-import {connect} from "react-redux";
+import {connect, useSelector} from "react-redux";
 import {ListGroup, ListGroupItem} from "reactstrap";
 import {setProblemListIndex} from "../../store/actions/activity";
-import BoardNameEdit from "./board_list";
 import {syncBoardWithInd} from "../../store/actions/profile";
 import {setSelectedHoldList} from "../../store/actions/board";
 import ProblemsForm from "../../form/panel_items/problems"
 
-class BoardProblems extends Component {
+const BoardProblems = (props) => {
 
-    // Show board holds num e.g. 8 X 10   select (with number of problems for each) ?? so if change grid know where have gone
+    // TODO grades list order-by according to that hardcoded order,
+    // or google func sort by first 3 chars - might work
+    const content = useSelector(state => state);
+    const problemListIndex = content.activity.problemListIndex;
+    const problems = content.board.problems;
+    const grades = content.board.grades;
+    const selectedGrades = content.activity.selectedGrades;
 
-    render() {
-        console.log(this.props.problems)
-        console.log(this.props.grades)
-        let problems = [];
+        console.log(selectedGrades)
+        console.log(grades)
+        let listGroups = [];
+        const gradeList = selectedGrades.length > 0 ? selectedGrades : grades;
 
+        gradeList.forEach((grade, ind) => {
+            let lgItems = [];
+            console.log(grade)
+            problems[grade].forEach((problem, ind) => {
+                console.log(problem)
+                lgItems.push((
+                    <ListGroupItem
+                        key={`lgi_${grade}_${ind}`}
+                        className='problem-item'
+                        onClick={() => {}}
+                    >
+                        <span className='prob-name-label'>{problem.name}</span>
+                        <span id='add_board_label' role="img" aria-label="plus" className='problem_rate_icon'>
+                            &#x2795;
+                        </span>
+                    </ListGroupItem>
+                ));
+            });
+            let lGroup = (
+                <div key={`${grade}_${ind}`} className='top8'>
+                    <span className='grade-label'>{grade}</span>
+                    <ListGroup key={ind} className=''>
+                        {lgItems}
+                    </ListGroup>
+                </div>
+            );
+            listGroups.push(lGroup)
+        });
         return (
-            <div>
-                <ProblemsForm
-                    gradeOptions={this.props.grades.map(val => {return {label: val, id: val}})}
-                />
-            </div>
+            <React.Fragment>
+                <div>
+                    <ProblemsForm
+                        gradeOptions={grades.map(val => {return {label: val, id: val}})}
+                    />
+                </div>
+                {listGroups}
+            </React.Fragment>
         )
         // const setupAction = (
         //     <ListGroupItem
@@ -74,24 +110,5 @@ class BoardProblems extends Component {
         //         { boardNames.length < 5 && setupAction }
         //     </ListGroup>
         // )
-    }
-}
-
-const mapStateToProps = ({activity, auth, board}) => {
-    return {
-        problemListIndex: activity.problemListIndex,
-        problems: board.problems,
-        grades: board.grades,
-    };
 };
-
-const mapDispatchToProps = dispatch => {
-    return {
-        setProblemListIndex: (val) => dispatch(setProblemListIndex(val)),
-    };
-};
-
-export default connect(
-    mapStateToProps,
-    mapDispatchToProps
-)(BoardProblems);
+export default BoardProblems;
