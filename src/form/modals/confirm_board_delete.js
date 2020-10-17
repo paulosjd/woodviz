@@ -10,7 +10,7 @@ const ConfirmBoardDelete = ({
             isOpen={isOpen}
             toggle={toggle}
             className="registration-modal">
-            <ModalBody>
+            <ModalBody style={{padding: '1.5rem'}}>
                 <div>
                     <p style={{lineHeight: 0.75}}>Are you sure you want to delete</p>
                     <p>{boardName}?</p>

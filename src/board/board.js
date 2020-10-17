@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {setHoverHold, setSelectedHold, setSelectedHoldList} from '../store/actions/board'
-import {holdAsStr, dimHoldAsStr} from '../utils/helpers'
+import {holdAsStr, dimHoldAsStr} from '../utils/general'
 import svgHoldPaths from './svg_hold_paths'
 
 class Board extends Component {
@@ -51,6 +51,7 @@ class Board extends Component {
     render() {
         console.log(this.props.selectedHoldXList)
         console.log(this.props.selectedHoldYList)
+        console.log(this.props.problems)
         const [xCoords, yCoords] = [this.props.xCoords, this.props.yCoords];
         const [boardWidth, boardHeight] = [400, 500];
         const grid = [];
@@ -179,6 +180,8 @@ const mapStateToProps = ({activity, auth, board}) => {
         selectedHoldXList: board.selectedHoldXList,
         selectedHoldYList: board.selectedHoldYList,
         holdSet: board.holdSet,
+        problems: board.problems,
+        grades: board.grades,
     };
 };
 

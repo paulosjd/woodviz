@@ -1,6 +1,6 @@
 import axios from "axios";
 import {
-    FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE, SET_PROFILE_BOARD_PROBLEMS
+    FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE
 } from '../constants/profile'
 import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HOLD} from '../constants/board'
 import {
@@ -22,15 +22,22 @@ const pdcb = (profileData, dispatch, boardInd, ) => {
             holdSet: boards[boardInd].hold_set,
             boardName: boards[boardInd].board_name,
             boardId: boards[boardInd].board_id,
+            problems: boards[boardInd].problems,
+            grades: boards[boardInd].grades
         }
     });
     dispatch({
         type: SET_PROFILE_BOARDS,
-        value: boards.map(obj => {
-            return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
-                boardName: obj.board_name, boardId: obj.board_id }
-        })
-    });
+        value: boards.map(obj => boardObj(obj))
+    })
+};
+
+const boardObj = (obj) => {
+    return {
+        xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
+        boardName: obj.board_name, boardId: obj.board_id,
+        problems: obj.problems, grades: obj.grades
+    }
 };
 
 export const syncBoardWithInd = () => {
@@ -46,6 +53,8 @@ export const syncBoardWithInd = () => {
                 holdSet: boards[boardInd].holdSet,
                 boardName: boards[boardInd].boardName,
                 boardId: boards[boardInd].boardId,
+                problems: boards[boardInd].problems,
+                grades: boards[boardInd].grades
             }
         });
     }
@@ -89,10 +98,7 @@ export const createNewBoard = (value) => {
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => dispatch({
                 type: SET_PROFILE_BOARDS,
-                value: profileData.data.boards.map(obj => {
-                    return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
-                        boardName: obj.board_name, boardId: obj.board_id }
-                })
+                value: profileData.data.boards.map(obj => boardObj(obj))
             }))
             .then(() => dispatch({ type: SET_SHOW_BOARD_ADD,  value: false }))
             .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
@@ -108,10 +114,7 @@ export const editBoardName = (value, boardId) => {
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => dispatch({
                 type: SET_PROFILE_BOARDS,
-                value: profileData.data.boards.map(obj => {
-                    return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
-                        boardName: obj.board_name, boardId: obj.board_id }
-                })
+                value: profileData.data.boards.map(obj => boardObj(obj))
             }))
             .then(() => dispatch({ type: SET_SHOW_BOARD_NAME_EDIT, value: false }))
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
@@ -125,10 +128,7 @@ export const deleteBoard = (boardId) => {
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => dispatch({
                 type: SET_PROFILE_BOARDS,
-                value: profileData.data.boards.map(obj => {
-                    return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
-                        boardName: obj.board_name, boardId: obj.board_id }
-                })
+                value: profileData.data.boards.map(obj => boardObj(obj))
             }))
             .then(() => dispatch({ type: SET_SHOW_BOARD_DELETE_CONFIRM, value: false }))
             .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
@@ -146,10 +146,7 @@ export const saveHoldSet = (value) => {
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => dispatch({
                 type: SET_PROFILE_BOARDS,
-                value: profileData.data.boards.map(obj => {
-                    return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
-                        boardName: obj.board_name, boardId: obj.board_id }
-                })
+                value: profileData.data.boards.map(obj => boardObj(obj))
             }))
             .then(() => dispatch({ type: SHOW_HOLDS_SAVED_NOTE, value: true }))
             .then(() => setTimeout(() => dispatch(
@@ -163,10 +160,13 @@ export const saveProblemHolds = (value) => {
     const url = `${baseUrl}/profile/problems`;
     return dispatch => {
         axios.post(url,
-            {p_name: value.name, grade: value.grade},
+            {name: value.name, grade: value.grade, board_id: value.boardId,
+                x_holds: value.selectedHoldXList, y_holds: value.selectedHoldYList},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-            .then(profileData => console.log(profileData))
-                // dispatch({
+            .then(profileData => dispatch({
+                type: SET_PROFILE_BOARDS,
+                value: profileData.data.boards.map(obj => boardObj(obj))
+            }))                // dispatch({
 
                 // type: 'fdgffg',
                 // value: profileData.data.boards.map(obj => {

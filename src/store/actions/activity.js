@@ -1,9 +1,6 @@
-import axios from 'axios'
-import AuthService from '../../utils/auth_service';
-import {USER_LOGOUT, authConstants as constants} from '../constants/auth';
 import {
-    RESET_ACTIVITY_STATE, SET_BOARD_LIST_INDEX, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SET_SHOW_BOARD_ADD,
-    SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM
+    SET_BOARD_LIST_INDEX, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SET_SHOW_BOARD_ADD,
+    SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, SET_PROBLEM_LIST_INDEX, SET_PROBLEM_LIST_GRADE
 } from "../constants/activity";
 
 export const setAction = (value) => {
@@ -16,6 +13,14 @@ export const setSelectedPanelHold = (value) => {
 
 export const setBoardListIndex = (value) => {
     return { type: SET_BOARD_LIST_INDEX,  value }
+};
+
+export const setProblemListIndex = (value) => {
+    return { type: SET_PROBLEM_LIST_INDEX,  value }
+};
+
+export const setProblemListGrade = (value) => {
+    return { type: SET_PROBLEM_LIST_GRADE,  value }
 };
 
 export const setShowBoardAdd = (value) => {

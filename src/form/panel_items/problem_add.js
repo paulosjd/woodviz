@@ -8,12 +8,9 @@ import {saveProblemHolds} from "../../store/actions/profile";
 class ProblemAdd extends Component {
 
     render() {
-        // onSubmit={val => forgottenLogin(forgotField, val)}
         const grades = ['6a', '6a+', '6b', '6b+', '6c', '6c+', '7a', '7a+', '7b', '7b+', '7c', '7c+', '8a'];
-
         return (
             <Formik
-                enableReinitialize
                 initialValues={{
                     name: '',
                     grade: '6a',
@@ -22,21 +19,24 @@ class ProblemAdd extends Component {
                 }}
                 validationSchema={BoardProblemSchema}
                 onSubmit={val => {
-                    // console.log(val)
-                    this.props.saveProblemHolds(val)
+                    this.props.saveProblemHolds({...val, boardId: this.props.boardId})
+                    // clear form and go to it in board problems, or show blank form
                 }}
             >
                 {props => {
                     const {values, touched, errors, handleChange, handleBlur, handleSubmit} = props;
-                    console.log(errors)
-                    console.log(values)
-
-                    // TODO will need something like the onchcange setFieldValue for setting multiple/array selected
-
-                    // TODO - clear selected holds button - which calls resetSelectedHoldList
-
+                    values.selectedHoldXList = this.props.selectedHoldXList;
+                    values.selectedHoldYList = this.props.selectedHoldYList;
+                    let hasValues = true;
+                    for (let val of Object.values(values)) {
+                        if (val.length === 0) {
+                            hasValues = false
+                        }
+                    }
                     return (
-                        <form onSubmit={handleSubmit} className='pa-form'>
+                        <form
+                            onSubmit={handleSubmit}
+                            className='pa-form'>
                             <div className='pa-form-name'>
                                 <label htmlFor="name">Name</label>
                                 <input
@@ -60,15 +60,24 @@ class ProblemAdd extends Component {
                                             <option
                                                 key={`grade${ind}`}
                                                 value={val}
-                                                label={val}
-                                                style={{}}>
+                                                label={val}>
                                             </option>)
                                     })}
                                 </select>
                             </div>
-                            <button type="submit" className="form-submit top-10 bottom-14 block">
-                                Save
-                            </button>
+                            <div>
+                                <button
+                                    type="submit"
+                                    className={"form-submit top-10 bottom-14 ".concat(
+                                        !hasValues ? 'greyed-btn' : '')}
+                                    disabled={!hasValues}
+                                >
+                                    Save
+                                </button>
+                                {!values.selectedHoldXList.length > 0 && (
+                                    <span className='sel-holds-txt'>Select holds</span>)}
+                            </div>
+
                             {this.props.selectedHoldXList.length > 0 && (
                                 <button
                                     onClick={this.props.resetSelectedHoldList}
@@ -85,10 +94,10 @@ class ProblemAdd extends Component {
     }
 }
 
-const mapStateToProps = ({auth, board}) => {
+const mapStateToProps = ({activity, auth, board, profile}) => {
     return {
+        boardId: profile.boards[activity.boardListIndex].boardId,
         isAuth: !!auth.user_id,
-        username: auth.username,
         xCoords: board.xCoords,
         yCoords: board.yCoords,
         hoverHoldX: board.hoverHoldX,
@@ -104,7 +113,7 @@ const mapStateToProps = ({auth, board}) => {
 const mapDispatchToProps = dispatch => {
     return {
         resetSelectedHoldList: () => dispatch(resetSelectedHoldList()),
-        saveProblemHolds: () => dispatch(saveProblemHolds())
+        saveProblemHolds: (val) => dispatch(saveProblemHolds(val))
     };
 };
 

@@ -94,7 +94,7 @@
 }
 
 .board-item:hover {
-  background-color: #f8f9fa !important;
+  background-color: #cecfd6 !important;
 }
 
 .clear-holds-btn {
@@ -104,6 +104,16 @@
   border-radius: 2px;
   border-color: white;
   background-color: whitesmoke;
+}
+
+.greyed-btn {
+  background-color: #d7d8df;
+}
+
+.sel-holds-txt {
+  font-size: small;
+  color: #f6a626;
+  margin-left: 32px;
 }
 
 .lg-back-btn {

@@ -2,7 +2,7 @@ import { RESET_BOARD_STATE, SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HO
     SET_SELECTED_HOLD_LIST, RESET_SELECTED_HOLD_LIST, DEL_HOLD, xCoordsMap, yCoordsMap
 } from '../constants/board'
 import {SET_CURRENT, SET_BOARD_LIST_INDEX} from '../constants/activity'
-import {holdAsStr, dimHoldAsStr} from '../../utils/helpers'
+import {holdAsStr, dimHoldAsStr} from '../../utils/general'
 
 const initialState = {
     xCoords: xCoordsMap['8'],
@@ -16,6 +16,8 @@ const initialState = {
     holdSet: {},
     boardName: '',
     boardId: '',
+    problems: [],
+    grades: []
 };
 
 export default function board(state = initialState, action) {
@@ -29,7 +31,7 @@ export default function board(state = initialState, action) {
                 xCoords: xCoordsMap[action.value.xNum],
                 yCoords: yCoordsMap[action.value.yNum],
                 boardName: '',
-                boardId: '', // TODO
+                boardId: '',
             };
         case SET_BOARD_POINTS:
             return {
@@ -38,7 +40,9 @@ export default function board(state = initialState, action) {
                 xCoords: action.value.xCoords,
                 yCoords: action.value.yCoords,
                 boardName: action.value.boardName,
-                boardId: action.value.boardId
+                boardId: action.value.boardId,
+                problems: action.value.problems,
+                grades: action.value.grades,
             };
         case SET_HOLD:
             return {
@@ -65,12 +69,10 @@ export default function board(state = initialState, action) {
             return { ...state, selectedHoldX: null, selectedHoldY: null };
         case SET_SELECTED_HOLD:
             let value = action.value;
-            console.log(value)
             if (value.selectedHoldX && value.selectedHoldX) {
                 value.selectedHoldX = dimHoldAsStr(value.selectedHoldX)
                 value.selectedHoldY = dimHoldAsStr(value.selectedHoldY)
             }
-            console.log(value)
             return { ...state, ...value };
         case SET_SELECTED_HOLD_LIST:
             return { ...state, ...action.value };
