@@ -93,6 +93,14 @@
   margin-top: 30px;
 }
 
+.left125 {
+  margin-left: 1.25rem;
+}
+
+.float-right {
+  float: right
+}
+
 .hover-background:hover {
   background-color: #f8f9fa !important;
 }
@@ -105,16 +113,34 @@
   background-color: #cecfd6 !important;
 }
 
+.prob-info {
+  margin-top: 10px;
+  margin-left: 1.25rem;
+  font-size: small;
+  width: 220px;
+  font-weight: lighter;
+}
+
+.prob-info table{
+
+}
+
 .problem-item {
   padding-top: 0 !important;
   padding-bottom: 2px !important;
   background-color: rgba(252, 231, 233, 0.07) !important
 }
+
 .problem-item span{
   font-size: small;
 }
+
 .problem-item:hover {
-  background-color: #f4f3fc !important;
+  background-color: #f5f4fc !important;
+}
+
+.active-prob, .active-prob:hover {
+  background-color: #eff0fc !important;
 }
 
 .clear-holds-btn {
@@ -269,10 +295,6 @@
   margin-left: 30px;
   color: #5168a9;
   display: inline;
-}
-
-.saveddf {
-  color: #470487;
 }
 
 .all-holds {

@@ -1,7 +1,7 @@
 import {
     SET_BOARD_LIST_INDEX, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SET_SHOW_BOARD_ADD,
-    SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, SET_PROBLEM_LIST_INDEX,
-    ADD_SELECTED_GRADE, REMOVE_SELECTED_GRADE
+    SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, ADD_SELECTED_GRADE,
+    REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID
 } from "../constants/activity";
 
 export const setAction = (value) => {
@@ -14,10 +14,6 @@ export const setSelectedPanelHold = (value) => {
 
 export const setBoardListIndex = (value) => {
     return { type: SET_BOARD_LIST_INDEX,  value }
-};
-
-export const setProblemListIndex = (value) => {
-    return { type: SET_PROBLEM_LIST_INDEX,  value }
 };
 
 export const setShowBoardAdd = (value) => {
@@ -40,3 +36,6 @@ export const removeSelectedGrade = (value) => {
     return { type: REMOVE_SELECTED_GRADE,  value }
 };
 
+export const setSelectedProblemId = (value) => {
+    return { type: SET_SELECTED_PROBLEM_ID,  value }
+};

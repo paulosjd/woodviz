@@ -7,6 +7,7 @@ import {resetSelectedHoldList} from "../store/actions/board";
 import {createNewBoard} from "../store/actions/profile";
 import ActionItems from './panel_items/action_items'
 import BoardList from './panel_items/board_list'
+import ProblemInfo from './panel_items/problem_info'
 
 class LeftHandPanel extends Component {
 
@@ -38,6 +39,15 @@ class LeftHandPanel extends Component {
             )
         }
 
+        let problemInfo;
+        if (this.props.selectedProblem) {
+            problemInfo = (
+                <ProblemInfo
+                    problem={this.props.selectedProblem}
+                    grade={this.props.problemGrade}
+                />)
+        }
+
         return (
             <Col xs={this.props.xs}>
                 { intro }
@@ -50,20 +60,36 @@ class LeftHandPanel extends Component {
                     setBoardListIndex={this.props.setBoardListIndex}
                     createNewBoard={this.props.createNewBoard}
                 />
-                {delBoardText}
+                { delBoardText }
+                { problemInfo }
             </Col>
         );
     }
 }
 
-const mapStateToProps = ({auth, activity, profile}) => {
+const mapStateToProps = ({auth, activity, board, profile}) => {
+    let selectedProblem;
+    let problemGrade = null;
+    if (activity.selectedProblemId) {
+        const flatProblems = Object.values(board.problems).flat();
+        const ind = flatProblems.findIndex(obj => obj.id === activity.selectedProblemId);
+        selectedProblem = flatProblems[ind];
+        Object.entries(board.problems).forEach(([grade, problems]) => {
+            let probIds = problems.map(obj => obj.id);
+            if (probIds.includes(activity.selectedProblemId)) {
+                problemGrade = grade;
+            }
+        })
+    }
     return {
         currentAction: activity.current,
         boardListIndex: activity.boardListIndex,
         boards: profile.boards,
         isAuth: !!auth.user_id,
         boardsLoaded: profile.boardsLoaded,
-        showBoardNameEdit: activity.showBoardNameEdit
+        showBoardNameEdit: activity.showBoardNameEdit,
+        selectedProblem: selectedProblem,
+        problemGrade: problemGrade
     };
 };
 

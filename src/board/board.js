@@ -35,10 +35,14 @@ class Board extends Component {
     }
 
     holdIsSelected(xKey, yKey) {
-        if (this.props.currentAction === 'add') {
+        if (this.props.currentAction === 'add' || this.props.selectedProblem) {
             let ind = 0;
-            for (let val of this.props.selectedHoldXList) {
-                if (val === dimHoldAsStr(xKey) && this.props.selectedHoldYList[ind] === dimHoldAsStr(yKey)) {
+            let [xList, yList] = [this.props.selectedHoldXList, this.props.selectedHoldYList];
+            if (this.props.selectedProblem) {
+                [xList, yList] = [this.props.selectedProblem.x_holds, this.props.selectedProblem.y_holds]
+            }
+            for (let val of xList) {
+                if (val === dimHoldAsStr(xKey) && yList[ind] === dimHoldAsStr(yKey)) {
                     return true
                 }
                 ind++;
@@ -49,12 +53,6 @@ class Board extends Component {
     }
 
     render() {
-
-        // console.log(this.props.selectedHoldXList)
-        // console.log(this.props.selectedHoldYList)
-        // console.log(this.props.problems)
-
-
         const [xCoords, yCoords] = [this.props.xCoords, this.props.yCoords];
         const [boardWidth, boardHeight] = [400, 500];
         const grid = [];
@@ -63,7 +61,6 @@ class Board extends Component {
                 grid.push({x: xyVal, y: yVal, holdKeyX: xInd, holdKeyY: yInd})
             });
         });
-
         const holdSetBool = Object.keys(this.props.holdSet).length > 0;
         const boardFillColor = holdSetBool ? '#B8B8B8' : 'grey';
 
@@ -166,10 +163,15 @@ class Board extends Component {
             </svg>
         );
     }
-
 }
 
 const mapStateToProps = ({activity, auth, board}) => {
+    let selectedProblem;
+    if (activity.selectedProblemId) {
+        const flatProblems = Object.values(board.problems).flat();
+        const ind = flatProblems.findIndex(obj => obj.id === activity.selectedProblemId);
+        selectedProblem = flatProblems[ind]
+    }
     return {
         isAuth: !!auth.user_id,
         currentAction: activity.current,
@@ -185,6 +187,7 @@ const mapStateToProps = ({activity, auth, board}) => {
         holdSet: board.holdSet,
         problems: board.problems,
         grades: board.grades,
+        selectedProblem: selectedProblem
     };
 };
 

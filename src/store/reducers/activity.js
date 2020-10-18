@@ -1,6 +1,6 @@
 import {RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE, SET_BOARD_LIST_INDEX,
-    SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, SET_PROBLEM_LIST_INDEX,
-    ADD_SELECTED_GRADE, REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID
+    SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, ADD_SELECTED_GRADE,
+    REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID
 } from '../constants/activity'
 import {SET_SELECTED_HOLD} from "../constants/board";
 
@@ -68,11 +68,6 @@ export default function activity(state = initialState, action) {
                 ...state,
                 showBoardNameEdit: action.value ? false : state.showBoardNameEdit,
                 showBoardAdd: action.value
-            };
-        case SET_PROBLEM_LIST_INDEX:
-            return {
-                ...state,
-                problemListIndex: action.value
             };
         case SET_SELECTED_PROBLEM_ID:
             return {

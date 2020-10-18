@@ -10,6 +10,22 @@ export const dimHoldAsStr = (n) => {
     return n
 };
 
+export const orderGrades = (a, b) => {
+    if (a[0] > b[0]) {
+        return 1;
+    } else if (a[0] < b[0]) {
+        return -1;
+    } else if (a[1] > b[1]) {
+        return 1;
+    } else if (a[1] < b[1]) {
+        return -1;
+    } else if (a[2]) {
+        return 1;
+    } else {
+        return 0
+    }
+};
+
 export const toTitleCase = (phrase) => {
     if (phrase.toUpperCase() === phrase) {
         return phrase

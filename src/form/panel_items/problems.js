@@ -7,12 +7,14 @@ const ProblemsForm = ({gradeOptions}) => {
 
     const [dropDownClicked, setDropDownClicked] = useState(false);
     const [multiSelect, setMultiSelect] = useState(gradeOptions);  // contains the selected objects
-    const dispatch = useDispatch();
+
     const content = useSelector(state => state);
     const selectedGrades = content.activity.selectedGrades;
+
+    const dispatch = useDispatch();
     const addGrade = val => dispatch(addSelectedGrade(val));
     const removeGrade = val => dispatch(removeSelectedGrade(val));
-    console.log(selectedGrades)
+
     useEffect(() => {
         setMultiSelect(gradeOptions)
     }, [gradeOptions]);
@@ -42,8 +44,7 @@ const ProblemsForm = ({gradeOptions}) => {
                 />
             </div>
         </React.Fragment>
-)
-
+    )
 };
 
 export default ProblemsForm
