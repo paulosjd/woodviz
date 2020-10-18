@@ -26,6 +26,20 @@ export const orderGrades = (a, b) => {
     }
 };
 
+export const getStars = rating => {
+    switch (rating) {
+        case 1:
+            return '\u2B50';
+        case 2:
+            return '\u2B50\u2B50';
+        case 3:
+            return '\u2B50\u2B50\u2B50';
+        default:
+            return '';
+            return '&#x2795;';
+    }
+};
+
 export const toTitleCase = (phrase) => {
     if (phrase.toUpperCase() === phrase) {
         return phrase

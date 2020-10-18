@@ -2,12 +2,10 @@ import axios from "axios";
 import {
     FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE
 } from '../constants/profile'
-import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS, SET_HOLD} from '../constants/board'
+import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS} from '../constants/board'
 import {
-    SET_BOARD_LIST_INDEX,
-    SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_DELETE_CONFIRM,
-    SET_SHOW_BOARD_NAME_EDIT,
-    SHOW_HOLDS_SAVED_NOTE
+    SET_BOARD_LIST_INDEX, SET_CURRENT, SET_SELECTED_PROBLEM_ID, SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_DELETE_CONFIRM,
+    SET_SHOW_BOARD_NAME_EDIT, SHOW_HOLDS_SAVED_NOTE
 } from "../constants/activity";
 
 const baseUrl = 'http://127.0.0.1:8000/api';
@@ -160,25 +158,14 @@ export const saveProblemHolds = (value) => {
     return dispatch => {
         axios.post(url,
             {name: value.name, grade: value.grade, board_id: value.boardId,
+                rating: value.rating, notes: value.notes,
                 x_holds: value.selectedHoldXList, y_holds: value.selectedHoldYList},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => dispatch({
                 type: SET_PROFILE_BOARDS,
                 value: profileData.data.boards.map(obj => boardObj(obj))
-            }))                // dispatch({
-
-                // type: 'fdgffg',
-                // value: profileData.data.boards.map(obj => {
-                //     return { xCoords: obj.x_coords, yCoords: obj.y_coords, holdSet: obj.hold_set,
-                //         boardName: obj.board_name, boardId: obj.board_id }
-                // })
-            // }))
-            // .then(() => dispatch({ type: SHOW_HOLDS_SAVED_NOTE, value: true }))
-            // .then(() => setTimeout(() => dispatch(
-            //     { type: SHOW_HOLDS_SAVED_NOTE, value: false }),4000))
+            }))
             .then(() => dispatch(syncBoardWithInd()))
-            .catch((error) => console.log(error))
-            //     dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
-
+            .then(() => dispatch(({type: SET_CURRENT, value: 'problems'})))
     }
 };

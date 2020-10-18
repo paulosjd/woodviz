@@ -30,7 +30,7 @@ const ProblemsForm = ({gradeOptions}) => {
     return (
         <React.Fragment>
             <div className='inline problems-form'>
-                <label style={{marginTop: 12, fontSize: 'small'}}>Grades</label>
+                <label className='grade-sel-lab'>Grades</label>
                 <MultiSelect
                     dropDownClicked={dropDownClicked}
                     setDropDownClicked={setDropDownClicked}

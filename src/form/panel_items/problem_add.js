@@ -4,6 +4,7 @@ import {Formik} from 'formik';
 import {BoardProblemSchema} from '../../schemas/board_problem'
 import {resetSelectedHoldList} from "../../store/actions/board";
 import {saveProblemHolds} from "../../store/actions/profile";
+import {getStars} from '../../utils/general'
 
 class ProblemAdd extends Component {
 
@@ -14,6 +15,8 @@ class ProblemAdd extends Component {
                 initialValues={{
                     name: '',
                     grade: '6a',
+                    notes: '',
+                    rating: '',
                     selectedHoldXList: this.props.selectedHoldXList,
                     selectedHoldYList: this.props.selectedHoldYList
                 }}
@@ -36,8 +39,9 @@ class ProblemAdd extends Component {
                     return (
                         <form
                             onSubmit={handleSubmit}
-                            className='pa-form'>
-                            <div className='pa-form-name'>
+                            className='pa-form'
+                        >
+                            <div>
                                 <label htmlFor="name">Name</label>
                                 <input
                                     id="name"
@@ -66,6 +70,31 @@ class ProblemAdd extends Component {
                                 </select>
                             </div>
                             <div>
+                                <label htmlFor="rating">Rating</label>
+                                <select
+                                    id='rating'
+                                    onChange={handleChange}
+                                    className='rating-select'
+                                >
+                                    <option value={0} label='' />
+                                    <option value={1}>{getStars(1)}</option>
+                                    <option value={2}>{getStars(2)}</option>
+                                    <option value={3}>{getStars(3)}</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label htmlFor="notes">Description</label>
+                                <input
+                                    id="notes"
+                                    type="text"
+                                    maxLength={35}
+                                    value={values.notes}
+                                    onBlur={handleBlur}
+                                    onChange={handleChange}
+                                    className='fs12'
+                                />
+                            </div>
+                            <div>
                                 <button
                                     type="submit"
                                     className={"form-submit top-10 bottom-14 ".concat(
@@ -77,7 +106,6 @@ class ProblemAdd extends Component {
                                 {!values.selectedHoldXList.length > 0 && (
                                     <span className='sel-holds-txt'>Select holds</span>)}
                             </div>
-
                             {this.props.selectedHoldXList.length > 0 && (
                                 <button
                                     onClick={this.props.resetSelectedHoldList}

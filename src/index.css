@@ -4,7 +4,7 @@
 }
 
 .App {
-  background-color: #fcfcfc;;
+  background-color: #fcfcfc;
 }
 
 .container {
@@ -85,6 +85,10 @@
   margin-top: 8px;
 }
 
+.top14 {
+  margin-top: 14px;
+}
+
 .top20 {
   margin-top: 20px;
 }
@@ -99,6 +103,26 @@
 
 .float-right {
   float: right
+}
+
+.align-right {
+  text-align: right;
+}
+
+.fs-med {
+  font-size: medium;
+}
+
+.fs14 {
+  font-size: 14px;
+}
+
+.fs12 {
+  font-size: 12px;
+}
+
+.font-light {
+  font-weight: lighter;
 }
 
 .hover-background:hover {
@@ -117,12 +141,32 @@
   margin-top: 10px;
   margin-left: 1.25rem;
   font-size: small;
-  width: 220px;
+  width: 184px;
   font-weight: lighter;
+  color: #04101b
 }
 
-.prob-info table{
+.rating_icon {
+  font-size: 10px;
+}
 
+.edit-prob-btn {
+  border-radius: 2px;
+  background-color: #fcfcfc;
+  color: #888f83;
+  font-size: small;
+  font-weight: lighter;
+  border-width: thin;
+  border-color: azure;
+  margin-left: 1.25rem;
+  padding-left: 6px;
+  padding-right: 6px;
+}
+
+.edit-prob-icon {
+  font-size: 0.5rem !important;
+  cursor: pointer;
+  padding-right: 3px;
 }
 
 .problem-item {
@@ -141,6 +185,21 @@
 
 .active-prob, .active-prob:hover {
   background-color: #eff0fc !important;
+}
+
+.rating-select {
+  font-size: 10px;
+  width: 68px !important;
+}
+
+.rating-select option {
+  font-size: 10px;
+}
+
+.grade-sel-lab {
+  margin-top: 12px;
+  font-size: small;
+  margin-bottom: 16px;
 }
 
 .clear-holds-btn {
