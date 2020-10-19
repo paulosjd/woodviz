@@ -1,4 +1,4 @@
-export const RESET_BOARD_STATE = 'RESET_BOARD_STATE';
+export const RESET_HOLDSET_AND_BOARD_ID = 'RESET_HOLDSET_AND_BOARD_ID';
 export const SET_BOARD_POINTS = 'SET_BOARD_POINTS';
 export const SET_HOLD = 'SET_HOLD';
 export const DEL_HOLD = 'DEL_HOLD';

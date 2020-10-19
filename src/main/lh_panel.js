@@ -4,7 +4,7 @@ import {Col} from "reactstrap";
 import {setShowRegForm, focusUsernameInput} from "../store/actions/auth";
 import {setAction, setBoardListIndex, setShowBoardDeleteConfirm} from "../store/actions/activity";
 import {resetSelectedHoldList} from "../store/actions/board";
-import {createNewBoard} from "../store/actions/profile";
+import {createNewBoard, syncBoardWithInd} from "../store/actions/profile";
 import ActionItems from './panel_items/action_items'
 import BoardList from './panel_items/board_list'
 import ProblemInfo from './panel_items/problem_info'
@@ -54,6 +54,7 @@ class LeftHandPanel extends Component {
                 <ActionItems
                     currentAction={this.props.currentAction}
                     setAction={this.props.setAction}
+                    syncBoard={this.props.syncBoard}
                 />
                 <BoardList
                     boardListIndex={this.props.boardListIndex}
@@ -106,6 +107,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(resetSelectedHoldList())
         },
         showDeleteBoard: () =>  dispatch(setShowBoardDeleteConfirm(true)),
+        syncBoard: () => dispatch(syncBoardWithInd()),
         createNewBoard: (val, isAuth) => {
             if (isAuth) {
                 dispatch(createNewBoard(val))

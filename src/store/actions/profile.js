@@ -99,7 +99,7 @@ export const createNewBoard = (value) => {
                 value: profileData.data.boards.map(obj => boardObj(obj))
             }))
             .then(() => dispatch({ type: SET_SHOW_BOARD_ADD,  value: false }))
-            .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
+            .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: state.profile.boards.length }))
             .then(() => dispatch(syncBoardWithInd()))
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
     }

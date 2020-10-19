@@ -36,13 +36,30 @@ class BoardSetup extends Component {
                 </button>
             )
         }
+
+        let setHoldBtn = (
+            <span>Set board name to begin</span>
+        );
+        if (this.props.boardName) {
+            setHoldBtn = (
+                <button
+                    onClick={() => {
+                        this.props.setHandHold({svgDataInd: selPanelHoldInd});
+                        if (this.props.isAuth) {
+                            this.setState({ ...this.state, showSaveBtn: true })
+                        }
+                    }}
+                    className='set-hold-btn'
+                    disabled={!this.props.selectedHold || !this.props.selectedPanelHold}
+                >Set hold
+                </button>
+            )
+        }
         let rmHoldBtn;
         if (hsholdIsSelected) {
             rmHoldBtn = (
                 <button
                     onClick={(val) => {
-                        console.log('delHold val passed to delHandHold')
-                        console.log(val)
                         this.props.delHandHold(val);
                         if (this.props.isAuth) {
                             this.setState({ ...this.state, showSaveBtn: true })
@@ -53,7 +70,7 @@ class BoardSetup extends Component {
             )
         }
         let boardDimsForm;
-        if (Object.keys(this.props.holdSet).length === 0){
+        if (Object.keys(this.props.holdSet).length === 0 && this.props.boardName){
             boardDimsForm = (
                 <BoardPointsForm
                     xPtNum={xPtNum}
@@ -68,17 +85,7 @@ class BoardSetup extends Component {
 
         return (
             <React.Fragment>
-                <button
-                    onClick={() => {
-                        this.props.setHandHold({svgDataInd: selPanelHoldInd});
-                        if (this.props.isAuth) {
-                            this.setState({ ...this.state, showSaveBtn: true })
-                        }
-                    }}
-                    className='set-hold-btn'
-                    disabled={!this.props.selectedHold || !this.props.selectedPanelHold}
-                >Set hold
-                </button>
+                { setHoldBtn }
                 { this.props.showHoldsSavedNote && <span className='hold_set_saved'>Saved!</span> }
                 { rmHoldBtn }
                 { saveBtn }

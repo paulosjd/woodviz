@@ -22,7 +22,6 @@ export default function activity(state = initialState, action) {
     const grades = state.selectedGrades;
     const partInitState = {
         ...state,
-        showBoardAdd: false,
         selectedGrades: [],
         problemName: '',
         selectedProblemId: null
@@ -33,6 +32,7 @@ export default function activity(state = initialState, action) {
         case SET_CURRENT:
             return {
                 ...partInitState,
+                showBoardAdd: false,
                 showBoardNameEdit: false,
                 current: action.value,
                 selectedPanelHoldX: null,
@@ -55,11 +55,12 @@ export default function activity(state = initialState, action) {
                 showHoldsSavedNote: action.value
             };
         case SET_BOARD_LIST_INDEX:
-            if (partInitState.boardListIndex === action.value) {
+            if (state.boardListIndex === action.value && !state.showBoardAdd) {
                 return state
             }
             return {
                 ...partInitState,
+                showBoardAdd: false,
                 showBoardNameEdit: false,
                 boardListIndex: action.value
             };

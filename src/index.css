@@ -417,9 +417,13 @@
 
 .add_board_form {
   font-size: 0.8rem;
-  padding-right: 0 !important
+  padding-right: 0 !important;
+  background-color: #fbfaf9 !important;
 }
 
 .add_board_input {
   width: 150px;
+  font-size: 1rem;
+  color: #183261 !important;
+  padding: 2px 2px 2px 5px;
 }

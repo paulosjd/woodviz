@@ -1,7 +1,7 @@
 import React from "react";
 import {ListGroup, ListGroupItem} from "reactstrap";
 
-const ActionItems = ({currentAction, setAction}) => {
+const ActionItems = ({currentAction, setAction, syncBoard}) => {
 
     const items = [
         {key: 'problems', label: 'Board problems'},
@@ -15,7 +15,10 @@ const ActionItems = ({currentAction, setAction}) => {
                 return (
                     <ListGroupItem
                         key={item.key}
-                        onClick={() => setAction(item.key)}
+                        onClick={() => {
+                            setAction(item.key);
+                            syncBoard()
+                        }}
                         className={currentAction === item.key ? 'board-item active-item' : 'board-item'}
                     >
                         <h5>{item.label}</h5>

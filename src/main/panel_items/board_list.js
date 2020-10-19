@@ -1,7 +1,8 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useDispatch, useSelector} from "react-redux";
 import {ListGroup, ListGroupItem} from "reactstrap";
 import {setShowBoardAdd, setShowBoardNameEdit} from "../../store/actions/activity";
+import {resetHoldset} from "../../store/actions/board";
 import {syncBoardWithInd} from "../../store/actions/profile";
 import {EscapeKeyAction} from "../../utils/use_key_actions";
 import BoardNameEdit from "../../form/panel_items/board_name_edit";
@@ -10,12 +11,18 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
 
     const [newNameVal, setNewNameVal] = useState('');
     const dispatch = useDispatch();
+
     const content = useSelector(state => state);
     const currentAction = content.activity.current;
     const showBoardAdd = content.activity.showBoardAdd;
     const showBoardNameEdit = content.activity.showBoardNameEdit;
     const isAuth = !!content.auth.user_id;
     let boardNames = content.profile.boards.map(obj => obj.boardName);
+
+    useEffect(() => {
+        setNewNameVal('')
+    }, [currentAction, content.activity.boardListIndex]);
+
     if (isAuth && !content.profile.boardsLoaded) {
         // Temp fix non-auth default board data display while load; this.props.boards.length expected to be 1
         boardNames = ['']
@@ -29,6 +36,7 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
                     className={isAuth ? 'add_board_btn' : 'add_board_btn faded'}
                     onClick={() => {
                         if (isAuth) {
+                            dispatch(resetHoldset(''));
                             dispatch(setShowBoardAdd(true))
                         }
                     }}
@@ -77,7 +85,7 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
             {boardNames.map((name, ind) => {
                 let item;
                 let editBtn;
-                if (currentAction === 'setup' && !showBoardNameEdit && boardListIndex === ind) {
+                if (currentAction === 'setup' && !showBoardNameEdit && !showBoardAdd && boardListIndex === ind) {
                     editBtn = (
                         <span onClick={() => dispatch(setShowBoardNameEdit(true))}
                               role="img" aria-label="info" id="target-edit-icon" className='edit-icon'
@@ -89,6 +97,10 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
                 } else {
                     item = <span style={{fontSize: '1.0rem'}}>{name}</span>
                 }
+                let clsName = 'board-lg-item';
+                if (boardListIndex === ind && !showBoardAdd) {
+                    clsName += ' active-item'
+                }
                 return (
                     <ListGroupItem
                         key={ind}
@@ -98,7 +110,7 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
                                 dispatch(syncBoardWithInd())
                             }
                         }}
-                        className={boardListIndex === ind ? 'board-lg-item active-item' : 'board-lg-item'}
+                        className={clsName}
                     >
                         {item}
                         {editBtn}
