@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {setHoverHold, setSelectedHold, setSelectedHoldList} from '../store/actions/board'
+import {setTempLists} from '../store/actions/profile'
 import {holdAsStr, dimHoldAsStr} from '../utils/general'
 import svgHoldPaths from './svg_hold_paths'
 
@@ -15,6 +16,7 @@ class Board extends Component {
         const [xKey, yKey] = [holdInd % this.props.xCoords.length, parseInt(holdInd / this.props.xCoords.length)];
         const isSel = this.holdIsSelected(xKey, yKey);
         const inHoldSet = Object.keys(this.props.holdSet).includes(holdAsStr(xKey, yKey));
+
         if (this.props.currentAction === 'add' && inHoldSet) {
             const selHolds = this.props.selectedHoldXList.map(
                 (v, i) => holdAsStr(v, this.props.selectedHoldYList[i])
@@ -26,10 +28,36 @@ class Board extends Component {
                 })
             }
         }
+        if (this.props.showProblemEdit && this.props.currentAction === 'problems' && this.props.selectedProblem) {
+            let [xHolds, yHolds] = [
+                this.props.selectedProblem.x_holds, this.props.selectedProblem.y_holds
+            ];
+            if (this.props.tempXList.length > 0) {
+                [xHolds, yHolds] = [this.props.tempXList, this.props.tempYList]
+            }
+            let ind = 0;
+            for (let val of xHolds) {
+                if (val === dimHoldAsStr(xKey) && yHolds[ind] === dimHoldAsStr(yKey)) {
+                    let newX = xHolds.filter((v, i) => i !== ind);
+                    let newY = yHolds.filter((v, i) => i !== ind);
+                    this.props.setTempLists({tempXList: newX, tempYList: newY});
+                    return
+                }
+                ind++;
+            }
+            let newX = [...xHolds];
+            newX.push(dimHoldAsStr(xKey));
+            let newY = [...yHolds];
+            newY.push(dimHoldAsStr(yKey));
+            this.props.setTempLists({tempXList: newX, tempYList: newY});
+        }
         this.props.setSelectedHold({selectedHoldX: isSel ? null : xKey, selectedHoldY: isSel ? null : yKey})
     }
 
     holdIsHovered(xKey, yKey) {
+        if (this.props.selectedProblem && this.props.showProblemEdit) {
+            return this.props.hoverHoldX === xKey && this.props.hoverHoldY === yKey
+        }
         return ['setup', 'add'].includes(this.props.currentAction) && this.props.hoverHoldX === xKey &&
             this.props.hoverHoldY === yKey
     }
@@ -40,6 +68,9 @@ class Board extends Component {
             let [xList, yList] = [this.props.selectedHoldXList, this.props.selectedHoldYList];
             if (this.props.selectedProblem) {
                 [xList, yList] = [this.props.selectedProblem.x_holds, this.props.selectedProblem.y_holds]
+                if (this.props.tempXList.length > 0) {
+                    [xList, yList] = [this.props.tempXList, this.props.tempYList]
+                }
             }
             for (let val of xList) {
                 if (val === dimHoldAsStr(xKey) && yList[ind] === dimHoldAsStr(yKey)) {
@@ -63,6 +94,7 @@ class Board extends Component {
         });
         const holdSetBool = Object.keys(this.props.holdSet).length > 0;
         const boardFillColor = holdSetBool ? '#B8B8B8' : 'grey';
+        const isEdit = this.props.showProblemEdit;
 
         return (
             <svg width={boardWidth} height={boardHeight} className='board' id='profile_board'>
@@ -124,12 +156,14 @@ class Board extends Component {
                     let selectdMark;
                     const holdIsSelected = this.holdIsSelected(holdKeyX, holdKeyY);
                     if (holdIsSelected) {
-                        selectdMark = (
-                            <circle
-                                cx={x} cy={y} key={'outline' + ind}
-                                r="12" stroke='black' strokeWidth='2' fill='none'
-                            />
-                        );
+                        if (this.props.currentAction === 'setup') {
+                            selectdMark = (
+                                <circle
+                                    cx={x} cy={y} key={'outline' + ind}
+                                    r="12" stroke='black' strokeWidth='2' fill='none'
+                                />
+                            );
+                        }
                         if (svgDataInd || svgDataInd === 0) {
                             selectdMark = (
                                 <rect width={26} height={26} x={x - 13} y={y - 13} stroke='green' fill='none'/>
@@ -145,9 +179,12 @@ class Board extends Component {
                             );
                         }
                         if (svgDataInd || svgDataInd === 0) {
+                            let strokeColor = holdIsSelected ? 'green' : '#626b82';
+                            if (isEdit) {
+                                strokeColor = holdIsSelected ? 'orangered' : '#4A5FC2'
+                            }
                             hoveredMark = (
-                                <rect width={26} height={26} x={x - 13} y={y - 13}
-                                      stroke={!holdIsSelected ? '#626b82' : 'green'} fill='none' />
+                                <rect width={26} height={26} x={x - 13} y={y - 13} stroke={strokeColor} fill='none' />
                             )
                         }
                     }
@@ -165,7 +202,7 @@ class Board extends Component {
     }
 }
 
-const mapStateToProps = ({activity, auth, board}) => {
+const mapStateToProps = ({activity, auth, board, profile}) => {
     let selectedProblem;
     if (activity.selectedProblemId) {
         const flatProblems = Object.values(board.problems).flat();
@@ -187,7 +224,10 @@ const mapStateToProps = ({activity, auth, board}) => {
         holdSet: board.holdSet,
         problems: board.problems,
         grades: board.grades,
-        selectedProblem: selectedProblem
+        selectedProblem: selectedProblem,
+        showProblemEdit: activity.showProblemEdit,
+        tempXList: profile.tempXList,
+        tempYList: profile.tempYList
     };
 };
 
@@ -196,6 +236,7 @@ const mapDispatchToProps = dispatch => {
         setHoverHold: (val) => dispatch(setHoverHold(val)),
         setSelectedHold: (val) => dispatch(setSelectedHold(val)),
         setSelectedHoldList: (val) => dispatch(setSelectedHoldList(val)),
+        setTempLists: (val) => dispatch(setTempLists(val)),
     };
 };
 

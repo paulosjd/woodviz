@@ -1,11 +1,11 @@
 import axios from "axios";
 import {
-    FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE
+    FETCH_SUMMARY_DATA_FAILURE, SET_PROFILE_BOARDS, INITIAL_LOAD_DONE, SET_TEMP_LISTS
 } from '../constants/profile'
 import {SET_BOARD_POINTS, SET_BOARD_POINTS_FROM_NUMS} from '../constants/board'
 import {
-    SET_BOARD_LIST_INDEX, SET_CURRENT, SET_SELECTED_PROBLEM_ID, SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_DELETE_CONFIRM,
-    SET_SHOW_BOARD_NAME_EDIT, SHOW_HOLDS_SAVED_NOTE
+    SET_BOARD_LIST_INDEX, SET_CURRENT, SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_DELETE_CONFIRM,
+    SET_SHOW_BOARD_NAME_EDIT, SHOW_HOLDS_SAVED_NOTE, SET_SELECTED_PROBLEM_ID, SET_SHOW_PROBLEM_DELETE_CONFIRM
 } from "../constants/activity";
 
 const baseUrl = 'http://127.0.0.1:8000/api';
@@ -131,7 +131,7 @@ export const deleteBoard = (boardId) => {
             .then(() => dispatch({ type: SET_SHOW_BOARD_DELETE_CONFIRM, value: false }))
             .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
             .then(() => dispatch(syncBoardWithInd()))
-            .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
+            .catch(() => {})
     }
 };
 
@@ -161,11 +161,32 @@ export const saveProblemHolds = (value) => {
                 rating: value.rating, notes: value.notes,
                 x_holds: value.selectedHoldXList, y_holds: value.selectedHoldYList},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-            .then(profileData => dispatch({
-                type: SET_PROFILE_BOARDS,
-                value: profileData.data.boards.map(obj => boardObj(obj))
-            }))
-            .then(() => dispatch(syncBoardWithInd()))
-            .then(() => dispatch(({type: SET_CURRENT, value: 'problems'})))
+            .then(profileData => {
+                dispatch({type: SET_PROFILE_BOARDS, value: profileData.data.boards.map(obj => boardObj(obj))})
+                if (!value.problemId) {
+                    dispatch(({type: SET_CURRENT, value: 'problems'}));
+                    dispatch(({type: SET_SELECTED_PROBLEM_ID, value: profileData.data.problem_id}))
+                }
+                dispatch(syncBoardWithInd())
+            })
     }
+};
+
+export const deleteProblem = (problemId) => {
+    const url = `${baseUrl}/profile/problems`;
+    return (dispatch) => {
+        axios.post(url, {delete_problem: true, problem_id: problemId},
+            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(profileData => {
+                dispatch({type: SET_PROFILE_BOARDS, value: profileData.data.boards.map(obj => boardObj(obj))});
+                dispatch({ type: SET_SHOW_PROBLEM_DELETE_CONFIRM, value: false })
+                dispatch(({type: SET_CURRENT, value: 'problems'}));
+                dispatch(syncBoardWithInd())
+            })
+            .catch(() => {})
+    }
+};
+
+export const setTempLists = (value) => {
+    return { type: SET_TEMP_LISTS,  value }
 };

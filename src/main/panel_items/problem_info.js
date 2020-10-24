@@ -5,7 +5,7 @@ const ProblemInfo = ({problem, grade, setShowProblemEdit}) => {
 
     return (
         <React.Fragment>
-            <div className='top30 left125'>
+            <div className='top30 left125 cursor-default'>
                 <span>{problem.name}</span>
             </div>
             <table className='prob-info'>

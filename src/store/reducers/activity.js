@@ -1,6 +1,6 @@
 import {RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE, SET_BOARD_LIST_INDEX,
     SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, ADD_SELECTED_GRADE,
-    REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID, SET_SHOW_PROBLEM_EDIT
+    REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID, SET_SHOW_PROBLEM_EDIT, SET_SHOW_PROBLEM_DELETE_CONFIRM
 } from '../constants/activity'
 import {SET_SELECTED_HOLD} from "../constants/board";
 
@@ -13,13 +13,16 @@ const initialState = {
     problemListIndex: 0,
     showBoardNameEdit: false,
     showBoardDeleteConfirm: false,
+    showProblemDeleteConfirm: false,
     showBoardAdd: false,
     showProblemEdit: false,
     selectedGrades: [],
     selectedProblemId: null
 };
 
+
 export default function activity(state = initialState, action) {
+
     const grades = state.selectedGrades;
     const partInitState = {
         ...state,
@@ -27,6 +30,7 @@ export default function activity(state = initialState, action) {
         problemName: '',
         selectedProblemId: null
     };
+
     switch(action.type) {
         case RESET_ACTIVITY_STATE:
             return { ...initialState };
@@ -42,13 +46,13 @@ export default function activity(state = initialState, action) {
             };
         case SET_SELECTED_HOLD:
             return {
-                ...partInitState,
+                ...state,
                 selectedPanelHoldX: null,
                 selectedPanelHoldY: null
             };
         case SET_SELECTED_PANEL_HOLD:
             return {
-                ...partInitState,
+                ...state,
                 ...action.value
             };
         case SHOW_HOLDS_SAVED_NOTE:
@@ -95,6 +99,11 @@ export default function activity(state = initialState, action) {
                 ...partInitState,
                 showBoardNameEdit: false,
                 showBoardDeleteConfirm: action.value
+            };
+        case SET_SHOW_PROBLEM_DELETE_CONFIRM:
+            return {
+                ...state,
+                showProblemDeleteConfirm: action.value
             };
         case ADD_SELECTED_GRADE:
             grades.push(action.value);

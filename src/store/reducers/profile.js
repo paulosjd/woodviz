@@ -1,21 +1,47 @@
 import {
-    SET_PROFILE_BOARDS, INITIAL_LOAD_DONE
+    SET_PROFILE_BOARDS, INITIAL_LOAD_DONE, SET_TEMP_LISTS
 } from "../constants/profile";
 import {xCoordsMap, yCoordsMap} from "../constants/board";
+import {SET_BOARD_LIST_INDEX, SET_CURRENT, SET_SELECTED_PROBLEM_ID, SET_SHOW_PROBLEM_EDIT} from "../constants/activity";
 
 const initialState = {
     boards: [
         {holdSet: {}, xCoords: xCoordsMap['8'], yCoords: yCoordsMap['12'], boardName: 'Set A'},
     ],
     boardsLoaded: false,
+    tempXList: [],
+    tempYList: []
 };
 
+
 export default function profile(state = initialState, action) {
+
+    const newState = { ...state, tempXList: [], tempYList: []};
+    [SET_SHOW_PROBLEM_EDIT, SET_SELECTED_PROBLEM_ID, SET_BOARD_LIST_INDEX, SET_CURRENT].forEach(i => {
+        if (action.type === i) {
+            return newState
+        }
+    });
+
     switch (action.type) {
         case SET_PROFILE_BOARDS:
-            return { ...state, boards: action.value};
+            return {
+                ...newState,
+                boards: action.value
+            };
+        case SET_TEMP_LISTS:
+            return {
+                ...state,
+                tempXList: action.value.tempXList,
+                tempYList: action.value.tempYList
+            };
         case INITIAL_LOAD_DONE:
-            return { ...state, boardsLoaded: true};
+            return {
+                ...newState,
+                boardsLoaded: true
+            };
+        case SET_SHOW_PROBLEM_EDIT:
+            return newState;
         default:
             return state
     }

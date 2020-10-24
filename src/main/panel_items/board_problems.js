@@ -3,7 +3,7 @@ import {useDispatch, useSelector} from "react-redux";
 import {ListGroup, ListGroupItem} from "reactstrap";
 import {setSelectedProblemId} from "../../store/actions/activity";
 import ProblemsForm from "../../form/panel_items/problems"
-import {orderGrades} from "../../utils/general"
+import {orderGrades, compareNames} from "../../utils/general"
 
 const BoardProblems = (props) => {
 
@@ -21,7 +21,7 @@ const BoardProblems = (props) => {
 
     gradeList.forEach((grade, ind) => {
         let lgItems = [];
-        problems[grade].forEach((problem, ind) => {
+        problems[grade].sort(compareNames).forEach((problem, ind) => {
             lgItems.push((
                 <ListGroupItem
                     key={`lgi_${grade}_${ind}`}

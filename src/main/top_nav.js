@@ -1,12 +1,12 @@
 import React, {Component} from 'react';
-import { Navbar, UncontrolledTooltip, Alert } from 'reactstrap';
-import {connect } from "react-redux";
+import {Navbar} from 'reactstrap';
+import {connect} from "react-redux";
 import Login from '../auth/login'
-import { } from '../store/actions/profile'
-import { userLogout } from '../store/actions/auth'
+import {userLogout} from '../store/actions/auth'
 import ConfirmBoardDelete from '../form/modals/confirm_board_delete'
-import {setShowBoardDeleteConfirm} from "../store/actions/activity";
-import {deleteBoard} from "../store/actions/profile";
+import ConfirmProblemDelete from '../form/modals/confirm_problem_delete'
+import {setShowBoardDeleteConfirm, setShowProblemDeleteConfirm} from "../store/actions/activity";
+import {deleteBoard, deleteProblem} from "../store/actions/profile";
 
 class TopNav extends Component {
 
@@ -56,26 +56,53 @@ class TopNav extends Component {
             )
         }
 
+        if (this.props.showProblemDeleteConfirm) {
+            return (
+                <React.Fragment>
+                    {navbar}
+                    <ConfirmProblemDelete
+                        toggle={() => this.props.setShowProblemDeleteConfirm(!this.props.showProblemDeleteConfirm)}
+                        isOpen={this.props.showProblemDeleteConfirm}
+                        problemName={this.props.problemName}
+                        problemId={this.props.selectedProblemId}
+                        setShowProblemDeleteConfirm={this.props.setShowProblemDeleteConfirm}
+                        deleteProblem={this.props.deleteProblem}
+                    />
+                </React.Fragment>
+            )
+        }
+
         return navbar
     }
 }
 
-const mapStateToProps = ({auth, activity, profile}) => {
+const mapStateToProps = ({auth, activity, board, profile}) => {
     const boardInd = activity.boardListIndex;
+    let problemName;
+    if (activity.selectedProblemId) {
+        const flatProblems = Object.values(board.problems).flat();
+        const ind = flatProblems.findIndex(obj => obj.id === activity.selectedProblemId);
+        problemName = flatProblems[ind].name;
+    }
     return {
         user_id: auth.user_id,
         username: auth.username,
         showBoardDeleteConfirm: activity.showBoardDeleteConfirm,
+        showProblemDeleteConfirm: activity.showProblemDeleteConfirm,
         boardName: profile.boards[boardInd].boardName,
         boardId: profile.boards[boardInd].boardId,
+        selectedProblemId: activity.selectedProblemId,
+        problemName: problemName
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         userLogout: () => dispatch(userLogout()),
-        setShowBoardDeleteConfirm: (val) =>  dispatch(setShowBoardDeleteConfirm(val)),
-        deleteBoard: (val) => dispatch(deleteBoard(val)),
+        setShowBoardDeleteConfirm: val =>  dispatch(setShowBoardDeleteConfirm(val)),
+        setShowProblemDeleteConfirm: val =>  dispatch(setShowProblemDeleteConfirm(val)),
+        deleteBoard: val => dispatch(deleteBoard(val)),
+        deleteProblem: val => dispatch(deleteProblem(val)),
     };
 };
 

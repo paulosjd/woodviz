@@ -76,11 +76,13 @@ class LeftHandPanel extends Component {
                     setAction={this.props.setAction}
                     syncBoard={this.props.syncBoard}
                 />
-                <BoardList
-                    boardListIndex={this.props.boardListIndex}
-                    setBoardListIndex={this.props.setBoardListIndex}
-                    createNewBoard={this.props.createNewBoard}
-                />
+                { this.props.currentAction === 'setup' && (
+                    <BoardList
+                        boardListIndex={this.props.boardListIndex}
+                        setBoardListIndex={this.props.setBoardListIndex}
+                        createNewBoard={this.props.createNewBoard}
+                    />
+                )}
                 { delBoardText }
                 { problemInfo }
             </Col>

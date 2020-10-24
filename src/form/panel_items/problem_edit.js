@@ -1,18 +1,21 @@
 import React from "react";
 import {Formik} from "formik";
-import {useSelector} from "react-redux";
+import {useDispatch, useSelector} from "react-redux";
 import {getStars} from '../../utils/general'
 import {BoardProblemSchema} from "../../schemas/board_problem";
+import {setShowProblemDeleteConfirm} from "../../store/actions/activity";
 
 const ProblemEdit = ({
-    problem, grade, setShowProblemEdit, saveProblemHolds, selectedHoldXList, selectedHoldYList
+    problem, grade, setShowProblemEdit, saveProblemHolds
 }) => {
 
+    const dispatch = useDispatch();
     const content = useSelector(state => state);
     const boardId = content.board.boardId;
+    const tempXList = content.profile.tempXList;
+    const tempYList = content.profile.tempYList;
     const grades = ['6a', '6a+', '6b', '6b+', '6c', '6c+', '7a', '7a+', '7b', '7b+', '7c', '7c+', '8a'];
-    console.log(selectedHoldXList)
-    console.log(problem)
+
     return (
         <Formik
             initialValues={{
@@ -25,8 +28,12 @@ const ProblemEdit = ({
             }}
             validationSchema={BoardProblemSchema}
             onSubmit={val => {
-                saveProblemHolds({...val, problemId: problem.id, boardId: boardId});
-                // setShowProblemEdit(false)
+                let pData = {};
+                if (tempXList.length > 0) {
+                    pData = {selectedHoldXList: tempXList, selectedHoldYList: tempYList}
+                }
+                saveProblemHolds({...val, ...pData, problemId: problem.id, boardId: boardId});
+                setShowProblemEdit(false)
             }}
         >
             {props => {
@@ -105,7 +112,6 @@ const ProblemEdit = ({
                             <button
                                 type='submit'
                                 className='edit-prob-btn'
-                                // onClick={() => setShowProblemEdit(false)}
                             >
                                 <span role="img" aria-label="info" id="target-edit-icon" className='edit-prob-icon'
                                 >&#x270F;</span>
@@ -113,8 +119,16 @@ const ProblemEdit = ({
                             </button>
                             <span
                                 className='prob-edit-cancel'
+                                onClick={() => dispatch(setShowProblemEdit(false))}
                             >
                                 Cancel
+                            </span>
+                        </div>
+                        <div className='del-prob-text'>
+                            <span
+                                onClick={() => dispatch(setShowProblemDeleteConfirm(true))}
+                            >
+                                Delete problem
                             </span>
                         </div>
                     </form>
