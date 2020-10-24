@@ -23,7 +23,6 @@ class ProblemAdd extends Component {
                 validationSchema={BoardProblemSchema}
                 onSubmit={val => {
                     this.props.saveProblemHolds({...val, boardId: this.props.boardId})
-                    // clear form and go to it in board problems, or show blank form
                 }}
             >
                 {props => {
@@ -46,6 +45,7 @@ class ProblemAdd extends Component {
                                 <input
                                     id="name"
                                     type="text"
+                                    maxLength={24}
                                     value={values.name}
                                     onBlur={handleBlur}
                                     onChange={handleChange}

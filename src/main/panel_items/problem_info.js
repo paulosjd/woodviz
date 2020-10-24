@@ -1,7 +1,7 @@
 import React from "react";
 import {getStars} from '../../utils/general'
-import {setShowBoardNameEdit} from "../../store/actions/activity";
-const ProblemInfo = ({problem, grade}) => {
+
+const ProblemInfo = ({problem, grade, setShowProblemEdit}) => {
 
     return (
         <React.Fragment>
@@ -28,11 +28,15 @@ const ProblemInfo = ({problem, grade}) => {
                 <span>{problem.notes}</span>
             </div>
             <div className='top14'>
-                <button className='edit-prob-btn'>
-                    <span onClick={() => {}}
-                          role="img" aria-label="info" id="target-edit-icon" className='edit-prob-icon'
-                    >&#x270F;</span>
-                    Edit</button>
+                <button
+                    className='edit-prob-btn'
+                    onClick={() => setShowProblemEdit(true)}
+                >
+                    <span role="img" aria-label="info" id="target-edit-icon" className='edit-prob-icon' >
+                        &#x270F;
+                    </span>
+                    Edit
+                </button>
             </div>
         </React.Fragment>
     )

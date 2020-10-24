@@ -1,6 +1,6 @@
 import {RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE, SET_BOARD_LIST_INDEX,
     SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, ADD_SELECTED_GRADE,
-    REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID, SET_SHOW_EDIT_PROBLEM
+    REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID, SET_SHOW_PROBLEM_EDIT
 } from '../constants/activity'
 import {SET_SELECTED_HOLD} from "../constants/board";
 
@@ -14,6 +14,7 @@ const initialState = {
     showBoardNameEdit: false,
     showBoardDeleteConfirm: false,
     showBoardAdd: false,
+    showProblemEdit: false,
     selectedGrades: [],
     selectedProblemId: null
 };
@@ -34,6 +35,7 @@ export default function activity(state = initialState, action) {
                 ...partInitState,
                 showBoardAdd: false,
                 showBoardNameEdit: false,
+                showProblemEdit: false,
                 current: action.value,
                 selectedPanelHoldX: null,
                 selectedPanelHoldY: null
@@ -62,6 +64,7 @@ export default function activity(state = initialState, action) {
                 ...partInitState,
                 showBoardAdd: false,
                 showBoardNameEdit: false,
+                showProblemEdit: false,
                 boardListIndex: action.value
             };
         case SET_SHOW_BOARD_ADD:
@@ -70,15 +73,15 @@ export default function activity(state = initialState, action) {
                 showBoardNameEdit: action.value ? false : state.showBoardNameEdit,
                 showBoardAdd: action.value
             };
-        case SET_SHOW_EDIT_PROBLEM:
+        case SET_SHOW_PROBLEM_EDIT:
             return {
                 ...state,
-                showBoardNameEdit: action.value ? false : state.showBoardNameEdit,
-                showBoardAdd: action.value
+                showProblemEdit: action.value
             };
         case SET_SELECTED_PROBLEM_ID:
             return {
                 ...state,
+                showProblemEdit: false,
                 selectedProblemId: action.value
             };
         case SET_SHOW_BOARD_NAME_EDIT:

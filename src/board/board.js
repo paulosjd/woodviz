@@ -65,7 +65,7 @@ class Board extends Component {
         const boardFillColor = holdSetBool ? '#B8B8B8' : 'grey';
 
         return (
-            <svg width={boardWidth} height={boardHeight} className='board'>
+            <svg width={boardWidth} height={boardHeight} className='board' id='profile_board'>
                 <rect
                     width={boardWidth} height={boardHeight}
                     stroke='#3333cc' fill={boardFillColor}

@@ -2,12 +2,14 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Col} from "reactstrap";
 import {setShowRegForm, focusUsernameInput} from "../store/actions/auth";
-import {setAction, setBoardListIndex, setShowBoardDeleteConfirm} from "../store/actions/activity";
+import {setAction, setBoardListIndex, setShowBoardDeleteConfirm, setShowProblemEdit} from "../store/actions/activity";
 import {resetSelectedHoldList} from "../store/actions/board";
 import {createNewBoard, syncBoardWithInd} from "../store/actions/profile";
 import ActionItems from './panel_items/action_items'
 import BoardList from './panel_items/board_list'
 import ProblemInfo from './panel_items/problem_info'
+import ProblemEdit from '../form/panel_items/problem_edit'
+import OutsideAction from "../utils/outside_action";
 
 class LeftHandPanel extends Component {
 
@@ -40,12 +42,24 @@ class LeftHandPanel extends Component {
         }
 
         let problemInfo;
-        if (this.props.selectedProblem) {
+        if (this.props.selectedProblem && this.props.showProblemEdit) {
+            problemInfo = (
+                <OutsideAction action={() => this.props.setShowProblemEdit(false)}>
+                    <ProblemEdit
+                        problem={this.props.selectedProblem}
+                        grade={this.props.problemGrade}
+                        setShowProblemEdit={this.props.setShowProblemEdit}
+                    />
+                </OutsideAction>
+            )
+        } else if (this.props.selectedProblem) {
             problemInfo = (
                 <ProblemInfo
                     problem={this.props.selectedProblem}
                     grade={this.props.problemGrade}
-                />)
+                    setShowProblemEdit={this.props.setShowProblemEdit}
+                />
+            )
         }
 
         return (
@@ -89,6 +103,7 @@ const mapStateToProps = ({auth, activity, board, profile}) => {
         isAuth: !!auth.user_id,
         boardsLoaded: profile.boardsLoaded,
         showBoardNameEdit: activity.showBoardNameEdit,
+        showProblemEdit: activity.showProblemEdit,
         selectedProblem: selectedProblem,
         problemGrade: problemGrade
     };
@@ -107,6 +122,7 @@ const mapDispatchToProps = dispatch => {
             dispatch(resetSelectedHoldList())
         },
         showDeleteBoard: () =>  dispatch(setShowBoardDeleteConfirm(true)),
+        setShowProblemEdit: val => dispatch(setShowProblemEdit(val)),
         syncBoard: () => dispatch(syncBoardWithInd()),
         createNewBoard: (val, isAuth) => {
             if (isAuth) {
