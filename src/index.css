@@ -52,6 +52,10 @@
   opacity: 0.6;
 }
 
+.cursor-default {
+  cursor: default;
+}
+
 .modal-title {
   font-size: 1.1rem;
   line-height: 1;
@@ -143,7 +147,8 @@
   font-size: small;
   width: 184px;
   font-weight: lighter;
-  color: #04101b
+  color: #04101b;
+  cursor: default;
 }
 
 .rating_icon {
@@ -156,11 +161,16 @@
   color: #888f83;
   font-size: small;
   font-weight: lighter;
-  border-width: thin;
+  border-width: 1px;
   border-color: azure;
   margin-left: 1.25rem;
   padding-left: 6px;
   padding-right: 6px;
+}
+
+.edit-prob-btn:hover {
+  background-color: #f9fcf5;
+  border-color: #f9fcf5;
 }
 
 .edit-prob-icon {
@@ -256,6 +266,19 @@
   cursor: pointer;
   font-size: small;
   margin-top: 18px !important;
+}
+
+.del-prob-text {
+  margin-left: 1.25rem;
+  color: #9497b8;
+  font-weight: lighter;
+  cursor: pointer;
+  font-size: small;
+  margin-top: 17px !important;
+}
+
+.del-prob-text:hover {
+  color: #80829f;
 }
 
 .del-board-btn {
@@ -472,4 +495,11 @@
   font-weight: lighter;
   margin-left: 14px;
   cursor: pointer;
+}
+.prob-edit-cancel:hover {
+  color: #80829f;
+}
+
+.foo{
+  color: #4A5FC2;
 }
