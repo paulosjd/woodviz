@@ -4,7 +4,7 @@ import {Col} from "reactstrap";
 import {setShowRegForm, focusUsernameInput} from "../store/actions/auth";
 import {setAction, setBoardListIndex, setShowBoardDeleteConfirm, setShowProblemEdit} from "../store/actions/activity";
 import {resetSelectedHoldList} from "../store/actions/board";
-import {createNewBoard, syncBoardWithInd} from "../store/actions/profile";
+import {createNewBoard, saveProblemHolds, syncBoardWithInd} from "../store/actions/profile";
 import ActionItems from './panel_items/action_items'
 import BoardList from './panel_items/board_list'
 import ProblemInfo from './panel_items/problem_info'
@@ -44,11 +44,17 @@ class LeftHandPanel extends Component {
         let problemInfo;
         if (this.props.selectedProblem && this.props.showProblemEdit) {
             problemInfo = (
-                <OutsideAction action={() => this.props.setShowProblemEdit(false)}>
+                <OutsideAction
+                    action={() => this.props.setShowProblemEdit(false)}
+                    ignoreIdList={['profile_board']}
+                >
                     <ProblemEdit
                         problem={this.props.selectedProblem}
                         grade={this.props.problemGrade}
                         setShowProblemEdit={this.props.setShowProblemEdit}
+                        saveProblemHolds={this.props.saveProblemHolds}
+                        selectedHoldXList={this.props.selectedHoldXList}
+                        selectedHoldYList={this.props.selectedHoldYList}
                     />
                 </OutsideAction>
             )
@@ -105,7 +111,9 @@ const mapStateToProps = ({auth, activity, board, profile}) => {
         showBoardNameEdit: activity.showBoardNameEdit,
         showProblemEdit: activity.showProblemEdit,
         selectedProblem: selectedProblem,
-        problemGrade: problemGrade
+        problemGrade: problemGrade,
+        selectedHoldXList: board.selectedHoldXList,
+        selectedHoldYList: board.selectedHoldYList,
     };
 };
 
@@ -123,6 +131,7 @@ const mapDispatchToProps = dispatch => {
         },
         showDeleteBoard: () =>  dispatch(setShowBoardDeleteConfirm(true)),
         setShowProblemEdit: val => dispatch(setShowProblemEdit(val)),
+        saveProblemHolds: (val) => dispatch(saveProblemHolds(val)),
         syncBoard: () => dispatch(syncBoardWithInd()),
         createNewBoard: (val, isAuth) => {
             if (isAuth) {

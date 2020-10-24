@@ -1,11 +1,18 @@
 import React from "react";
+import {Formik} from "formik";
+import {useSelector} from "react-redux";
 import {getStars} from '../../utils/general'
 import {BoardProblemSchema} from "../../schemas/board_problem";
-import {Formik} from "formik";
 
-const ProblemEdit = ({problem, grade, setShowProblemEdit}) => {
+const ProblemEdit = ({
+    problem, grade, setShowProblemEdit, saveProblemHolds, selectedHoldXList, selectedHoldYList
+}) => {
+
+    const content = useSelector(state => state);
+    const boardId = content.board.boardId;
     const grades = ['6a', '6a+', '6b', '6b+', '6c', '6c+', '7a', '7a+', '7b', '7b+', '7c', '7c+', '8a'];
-
+    console.log(selectedHoldXList)
+    console.log(problem)
     return (
         <Formik
             initialValues={{
@@ -13,16 +20,18 @@ const ProblemEdit = ({problem, grade, setShowProblemEdit}) => {
                 grade: grade,
                 notes: problem.notes,
                 rating: problem.rating,
-                selectedHoldXList: [],
-                selectedHoldYList: []
+                selectedHoldXList: problem.x_holds,
+                selectedHoldYList: problem.y_holds
             }}
             validationSchema={BoardProblemSchema}
             onSubmit={val => {
-
+                saveProblemHolds({...val, problemId: problem.id, boardId: boardId});
+                // setShowProblemEdit(false)
             }}
         >
             {props => {
                 const {values, touched, errors, handleChange, handleBlur, handleSubmit} = props;
+                console.log(errors)
                 return (
                     <form
                         onSubmit={handleSubmit}
@@ -40,6 +49,8 @@ const ProblemEdit = ({problem, grade, setShowProblemEdit}) => {
                                 onChange={handleChange}
                             />
                         </div>
+                        {errors.name && touched.name && (
+                            <div className="prob-edit-error">{errors.name}</div>)}
                         <table className='prob-info'>
                             <tbody>
                             <tr className="">
@@ -92,8 +103,9 @@ const ProblemEdit = ({problem, grade, setShowProblemEdit}) => {
                         </div>
                         <div className='top14'>
                             <button
+                                type='submit'
                                 className='edit-prob-btn'
-                                onClick={() => setShowProblemEdit(false)}
+                                // onClick={() => setShowProblemEdit(false)}
                             >
                                 <span role="img" aria-label="info" id="target-edit-icon" className='edit-prob-icon'
                                 >&#x270F;</span>
@@ -101,7 +113,6 @@ const ProblemEdit = ({problem, grade, setShowProblemEdit}) => {
                             </button>
                             <span
                                 className='prob-edit-cancel'
-                                onClick={() => setShowProblemEdit(false)}
                             >
                                 Cancel
                             </span>

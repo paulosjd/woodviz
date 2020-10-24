@@ -1,16 +1,23 @@
 import React, {useRef, useEffect} from "react";
 import PropTypes from "prop-types";
 
-const useOutsideAction = (ref, action, targetId, onTargetIdMatch, ignoreId) => {
+const useOutsideAction = (ref, action, targetId, onTargetIdMatch, ignoreIdList) => {
 
     const handleClickOutside = (event) => {
         /** Run the action if clicked on outside of element */
         if (targetId && onTargetIdMatch && event.target.id === targetId) {
             onTargetIdMatch()
         }
-        if (ref.current && ref.current === ignoreId) {
-            return
+
+        if (ignoreIdList) {
+            if (event.target.parentNode && ignoreIdList.includes(event.target.parentNode.id)) {
+                return
+            }
+            if (event.target.parentNode.parentNode && ignoreIdList.includes(event.target.parentNode.parentNode.id)) {
+                return
+            }
         }
+
         if (ref.current && !ref.current.contains(event.target)) {
             action()
         }
@@ -28,17 +35,21 @@ const useOutsideAction = (ref, action, targetId, onTargetIdMatch, ignoreId) => {
         document.addEventListener("keydown", handleKeyPress);
         return () => {
             // Unbind the event listener on clean up
-            document.removeEventListener("mousedown", handleClickOutside)
+            document.removeEventListener("mousedown", handleClickOutside);
             document.removeEventListener("keydown", handleKeyPress);
         }
     })
 };
 
 function OutsideAction(props) {
-    /** Component that runs the action prop (a callback function) if you click outside of it (and its children) */
+    /** Component that runs the action prop (a callback) if you click outside of it */
     const wrapperRef = useRef(null);
-    useOutsideAction(wrapperRef, props.action, props.targetId, props.onTargetIdMatch, props.ignoreId);
-    return <div ref={wrapperRef}>{props.children}</div>;
+    useOutsideAction(wrapperRef, props.action, props.targetId, props.onTargetIdMatch, props.ignoreIdList);
+    return (
+        <div ref={wrapperRef}>
+            {props.children}
+        </div>
+    )
 }
 
 OutsideAction.propTypes = {

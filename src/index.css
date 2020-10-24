@@ -303,7 +303,6 @@
   color: #c63c09;
   margin-bottom: 12px;
   margin-top: 0 !important
-
 }
 
 .hold-nums select {
@@ -450,6 +449,14 @@
   max-width: 72%;
   border-radius: 1px;
   border-width: thin;
+}
+
+.prob-edit-error {
+  text-align: left;
+  font-size: small;
+  color: #c63c09;
+  margin-top: 2px !important;
+  margin-left: 1.25rem;
 }
 
 .prob-edit-notes {

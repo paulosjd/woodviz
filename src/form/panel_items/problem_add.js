@@ -30,11 +30,12 @@ class ProblemAdd extends Component {
                     values.selectedHoldXList = this.props.selectedHoldXList;
                     values.selectedHoldYList = this.props.selectedHoldYList;
                     let hasValues = true;
-                    for (let val of Object.values(values)) {
-                        if (val.length === 0) {
+                    Object.entries(values).forEach(([field, value]) => {
+                        if (!['notes', 'rating'].includes(field) && value.length === 0) {
                             hasValues = false
                         }
-                    }
+                    });
+
                     return (
                         <form
                             onSubmit={handleSubmit}

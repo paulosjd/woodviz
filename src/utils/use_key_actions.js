@@ -1,5 +1,4 @@
 import React, {useEffect} from "react";
-import PropTypes from "prop-types";
 
 const useEscapeKeyAction = (actions, key) => {
 
@@ -18,12 +17,6 @@ const useEscapeKeyAction = (actions, key) => {
         }
     })
 };
-
-export function EnterKeyAction(props) {
-    /** Component that runs the action prop (a callback function) if you click outside of it (and its children) */
-    useEscapeKeyAction(props.actions, 'Enter');
-    return <div>{props.children}</div>;
-}
 
 export function EscapeKeyAction(props) {
     /** Component that runs the action prop (a callback function) if you click outside of it (and its children) */

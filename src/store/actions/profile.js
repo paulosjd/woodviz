@@ -157,7 +157,7 @@ export const saveProblemHolds = (value) => {
     const url = `${baseUrl}/profile/problems`;
     return dispatch => {
         axios.post(url,
-            {name: value.name, grade: value.grade, board_id: value.boardId,
+            {problem_id: value.problemId, name: value.name, grade: value.grade, board_id: value.boardId,
                 rating: value.rating, notes: value.notes,
                 x_holds: value.selectedHoldXList, y_holds: value.selectedHoldYList},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
