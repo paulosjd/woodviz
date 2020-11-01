@@ -38,7 +38,6 @@ const ProblemEdit = ({
         >
             {props => {
                 const {values, touched, errors, handleChange, handleBlur, handleSubmit} = props;
-                console.log(errors)
                 return (
                     <form
                         onSubmit={handleSubmit}

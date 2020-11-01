@@ -22,7 +22,8 @@ const RightHandPanel = (props) => {
                 <ProblemAdd />
             );
             break;
-        case 'setup':
+        // case 'setup':
+        default:
             colBody = (
                 <BoardSetup />
             )

@@ -2,6 +2,7 @@ import React from 'react';
 import {useDispatch, useSelector} from "react-redux";
 import {ListGroup, ListGroupItem} from "reactstrap";
 import {setSelectedProblemId} from "../../store/actions/activity";
+import {setProblemTicked} from "../../store/actions/profile";
 import ProblemsForm from "../../form/panel_items/problems"
 import {orderGrades, compareNames} from "../../utils/general"
 
@@ -22,16 +23,26 @@ const BoardProblems = (props) => {
     gradeList.forEach((grade, ind) => {
         let lgItems = [];
         problems[grade].sort(compareNames).forEach((problem, ind) => {
+            const tick = (
+                <span
+                    id='add_board_label' role="img" aria-label="plus" className='problem_tick_icon'
+                    onClick={() => dispatch(setProblemTicked({problemId: problem.id, ticked: !problem.ticked}))}
+                >
+                    {problem.ticked ? '\u2714' : '\u25FB'}
+                </span>
+            );
             lgItems.push((
                 <ListGroupItem
                     key={`lgi_${grade}_${ind}`}
                     className={problem.id === selectedProblemId ? 'problem-item active-prob' : 'problem-item'}
-                    onClick={() => setProblemId(problem.id)}
+                    onClick={(e) => {
+                        if (e.target.className !== 'problem_tick_icon') {
+                            setProblemId(problem.id)
+                        }
+                    }}
                 >
                     <span className='prob-name-label'>{problem.name}</span>
-                    <span id='add_board_label' role="img" aria-label="plus" className='problem_rate_icon'>
-                        &#x2795;
-                    </span>
+                    {tick}
                 </ListGroupItem>
             ));
         });

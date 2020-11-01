@@ -36,10 +36,10 @@ class Board extends Component {
                 [xHolds, yHolds] = [this.props.tempXList, this.props.tempYList]
             }
             let ind = 0;
+            const filterHold = ary => ary.filter((v, i) => i !== ind);
             for (let val of xHolds) {
                 if (val === dimHoldAsStr(xKey) && yHolds[ind] === dimHoldAsStr(yKey)) {
-                    let newX = xHolds.filter((v, i) => i !== ind);
-                    let newY = yHolds.filter((v, i) => i !== ind);
+                    let [newX, newY] = [filterHold(xHolds), filterHold(yHolds)];
                     this.props.setTempLists({tempXList: newX, tempYList: newY});
                     return
                 }

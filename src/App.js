@@ -27,7 +27,6 @@ class App extends Component {
             try {
                 const profile = Auth.getProfile();
                 this.props.loginSuccess(profile);
-                console.log('Fetching profile summary from App component');
                 this.props.fetchProfileData()
             } catch (err) {
                 Auth.logout();

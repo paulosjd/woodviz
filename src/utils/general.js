@@ -36,7 +36,6 @@ export const getStars = rating => {
             return '\u2B50\u2B50\u2B50';
         default:
             return '';
-            return '&#x2795;';
     }
 };
 

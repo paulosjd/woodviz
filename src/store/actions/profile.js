@@ -162,12 +162,28 @@ export const saveProblemHolds = (value) => {
                 x_holds: value.selectedHoldXList, y_holds: value.selectedHoldYList},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
             .then(profileData => {
-                dispatch({type: SET_PROFILE_BOARDS, value: profileData.data.boards.map(obj => boardObj(obj))})
+                dispatch({type: SET_PROFILE_BOARDS, value: profileData.data.boards.map(obj => boardObj(obj))});
                 if (!value.problemId) {
                     dispatch(({type: SET_CURRENT, value: 'problems'}));
                     dispatch(({type: SET_SELECTED_PROBLEM_ID, value: profileData.data.problem_id}))
                 }
                 dispatch(syncBoardWithInd())
+            })
+    }
+};
+
+
+export const setProblemTicked = (value) => {
+    const url = `${baseUrl}/profile/problems`;
+    return dispatch => {
+        axios.post(url,
+            {problem_id: value.problemId, is_ticked: value.ticked},
+            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+            .then(profileData => {
+                if (profileData.data.boards) {
+                    dispatch({type: SET_PROFILE_BOARDS, value: profileData.data.boards.map(obj => boardObj(obj))});
+                    dispatch(syncBoardWithInd())
+                }
             })
     }
 };

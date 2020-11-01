@@ -9,6 +9,12 @@ import HoldSetupForm from '../../form/panel_items/hold_setup'
 class BoardSetup extends Component {
     state = {showSaveBtn: false};
 
+    componentDidUpdate(prevProps) {
+        if (this.props.boardId !== prevProps.boardId) {
+            this.setState({...this.state, showSaveBtn: false});
+        }
+    }
+
     render() {
         const [xPtNum, yPtNum] = [this.props.xCoords.length, this.props.yCoords.length];
         let selPanelHoldInd;

@@ -40,7 +40,6 @@ class LeftHandPanel extends Component {
                 </div>
             )
         }
-
         let problemInfo;
         if (this.props.selectedProblem && this.props.showProblemEdit) {
             problemInfo = (
@@ -67,6 +66,18 @@ class LeftHandPanel extends Component {
                 />
             )
         }
+        let boardList;
+        if (this.props.currentAction === 'setup') {
+            boardList = (
+                <BoardList
+                    boardListIndex={this.props.boardListIndex}
+                    setBoardListIndex={this.props.setBoardListIndex}
+                    createNewBoard={this.props.createNewBoard}
+                />
+            )
+        } else {
+            boardList = <div className='top20 left125'><span>{this.props.boardName}</span></div>
+        }
 
         return (
             <Col xs={this.props.xs}>
@@ -76,13 +87,7 @@ class LeftHandPanel extends Component {
                     setAction={this.props.setAction}
                     syncBoard={this.props.syncBoard}
                 />
-                { this.props.currentAction === 'setup' && (
-                    <BoardList
-                        boardListIndex={this.props.boardListIndex}
-                        setBoardListIndex={this.props.setBoardListIndex}
-                        createNewBoard={this.props.createNewBoard}
-                    />
-                )}
+                { boardList }
                 { delBoardText }
                 { problemInfo }
             </Col>
@@ -110,6 +115,7 @@ const mapStateToProps = ({auth, activity, board, profile}) => {
         boards: profile.boards,
         isAuth: !!auth.user_id,
         boardsLoaded: profile.boardsLoaded,
+        boardName: profile.boards[activity.boardListIndex].boardName,
         showBoardNameEdit: activity.showBoardNameEdit,
         showProblemEdit: activity.showProblemEdit,
         selectedProblem: selectedProblem,

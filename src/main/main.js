@@ -12,11 +12,8 @@ class MainContainer extends Component {
     render() {
         let board;
         if (this.props.isAuth) {
-            console.log('main contraine isauth')
             board = <DemoBoard />
         } else {
-            console.log('main contraine NOT isauth')
-
             board = <DemoBoard />
         }
         return (
