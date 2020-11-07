@@ -6,14 +6,11 @@ import {userLogout} from '../store/actions/auth'
 import ConfirmBoardDelete from '../form/modals/confirm_board_delete'
 import ConfirmProblemDelete from '../form/modals/confirm_problem_delete'
 import {setShowBoardDeleteConfirm, setShowProblemDeleteConfirm} from "../store/actions/activity";
-import {deleteBoard, deleteProblem} from "../store/actions/profile";
+import {deleteBoard, deleteProblem, fetchProfileData} from "../store/actions/profile";
 
 class TopNav extends Component {
 
     render() {
-
-        // TODO section of e.g. buttons to with users recent ticks (, problems working on list etc.
-        // -- benchmarks  (record this alongside problem on rhs)
 
         let topRight;
         if (this.props.user_id) {
@@ -23,7 +20,8 @@ class TopNav extends Component {
                     className='gen-btn nav-btn'
                     onClick={(e) => {
                         this.props.handleLogout(e);
-                        this.props.userLogout()
+                        this.props.userLogout();
+                        this.props.fetchProfileData('anon');
                     }}
                 >Logout</button>
             )
@@ -33,9 +31,9 @@ class TopNav extends Component {
 
         const navbar = (
             <Navbar>
-                <span role="img" aria-label="Mushroom" className='nav-item' id="profile">&#x1F344;</span>
-                <span className="mr-auto"
-                >{ this.props.username }</span>
+                <span role="img" aria-label="Mushroom" className='nav-item left6' id="profile">&#x1F344;</span>
+                <span className="mr-auto left6"
+                >{ this.props.username || 'Demo' }</span>
                 { topRight }
             </Navbar>
         );
@@ -99,6 +97,7 @@ const mapStateToProps = ({auth, activity, board, profile}) => {
 const mapDispatchToProps = dispatch => {
     return {
         userLogout: () => dispatch(userLogout()),
+        fetchProfileData: (val) => dispatch(fetchProfileData(val)),
         setShowBoardDeleteConfirm: val =>  dispatch(setShowBoardDeleteConfirm(val)),
         setShowProblemDeleteConfirm: val =>  dispatch(setShowProblemDeleteConfirm(val)),
         deleteBoard: val => dispatch(deleteBoard(val)),

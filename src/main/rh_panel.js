@@ -14,7 +14,7 @@ const RightHandPanel = (props) => {
     switch (currentAction) {
         case 'problems':
             colBody = (
-                <BoardProblems />
+                <BoardProblems isAuth={props.isAuth} />
             );
             break;
         case 'add':

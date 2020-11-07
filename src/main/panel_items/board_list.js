@@ -85,7 +85,7 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
             {boardNames.map((name, ind) => {
                 let item;
                 let editBtn;
-                if (currentAction === 'setup' && !showBoardNameEdit && !showBoardAdd && boardListIndex === ind) {
+                if (currentAction === 'setup' && !showBoardNameEdit && !showBoardAdd && boardListIndex === ind && isAuth) {
                     editBtn = (
                         <span onClick={() => dispatch(setShowBoardNameEdit(true))}
                               role="img" aria-label="info" id="target-edit-icon" className='edit-icon'

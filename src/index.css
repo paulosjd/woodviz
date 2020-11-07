@@ -101,6 +101,10 @@
   margin-top: 30px;
 }
 
+.left6 {
+  margin-left: 6px;
+}
+
 .left125 {
   margin-left: 1.25rem;
 }
@@ -171,6 +175,16 @@
 .edit-prob-btn:hover {
   background-color: #f9fcf5;
   border-color: #f9fcf5;
+}
+
+.save-confirm {
+  color: #61665d;
+  background-color: #f5fff5 !important;
+}
+
+.save-confirm:hover {
+  color: #52564e;
+  background-color: #f1fbf1 !important;
 }
 
 .edit-prob-icon {
@@ -505,4 +519,11 @@
   float: right;
   padding-top: 10px !important;
   cursor: pointer;
+}
+
+.no_board_save {
+  display: inline;
+  color: #f6a626;
+  font-size: small;
+  margin-left: 20px
 }

@@ -8,6 +8,8 @@ import {getStars} from '../../utils/general'
 
 class ProblemAdd extends Component {
 
+    state = {noSaveMsg: false};
+
     render() {
         const grades = ['6a', '6a+', '6b', '6b+', '6c', '6c+', '7a', '7a+', '7b', '7b+', '7c', '7c+', '8a'];
         return (
@@ -22,7 +24,12 @@ class ProblemAdd extends Component {
                 }}
                 validationSchema={BoardProblemSchema}
                 onSubmit={val => {
-                    this.props.saveProblemHolds({...val, boardId: this.props.boardId})
+                    if (this.props.isAuth) {
+                        this.props.saveProblemHolds({...val, boardId: this.props.boardId})
+                    } else {
+                        this.setState({noSaveMsg: true});
+                        setTimeout(() => this.setState({noSaveMsg: false}), 2500)
+                    }
                 }}
             >
                 {props => {
@@ -35,6 +42,13 @@ class ProblemAdd extends Component {
                             hasValues = false
                         }
                     });
+
+                    let saveSpan;
+                    if (this.state.noSaveMsg) {
+                        saveSpan = <span className='sel-holds-txt'>Login required</span>;
+                    } else if (!values.selectedHoldXList.length > 0) {
+                        saveSpan = <span className='sel-holds-txt'>Select holds</span>;
+                    }
 
                     return (
                         <form
@@ -104,8 +118,7 @@ class ProblemAdd extends Component {
                                 >
                                     Save
                                 </button>
-                                {!values.selectedHoldXList.length > 0 && (
-                                    <span className='sel-holds-txt'>Select holds</span>)}
+                                {saveSpan}
                             </div>
                             {this.props.selectedHoldXList.length > 0 && (
                                 <button

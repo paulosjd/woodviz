@@ -58,12 +58,13 @@ export const syncBoardWithInd = () => {
     }
 };
 
-export const fetchProfileData = () => {
+export const fetchProfileData = (user) => {
     let url = `${baseUrl}/profile/data`;
+    const headers = user === 'anon' ? {} : {"Authorization": "Bearer " + localStorage.getItem('id_token')};
     return (dispatch, getState) => {
         const state = getState();
         const boardInd = state.activity.boardListIndex;
-        axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
+        axios.get(url, {headers: headers})
             .then(profileData => pdcb(profileData, dispatch, boardInd))
             .then(() => dispatch({ type: INITIAL_LOAD_DONE }))
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))

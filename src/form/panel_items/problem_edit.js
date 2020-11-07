@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {Formik} from "formik";
 import {useDispatch, useSelector} from "react-redux";
 import {getStars} from '../../utils/general'
@@ -11,10 +11,13 @@ const ProblemEdit = ({
 
     const dispatch = useDispatch();
     const content = useSelector(state => state);
+    const isAuth = !!content.auth.user_id;
     const boardId = content.board.boardId;
     const tempXList = content.profile.tempXList;
     const tempYList = content.profile.tempYList;
+    const [noSaveMsg, setNoSaveMsg] = useState(false);
     const grades = ['6a', '6a+', '6b', '6b+', '6c', '6c+', '7a', '7a+', '7b', '7b+', '7c', '7c+', '8a'];
+    const noSaveSpan = <span className='no_board_save'>Login required</span>;
 
     return (
         <Formik
@@ -28,12 +31,17 @@ const ProblemEdit = ({
             }}
             validationSchema={BoardProblemSchema}
             onSubmit={val => {
-                let pData = {};
-                if (tempXList.length > 0) {
-                    pData = {selectedHoldXList: tempXList, selectedHoldYList: tempYList}
+                if (isAuth) {
+                    let pData = {};
+                    if (tempXList.length > 0) {
+                        pData = {selectedHoldXList: tempXList, selectedHoldYList: tempYList}
+                    }
+                    saveProblemHolds({...val, ...pData, problemId: problem.id, boardId: boardId});
+                    setShowProblemEdit(false)
+                } else {
+                    setNoSaveMsg(true);
+                    setTimeout(() => setNoSaveMsg(false), 2500)
                 }
-                saveProblemHolds({...val, ...pData, problemId: problem.id, boardId: boardId});
-                setShowProblemEdit(false)
             }}
         >
             {props => {
@@ -110,10 +118,8 @@ const ProblemEdit = ({
                         <div className='top14'>
                             <button
                                 type='submit'
-                                className='edit-prob-btn'
+                                className='edit-prob-btn save-confirm'
                             >
-                                <span role="img" aria-label="info" id="target-edit-icon" className='edit-prob-icon'
-                                >&#x270F;</span>
                                 Save
                             </button>
                             <span
@@ -123,13 +129,16 @@ const ProblemEdit = ({
                                 Cancel
                             </span>
                         </div>
-                        <div className='del-prob-text'>
+                        {isAuth && (
+                            <div className='del-prob-text'>
                             <span
                                 onClick={() => dispatch(setShowProblemDeleteConfirm(true))}
                             >
                                 Delete problem
                             </span>
-                        </div>
+                            </div>
+                        )}
+                        {noSaveMsg && noSaveSpan}
                     </form>
                 );
             }}

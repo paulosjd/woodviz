@@ -31,6 +31,8 @@ class App extends Component {
             } catch (err) {
                 Auth.logout();
             }
+        } else {
+            this.props.fetchProfileData('anon')
         }
     }
 
@@ -83,7 +85,7 @@ const mapDispatchToProps = dispatch => {
     return {
         loginSuccess: (user) => dispatch(loginSuccess(user)),
         setShowReg: (val) => dispatch(setShowRegForm(val)),
-        fetchProfileData: () => dispatch(fetchProfileData()),
+        fetchProfileData: (val) => dispatch(fetchProfileData(val)),
         resetSelectedHold: () => dispatch(setSelectedHold({
             selectedHoldX: null, selectedHoldY: null })),
         resetSelectedPanelHold:  () => dispatch(setSelectedPanelHold(

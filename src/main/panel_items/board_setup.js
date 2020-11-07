@@ -7,7 +7,11 @@ import BoardPointsForm from '../../form/panel_items/board_points'
 import HoldSetupForm from '../../form/panel_items/hold_setup'
 
 class BoardSetup extends Component {
-    state = {showSaveBtn: false};
+
+    state = {
+        showSaveBtn: false,
+        noSaveMsg: false
+    };
 
     componentDidUpdate(prevProps) {
         if (this.props.boardId !== prevProps.boardId) {
@@ -28,14 +32,19 @@ class BoardSetup extends Component {
             saveBtn = (
                 <button
                     onClick={() => {
-                        this.setState({ ...this.state, showSaveBtn: false });
-                        this.props.saveHoldSet({
-                            holdSet: this.props.holdSet,
-                            boardWidth: xPtNum,
-                            boardHeight: yPtNum,
-                            boardName: this.props.boardName,
-                            boardId: this.props.boardId,
-                        });
+                        if (this.props.isAuth) {
+                            this.setState({ ...this.state, showSaveBtn: false });
+                            this.props.saveHoldSet({
+                                holdSet: this.props.holdSet,
+                                boardWidth: xPtNum,
+                                boardHeight: yPtNum,
+                                boardName: this.props.boardName,
+                                boardId: this.props.boardId,
+                            });
+                        } else {
+                            this.setState({noSaveMsg: true});
+                            setTimeout(() => this.setState({noSaveMsg: false}), 2500)
+                        }
                     }}
                     className='save-board-btn'
                 >Save board
@@ -46,14 +55,16 @@ class BoardSetup extends Component {
         let setHoldBtn = (
             <span>Set board name to begin</span>
         );
+        let noSaveMsg;
+        if (this.state.noSaveMsg) {
+            noSaveMsg = <span className='no_board_save'>Login required</span>;
+        }
         if (this.props.boardName) {
             setHoldBtn = (
                 <button
                     onClick={() => {
                         this.props.setHandHold({svgDataInd: selPanelHoldInd});
-                        if (this.props.isAuth) {
-                            this.setState({ ...this.state, showSaveBtn: true })
-                        }
+                        this.setState({ ...this.state, showSaveBtn: true })
                     }}
                     className='set-hold-btn'
                     disabled={!this.props.selectedHold || !this.props.selectedPanelHold}
@@ -94,6 +105,7 @@ class BoardSetup extends Component {
                 { setHoldBtn }
                 { this.props.showHoldsSavedNote && <span className='hold_set_saved'>Saved!</span> }
                 { rmHoldBtn }
+                { noSaveMsg }
                 { saveBtn }
                 <HoldSetupForm
                     selectedPanelHoldX={this.props.selectedPanelHoldX}

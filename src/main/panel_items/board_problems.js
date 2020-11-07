@@ -27,7 +27,11 @@ const BoardProblems = (props) => {
             const tick = (
                 <span
                     id='add_board_label' role="img" aria-label="plus" className='problem_tick_icon'
-                    onClick={() => dispatch(setProblemTicked({problemId: problem.id, ticked: !problem.ticked}))}
+                    onClick={() => {
+                        if (props.isAuth) {
+                            dispatch(setProblemTicked({problemId: problem.id, ticked: !problem.ticked}))
+                        }
+                    }}
                 >
                     {problem.ticked ? '\u2714' : '\u25FB'}
                 </span>
