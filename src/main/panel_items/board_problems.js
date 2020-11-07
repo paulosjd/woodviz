@@ -9,8 +9,9 @@ import {orderGrades, compareNames} from "../../utils/general"
 const BoardProblems = (props) => {
 
     const content = useSelector(state => state);
-    const problems = content.board.problems;
-    const grades = content.board.grades.sort(orderGrades);
+    const problems = content.board.problems || [];
+    let grades = content.board.grades || [];
+    grades = grades.sort(orderGrades);
     const selectedGrades = content.activity.selectedGrades;
     const selectedProblemId = content.activity.selectedProblemId;
 

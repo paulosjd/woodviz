@@ -75,7 +75,7 @@ class LeftHandPanel extends Component {
                     createNewBoard={this.props.createNewBoard}
                 />
             )
-        } else {
+        } else if (!this.props.selectedProblem) {
             boardList = <div className='top20 left125'><span>{this.props.boardName}</span></div>
         }
 

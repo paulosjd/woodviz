@@ -124,12 +124,13 @@ export const deleteBoard = (boardId) => {
     return (dispatch) => {
         axios.post(url, {delete_board: true, board_id: boardId},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-            .then(profileData => dispatch({
-                type: SET_PROFILE_BOARDS,
-                value: profileData.data.boards.map(obj => boardObj(obj))
-            }))
+            .then(profileData => {
+                dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 });
+                dispatch({
+                    type: SET_PROFILE_BOARDS,
+                    value: profileData.data.boards.map(obj => boardObj(obj))
+                })})
             .then(() => dispatch({ type: SET_SHOW_BOARD_DELETE_CONFIRM, value: false }))
-            .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: 0 }))
             .then(() => dispatch(syncBoardWithInd()))
             .catch(() => {})
     }

@@ -82,7 +82,7 @@ const mapStateToProps = ({auth, activity, board, profile}) => {
     if (activity.selectedProblemId) {
         const flatProblems = Object.values(board.problems).flat();
         const ind = flatProblems.findIndex(obj => obj.id === activity.selectedProblemId);
-        problemName = flatProblems[ind].name;
+        problemName = flatProblems[ind] ? flatProblems[ind].name : '';
     }
     return {
         user_id: auth.user_id,
