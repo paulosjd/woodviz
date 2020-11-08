@@ -527,3 +527,9 @@
   font-size: small;
   margin-left: 20px
 }
+
+.first_board_add_btn {
+  margin-top: 30px;
+  width: 220px;
+  cursor: pointer;
+}

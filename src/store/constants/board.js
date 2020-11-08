@@ -7,6 +7,7 @@ export const SET_HOVER_HOLD = 'SET_HOVER_HOLD';
 export const SET_SELECTED_HOLD = 'SET_SELECTED_HOLD';
 export const SET_SELECTED_HOLD_LIST = 'SET_SELECTED_HOLD_LIST';
 export const RESET_SELECTED_HOLD_LIST = 'RESET_SELECTED_HOLD_LIST';
+export const RESET_BOARD_STATE = 'RESET_BOARD_STATE';
 
 export const xCoordsMap = {
     '6': [38, 102, 167, 232, 297, 362],

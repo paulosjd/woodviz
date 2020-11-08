@@ -1,6 +1,8 @@
-import {RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE, SET_BOARD_LIST_INDEX,
+import {
+    RESET_ACTIVITY_STATE, SET_CURRENT, SET_SELECTED_PANEL_HOLD, SHOW_HOLDS_SAVED_NOTE, SET_BOARD_LIST_INDEX,
     SET_SHOW_BOARD_ADD, SET_SHOW_BOARD_NAME_EDIT, SET_SHOW_BOARD_DELETE_CONFIRM, ADD_SELECTED_GRADE,
-    REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID, SET_SHOW_PROBLEM_EDIT, SET_SHOW_PROBLEM_DELETE_CONFIRM
+    REMOVE_SELECTED_GRADE, SET_SELECTED_PROBLEM_ID, SET_SHOW_PROBLEM_EDIT, SET_SHOW_PROBLEM_DELETE_CONFIRM,
+    SET_SHOW_LOGIN_HELP, SET_FORGOTTEN_FIELD
 } from '../constants/activity'
 import {SET_SELECTED_HOLD} from "../constants/board";
 
@@ -16,6 +18,8 @@ const initialState = {
     showProblemDeleteConfirm: false,
     showBoardAdd: false,
     showProblemEdit: false,
+    showLoginHelp: false,
+    forgottenField: '',
     selectedGrades: [],
     selectedProblemId: null
 };
@@ -70,6 +74,17 @@ export default function activity(state = initialState, action) {
                 showBoardNameEdit: false,
                 showProblemEdit: false,
                 boardListIndex: action.value
+            };
+        case SET_FORGOTTEN_FIELD:
+            return {
+                ...state,
+                forgottenField: action.value
+            };
+        case SET_SHOW_LOGIN_HELP:
+            return {
+                ...state,
+                forgottenField: !action.value ? '' : state.forgottenField,
+                showLoginHelp: action.value
             };
         case SET_SHOW_BOARD_ADD:
             return {

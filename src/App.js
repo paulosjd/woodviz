@@ -9,8 +9,8 @@ import {setSelectedPanelHold} from './store/actions/activity'
 import {loginSuccess, setShowRegForm} from "./store/actions/auth";
 import {setSelectedHold} from './store/actions/board'
 import {fetchProfileData} from "./store/actions/profile";
-import './auth/login.css';
 import {EscapeKeyAction} from "./utils/use_key_actions";
+import './auth/login.css';
 
 const Auth = new AuthService();
 
@@ -22,7 +22,6 @@ class App extends Component {
     };
 
     componentDidMount() {
-
         if (Auth.loggedIn()) {
             try {
                 const profile = Auth.getProfile();

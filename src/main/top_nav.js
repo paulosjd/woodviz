@@ -3,15 +3,16 @@ import {Navbar} from 'reactstrap';
 import {connect} from "react-redux";
 import Login from '../auth/login'
 import {userLogout} from '../store/actions/auth'
+import Forgotten from '../auth/forgotten'
 import ConfirmBoardDelete from '../form/modals/confirm_board_delete'
 import ConfirmProblemDelete from '../form/modals/confirm_problem_delete'
-import {setShowBoardDeleteConfirm, setShowProblemDeleteConfirm} from "../store/actions/activity";
+import {setShowBoardDeleteConfirm, setShowLoginHelp, setShowProblemDeleteConfirm} from "../store/actions/activity";
+import {forgottenLogin} from "../store/actions/auth";
 import {deleteBoard, deleteProblem, fetchProfileData} from "../store/actions/profile";
 
 class TopNav extends Component {
 
     render() {
-
         let topRight;
         if (this.props.user_id) {
             topRight = (
@@ -21,6 +22,8 @@ class TopNav extends Component {
                     onClick={(e) => {
                         this.props.handleLogout(e);
                         this.props.userLogout();
+                        console.log('fetchProfileData 4')
+
                         this.props.fetchProfileData('anon');
                     }}
                 >Logout</button>
@@ -38,10 +41,24 @@ class TopNav extends Component {
             </Navbar>
         );
 
+        if (this.props.showLoginHelp) {
+            return (
+                <React.Fragment>
+                    { navbar }
+                    <Forgotten
+                        toggle={() => this.props.setShowLoginHelp(!this.props.showLoginHelp)}
+                        isOpen={this.props.showLoginHelp}
+                        forgotField={this.props.forgottenField}
+                        sendEmail={this.props.forgottenLogin}
+                    />
+                </React.Fragment>
+            )
+        }
+
         if (this.props.showBoardDeleteConfirm) {
             return (
                 <React.Fragment>
-                    {navbar}
+                    { navbar }
                     <ConfirmBoardDelete
                         toggle={() => this.props.setShowBoardDeleteConfirm(!this.props.showBoardDeleteConfirm)}
                         isOpen={this.props.showBoardDeleteConfirm}
@@ -57,7 +74,7 @@ class TopNav extends Component {
         if (this.props.showProblemDeleteConfirm) {
             return (
                 <React.Fragment>
-                    {navbar}
+                    { navbar }
                     <ConfirmProblemDelete
                         toggle={() => this.props.setShowProblemDeleteConfirm(!this.props.showProblemDeleteConfirm)}
                         isOpen={this.props.showProblemDeleteConfirm}
@@ -90,7 +107,9 @@ const mapStateToProps = ({auth, activity, board, profile}) => {
         boardName: profile.boards[boardInd].boardName,
         boardId: profile.boards[boardInd].boardId,
         selectedProblemId: activity.selectedProblemId,
-        problemName: problemName
+        problemName: problemName,
+        showLoginHelp: activity.showLoginHelp,
+        forgottenField: activity.forgottenField
     };
 };
 
@@ -102,6 +121,8 @@ const mapDispatchToProps = dispatch => {
         setShowProblemDeleteConfirm: val =>  dispatch(setShowProblemDeleteConfirm(val)),
         deleteBoard: val => dispatch(deleteBoard(val)),
         deleteProblem: val => dispatch(deleteProblem(val)),
+        setShowLoginHelp: (val) => dispatch(setShowLoginHelp(val)),
+        forgottenLogin: (fType, val) => dispatch(forgottenLogin(fType, val)),
     };
 };
 

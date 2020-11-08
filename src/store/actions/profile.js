@@ -10,7 +10,7 @@ import {
 
 const baseUrl = 'http://127.0.0.1:8000/api';
 
-const pdcb = (profileData, dispatch, boardInd, ) => {
+const pdcb = (profileData, dispatch, boardInd) => {
     const boards = profileData.data.boards;
     dispatch({
         type: SET_BOARD_POINTS,
@@ -91,7 +91,7 @@ export const updateBoardPoints = (value, isAuth) => {
 export const createNewBoard = (value) => {
     const url = `${baseUrl}/profile/board-setup`;
     return (dispatch, getState) => {
-        const state = getState();
+        let state = getState();
         axios.post(url, {board_height: state.board.yCoords.length, board_width: state.board.xCoords.length,
                 board_name: value},
             {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
@@ -100,7 +100,11 @@ export const createNewBoard = (value) => {
                 value: profileData.data.boards.map(obj => boardObj(obj))
             }))
             .then(() => dispatch({ type: SET_SHOW_BOARD_ADD,  value: false }))
-            .then(() => dispatch({ type: SET_BOARD_LIST_INDEX,  value: state.profile.boards.length }))
+            .then(() => dispatch({ type: INITIAL_LOAD_DONE }))
+            .then(() => {
+                state = getState();
+                dispatch({ type: SET_BOARD_LIST_INDEX, value: state.profile.boards.length - 1 })
+            })
             .then(() => dispatch(syncBoardWithInd()))
             .catch((error) => dispatch({ type: FETCH_SUMMARY_DATA_FAILURE, payload: {error} }))
     }

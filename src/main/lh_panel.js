@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import {connect} from "react-redux";
 import {Col} from "reactstrap";
 import {setShowRegForm, focusUsernameInput} from "../store/actions/auth";
-import {setAction, setBoardListIndex, setShowBoardDeleteConfirm, setShowProblemEdit} from "../store/actions/activity";
+import {
+    setAction, setBoardListIndex, setShowBoardDeleteConfirm, setShowProblemEdit, setShowLoginHelp, setForgottenField
+} from "../store/actions/activity";
 import {resetSelectedHoldList} from "../store/actions/board";
 import {createNewBoard, saveProblemHolds, syncBoardWithInd} from "../store/actions/profile";
 import ActionItems from './panel_items/action_items'
@@ -23,10 +25,20 @@ class LeftHandPanel extends Component {
                         <span className='link-text' onClick={this.props.usernameFocus}> login</span>
                     </p>
                     <div className='bottom20'>
-                    <span className='link-text' data-field='username' onClick={this.props.helpClick}>
-                        Username reminder</span>{'. '}
-                        <span className='link-text' data-field='password' onClick={this.props.helpClick}>
-                        Password reset</span>.
+                        <span className='link-text' data-field='username'
+                              onClick={() => {
+                                  this.props.setForgottenField('username');
+                                  this.props.helpClick();
+                              }}>
+                            Username reminder
+                        </span>{'. '}
+                        <span className='link-text' data-field='password'
+                              onClick={() => {
+                                  this.props.setForgottenField('password');
+                                  this.props.helpClick();
+                              }}>
+                            Password reset
+                        </span>.
                     </div>
                 </React.Fragment>
             )
@@ -146,6 +158,8 @@ const mapDispatchToProps = dispatch => {
                 dispatch(createNewBoard(val))
             }
         },
+        helpClick: () => dispatch(setShowLoginHelp(true)),
+        setForgottenField: (val) => dispatch(setForgottenField(val)),
     };
 };
 

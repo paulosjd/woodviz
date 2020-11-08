@@ -46,9 +46,3 @@ export default connect(
     mapStateToProps,
     mapDispatchToProps
 )(MainContainer);
-
-// (
-//     <svg height="20" width="20">
-//         <circle cx="5" cy="5" r="4" stroke="black" fill="red" />
-//     </svg>
-// )

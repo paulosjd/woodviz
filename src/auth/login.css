@@ -9,7 +9,7 @@
 }
 
 .login-form input {
-    width: 7.6rem;
+    width: 7.6rem !important;
     border: 1px solid #c5a97c;
     font-size: small;
 }
@@ -145,6 +145,10 @@
 .auth-errors, .login-error{
     text-align: right;
     color: orangered;
+}
+
+.auth-errors {
+    font-size: small;
 }
 
 .login-error{

@@ -4,10 +4,15 @@ import {connect} from "react-redux";
 import {Modal, ModalHeader} from 'reactstrap';
 import {Formik} from 'formik';
 import {RegisterSchema} from '../schemas/auth'
-import {forgottenLogin, loginSuccess, registrationSubmit, setShowRegForm} from "../store/actions/auth";
+import {forgottenLogin, regLoginSuccess, registrationSubmit, setShowRegForm} from "../store/actions/auth";
 import AuthService from "../utils/auth_service";
+import {authConstants as constants} from "../store/constants/auth";
+import {fetchProfileData} from "../store/actions/profile";
 
 class Register extends Component {
+
+    state = {submitted: false};
+
     constructor(props){
         super(props);
         this.postCreateAuth = this.postCreateAuth.bind(this);
@@ -16,10 +21,20 @@ class Register extends Component {
 
     postCreateAuth(token){
         this.Auth.setToken(token);
-        this.props.loginSuccess(decode(token))
+        this.props.loginSuccess(decode(token));
     }
 
     render() {
+        let submitErrorMsg;
+        let emailErrorMsg;
+        if (this.props.submitErrors) {
+            if (this.props.submitErrors.email) {
+                emailErrorMsg = <div className="auth-errors">{this.props.submitErrors.email}</div>
+            } else {
+                submitErrorMsg = <div className="auth-errors">{Object.values(this.props.submitErrors)[0]}</div>
+            }
+        }
+
         return (
             <Modal isOpen={this.props.isOpen} toggle={this.props.toggle} className="registration-modal">
                 <ModalHeader>Register new beast</ModalHeader>
@@ -27,7 +42,10 @@ class Register extends Component {
                     initialValues={{email: '', password: '', confirm_password: '', username: ''}}
                     validationSchema={RegisterSchema}
                     onSubmit={(values) => {
-                        this.props.registrationSubmit(values, this.postCreateAuth)
+                        if (Object.keys(values).length > 3 && Object.keys(this.props.submitErrors).length < 1) {
+                            this.setState({submitted: true});
+                            this.props.registrationSubmit(values, this.postCreateAuth)
+                        }
                     }}
                 >
                     {props => {
@@ -42,18 +60,28 @@ class Register extends Component {
                                         type="text"
                                         maxLength={20}
                                         value={values.username}
-                                        onChange={handleChange}
+                                        onChange={(val) => {
+                                            this.setState({submitted: false});
+                                            this.props.clearRegErrors();
+                                            handleChange(val)
+                                        }}
                                         onBlur={handleBlur}
                                         className={(errors.username && touched.username) ? 'text-input error'
                                             : 'form-item'}
                                     />
+                                    {errors.username && touched.username && (
+                                        <div className="auth-errors">{errors.username}</div>
+                                    )}
                                     <label htmlFor="password">Password</label>
                                     <input
                                         id="password"
                                         placeholder="Enter a password"
                                         type="password"
                                         value={values.password}
-                                        onChange={handleChange}
+                                        onChange={(val) => {
+                                            this.setState({submitted: false});
+                                            handleChange(val)
+                                        }}
                                         onBlur={handleBlur}
                                         className={
                                             errors.password && touched.password ? 'text-input error' : 'form-item'
@@ -67,7 +95,10 @@ class Register extends Component {
                                         id="password_confirm"
                                         placeholder="Re-enter password"
                                         type="password"
-                                        onChange={handleChange}
+                                        onChange={(val) => {
+                                            this.setState({submitted: false});
+                                            handleChange(val)
+                                        }}
                                         onBlur={handleBlur}
                                         autoComplete="off"
                                         className={errors.password_confirm && touched.password_confirm
@@ -83,12 +114,25 @@ class Register extends Component {
                                         type="text"
                                         value={values.email}
                                         onBlur={handleBlur}
-                                        onChange={handleChange}
-                                        className={(errors.email && touched.email) ? 'text-input error' : 'form-item'}
+                                        onChange={(val) => {
+                                            this.setState({submitted: false});
+                                            this.props.clearRegErrors();
+                                            handleChange(val)
+                                        }}
+                                        className={(emailErrorMsg || (errors.email && touched.email)) ?
+                                            'text-input error' : 'form-item'}
                                     />
-                                    <button type="submit" className="form-submit top-10">
+                                    {emailErrorMsg ? emailErrorMsg : errors.email && touched.email && (
+                                        <div className="auth-errors">{errors.email}</div>
+                                    )}
+                                    <button
+                                        type="submit"
+                                        className="form-submit top-10 "
+                                        disabled={this.state.submitted}
+                                    >
                                         Submit
                                     </button>
+                                    {submitErrorMsg}
                                 </form>
                             </div>);
                     }}
@@ -101,15 +145,18 @@ const mapStateToProps = ({registration}) => {
     return {
         regData: registration.regData,
         showRegForm: registration.showRegForm,
+        submitErrors: registration.registrationErrors,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        loginSuccess: (user) => dispatch(loginSuccess(user)),
+        loginSuccess: (user) => dispatch(regLoginSuccess(user)),
         registrationSubmit: (val, loginOnReg) => dispatch(registrationSubmit(val, loginOnReg)),
         forgottenLogin: (fType, val) => dispatch(forgottenLogin(fType, val)),
+        fetchProfileData: () => dispatch(fetchProfileData()),
         setShowReg: (val) => dispatch(setShowRegForm(val)),
+        clearRegErrors: () => dispatch({ type: constants.SET_REGISTRATION_ERRORS, errors: '' }),
     };
 };
 

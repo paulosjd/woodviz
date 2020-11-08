@@ -80,6 +80,10 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
         }
     }
 
+    if (boardNames.length === 1 && boardNames[0] === '') {
+        return <div className='first_board_add_btn' style={{width: 220}}>{setupAction}</div>
+    }
+
     return (
         <ListGroup className='top30'>
             {boardNames.map((name, ind) => {

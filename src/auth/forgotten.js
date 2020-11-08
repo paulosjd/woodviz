@@ -7,6 +7,8 @@ import {connect} from "react-redux";
 
 class Forgotten extends Component {
 
+    state = {submitted: false};
+
     render() {
         const { toggle, isOpen, forgotField, forgottenLogin, passwordResetSent, usernameReminderSent } = this.props;
         if ((forgotField === 'password' && passwordResetSent) || (forgotField !== 'password' && usernameReminderSent)) {
@@ -29,7 +31,10 @@ class Forgotten extends Component {
                 <Formik
                     initialValues={{email: ''}}
                     validationSchema={ForgotFieldSchema}
-                    onSubmit={val => forgottenLogin(forgotField, val)}
+                    onSubmit={val => {
+                        this.setState({submitted: true});
+                        forgottenLogin(forgotField, val)
+                    }}
                 >
                     {props => {
                         const {values, touched, errors, handleChange, handleBlur, handleSubmit} = props;
@@ -48,7 +53,12 @@ class Forgotten extends Component {
                                     />
                                     {errors.email && touched.email && (
                                         <div className="auth-errors">{errors.email}</div>)}
-                                    <button type="submit" className="form-submit top-10">Submit</button>
+                                    <button
+                                        type="submit"
+                                        className="form-submit top-10"
+                                        disabled={this.state.submitted}
+                                    >Submit
+                                    </button>
                                 </form>
                             </div>
                         );

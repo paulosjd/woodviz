@@ -1,8 +1,9 @@
 import axios from 'axios'
-import AuthService from '../../utils/auth_service';
 import { authConstants as constants } from '../constants/auth';
-import { REGISTER_FAILURE, USER_LOGOUT, USER_EMAIL_UPDATE, SET_AWAITING_AUTH
-} from "../constants/auth";
+import { USER_LOGOUT, SET_AWAITING_AUTH} from "../constants/auth";
+import {RESET_PROFILE_STATE} from "../constants/profile";
+import {SET_BOARD_LIST_INDEX} from "../constants/activity";
+import {RESET_BOARD_STATE} from "../constants/board";
 
 const baseUrl = 'http://127.0.0.1:8000/api/users';
 
@@ -10,24 +11,24 @@ export const loginSuccess = (user) => {
     return { type: constants.LOGIN_SUCCESS, user }
 };
 
+export const regLoginSuccess = (user) => {
+    return dispatch => {
+        dispatch({ type: constants.LOGIN_SUCCESS, user });
+        dispatch({ type: RESET_BOARD_STATE });
+        dispatch({ type: RESET_PROFILE_STATE });
+        dispatch(dispatch({ type: SET_BOARD_LIST_INDEX, value: 0 }));
+    }
+};
+
 export const forgottenLogin = (field, email) => {
     const url = `${baseUrl}/help/${field}`;
     return dispatch => {
         axios.post(url, JSON.stringify({email}), {headers: {"Content-Type": "application/json", }})
-            .then(() => {dispatch({type: field === 'password' ? constants.PASSWORD_RESET_SUCCESS :
-                    constants.USERNAME_REMINDER_SUCCESS})
-            })
-    }
-};
-
-// TODO add usage back into component connected dispatch, from samson
-export const requestVerificationEmail = () => {
-    const url = `${baseUrl}/new-verification-email`;
-    return dispatch => {
-        axios.get(url, {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-            .then(() => {dispatch({ type: constants.VERIFICATION_EMAIL_SUCCESS, value: true })})
-            .then(() => setTimeout(() => dispatch(
-                { type: constants.VERIFICATION_EMAIL_SUCCESS, value: false }),4000))
+            .then(() => dispatch({
+                type: field === 'password' ? constants.PASSWORD_RESET_SUCCESS :
+                    constants.USERNAME_REMINDER_SUCCESS
+            }))
+            .catch(errors => {});
     }
 };
 
@@ -37,16 +38,6 @@ export const passwordResetConfirm = (body) => {
         axios.post(url, JSON.stringify(body),{headers: {"Content-Type": "application/json"}})
             .then(() => dispatch({ type: constants.NEW_PASSWORD_CONFIRMED, value: 'Password has been reset' }))
             .catch(() => dispatch({ type: constants.NEW_PASSWORD_CONFIRMED, value: 'Reset link was invalid' }))
-    }
-};
-
-export const confirmAccountDelete = () => {
-    const Auth = new AuthService();
-    const url = `${baseUrl}/confirm-delete`;
-    return (dispatch) => {
-        axios.post(url, {confirm_delete: true},
-            {headers: {"Authorization": "Bearer " + localStorage.getItem('id_token')}})
-            .then(() => dispatch({ type: USER_LOGOUT })).then(() => Auth.logout())
     }
 };
 
@@ -71,11 +62,12 @@ export const registrationSubmit = (data, loginFunc) => {
     return dispatch => {
         axios.post(url, JSON.stringify(data), {headers: {"Content-Type": "application/json", }})
             .then(value => loginFunc(value.data.token))
+            .then(() => dispatch({ type: constants.SET_SHOW_REG_FORM, value: false }))
             .catch(errors => {
                 if (errors.response && errors.response.status === 400) {
-                    dispatch({ type: REGISTER_FAILURE, errors: errors.response.data.errors });
+                    dispatch({ type: constants.SET_REGISTRATION_ERRORS, errors: errors.response.data.errors });
                 } else {
-                    dispatch({ type: REGISTER_FAILURE, errors: {miscError: true} })
+                    dispatch({ type: constants.SET_REGISTRATION_ERRORS, errors: {miscError: 'Something went wrong'} })
                 }
             });
     }
