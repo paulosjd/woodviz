@@ -22,8 +22,6 @@ class TopNav extends Component {
                     onClick={(e) => {
                         this.props.handleLogout(e);
                         this.props.userLogout();
-                        console.log('fetchProfileData 4')
-
                         this.props.fetchProfileData('anon');
                     }}
                 >Logout</button>

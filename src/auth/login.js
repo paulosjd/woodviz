@@ -23,7 +23,7 @@ class Login extends Component {
         this.Auth.login(values.username, values.password)
             .then(profile => this.props.loginSuccess(profile))
             .then(() => this.props.fetchProfileData())
-            .catch((e) => {console.log('auth reject'); console.log(e)  ;
+            .catch(() => {
                 this.setState({loginFail: true});
                 this.props.setAwaitingAuth(false)
             });

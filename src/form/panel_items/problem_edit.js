@@ -93,6 +93,7 @@ const ProblemEdit = ({
                                         id='rating'
                                         onChange={handleChange}
                                         style={{fontSize: 10, height: 22}}
+                                        value={values.rating}
                                     >
                                         <option value={0} label='' />
                                         <option value={1}>{getStars(1)}</option>
