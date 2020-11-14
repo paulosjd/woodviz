@@ -8,7 +8,7 @@ import {
     SET_SHOW_BOARD_NAME_EDIT, SHOW_HOLDS_SAVED_NOTE, SET_SELECTED_PROBLEM_ID, SET_SHOW_PROBLEM_DELETE_CONFIRM
 } from "../constants/activity";
 
-const baseUrl = 'http://127.0.0.1:8000/api';
+const baseUrl = 'https://woodrecs.paulja.me/api';
 
 const pdcb = (profileData, dispatch, boardInd) => {
     const boards = profileData.data.boards;

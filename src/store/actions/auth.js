@@ -5,7 +5,7 @@ import {RESET_PROFILE_STATE} from "../constants/profile";
 import {SET_BOARD_LIST_INDEX} from "../constants/activity";
 import {RESET_BOARD_STATE} from "../constants/board";
 
-const baseUrl = 'http://127.0.0.1:8000/api/users';
+const baseUrl = 'https://woodrecs.paulja.me/api/users';
 
 export const loginSuccess = (user) => {
     return { type: constants.LOGIN_SUCCESS, user }
