@@ -14,7 +14,7 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
 
     const content = useSelector(state => state);
     const currentAction = content.activity.current;
-    const showBoardAdd = content.activity.showBoardAdd;
+    let showBoardAdd = content.activity.showBoardAdd;
     const showBoardNameEdit = content.activity.showBoardNameEdit;
     const isAuth = !!content.auth.user_id;
     let boardNames = content.profile.boards.map(obj => obj.boardName);
@@ -26,6 +26,10 @@ const BoardList = ({boardListIndex, setBoardListIndex, createNewBoard}) => {
     if (isAuth && !content.profile.boardsLoaded) {
         // Temp fix non-auth default board data display while load; this.props.boards.length expected to be 1
         boardNames = ['']
+    }
+
+    if (isAuth && boardNames.length === 1 && boardNames[0] === '') {
+        showBoardAdd = true
     }
 
     let setupAction;

@@ -8,7 +8,12 @@ import {RESET_BOARD_STATE} from "../constants/board";
 const baseUrl = 'https://woodrecs.paulja.me/api/users';
 
 export const loginSuccess = (user) => {
-    return { type: constants.LOGIN_SUCCESS, user }
+    return dispatch => {
+        dispatch({ type: constants.LOGIN_SUCCESS, user });
+        dispatch({ type: RESET_BOARD_STATE });
+        dispatch({ type: RESET_PROFILE_STATE });
+        dispatch(dispatch({ type: SET_BOARD_LIST_INDEX, value: 0 }));
+    }
 };
 
 export const regLoginSuccess = (user) => {
